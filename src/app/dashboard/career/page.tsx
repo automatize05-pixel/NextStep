@@ -8,6 +8,8 @@ import { Badge } from "../../../components/ui/badge"
 import { Compass, Lightbulb, Target, TrendingUp, ChevronRight, Loader2, Sparkles } from "lucide-react"
 import Link from "next/link"
 
+export const dynamic = 'force-dynamic'
+
 export default function CareerDiscoveryPage() {
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
@@ -85,7 +87,7 @@ export default function CareerDiscoveryPage() {
           <Badge className="bg-primary hover:bg-primary shadow-lg mb-2">
             <Sparkles className="h-3 w-3 mr-1" /> IA Ativada
           </Badge>
-          <h1 className="text-4xl font-extrabold tracking-tight">Descoberta de Carreira</h1>
+          <h1 className="text-4xl font-extrabold tracking-tight">Descoberta de Carreira (Angola)</h1>
           <p className="text-muted-foreground text-lg text-balance">
             Nossa IA analisou seu perfil e encontrou os melhores caminhos para sua evolução.
           </p>
