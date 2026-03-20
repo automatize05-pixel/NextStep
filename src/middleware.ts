@@ -41,6 +41,8 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // We will handle redirects in the client/layouts for better mobile resilience
+  /*
   const publicRoutes = ['/', '/login', '/register']
   const isPublicRoute = publicRoutes.includes(request.nextUrl.pathname)
 
@@ -50,6 +52,7 @@ export async function middleware(request: NextRequest) {
     loginUrl.pathname = '/login'
     return NextResponse.redirect(loginUrl)
   }
+  */
 
   return supabaseResponse
 }

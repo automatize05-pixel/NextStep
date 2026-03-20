@@ -16,6 +16,16 @@ export default function DashboardLayout({
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClient()
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser()
+      if (!user || error) {
+        window.location.href = "/login"
+      }
+    }
+    checkUser()
+  }, [])
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const handleLogout = async () => {
