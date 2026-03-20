@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { loginAction } from "./actions"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -14,25 +15,22 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    const formData = new FormData()
+    formData.append("email", email)
+    formData.append("password", password)
 
-    if (error) {
-      setError(error.message)
+    const result = await loginAction(formData)
+
+    if (result?.error) {
+      setError(result.error)
       setLoading(false)
-      return
     }
-
-    window.location.href = "/dashboard"
   }
 
   return (
