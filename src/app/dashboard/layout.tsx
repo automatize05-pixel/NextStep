@@ -13,6 +13,9 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
+  const pathname = usePathname()
+  const router = useRouter()
+  const supabase = createClient()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const handleLogout = async () => {
