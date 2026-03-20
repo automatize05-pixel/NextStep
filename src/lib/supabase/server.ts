@@ -7,7 +7,22 @@ export async function createClient() {
 
   if (!url || !key) {
     console.warn('Supabase env vars missing during build/server-side execution')
-    return {} as any
+    // Return a mock object that won't crash common calls
+    return {
+      auth: {
+        getUser: async () => ({ data: { user: null }, error: null }),
+        getSession: async () => ({ data: { session: null }, error: null }),
+      },
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            single: async () => ({ data: null, error: null }),
+            order: () => ({ data: [], error: null }),
+          }),
+          single: async () => ({ data: null, error: null }),
+        }),
+      }),
+    } as any
   }
 
   const cookieStore = await cookies()

@@ -8,7 +8,23 @@ export function createClient() {
     if (typeof window === 'undefined') {
       console.warn('Supabase env vars missing during build/server-side execution')
     }
-    return {} as any
+    // Return a mock object that won't crash common calls
+    return {
+      auth: {
+        getUser: async () => ({ data: { user: null }, error: null }),
+        getSession: async () => ({ data: { session: null }, error: null }),
+        onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
+      },
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            single: async () => ({ data: null, error: null }),
+            order: () => ({ data: [], error: null }),
+          }),
+          single: async () => ({ data: null, error: null }),
+        }),
+      }),
+    } as any
   }
 
   return createBrowserClient(url, key)
