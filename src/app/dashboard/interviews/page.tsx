@@ -182,7 +182,7 @@ export default function InterviewSimulatorPage() {
             >
               <Input 
                 placeholder="Descreva sua resposta com detalhes..." 
-                className="flex-1 h-12 focus-visible:ring-primary shadow-inner"
+                className="flex-1 h-12 focus-visible:ring-primary shadow-inner bg-white text-gray-900"
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 disabled={loading}
