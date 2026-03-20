@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { LayoutDashboard, User, FileText, Map, MessageSquare, Briefcase, LogOut } from "lucide-react"
