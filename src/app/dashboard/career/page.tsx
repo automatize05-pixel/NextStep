@@ -8,7 +8,7 @@ import { Badge } from "../../../components/ui/badge"
 import { Compass, Lightbulb, Target, TrendingUp, ChevronRight, Loader2, Sparkles } from "lucide-react"
 import Link from "next/link"
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic' 
 
 export default function CareerDiscoveryPage() {
   const supabase = createClient()
