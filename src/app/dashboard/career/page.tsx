@@ -46,8 +46,7 @@ export default function CareerDiscoveryPage() {
         role: `Especialista em ${interest}`,
         match: 85,
         why: `Seu perfil demonstra forte interesse em ${interest}. Com a base que você já tem, este é o caminho mais natural.`,
-        gaps: ["Certificação Avançada", "Experiência em Projetos Reais"],
-        salary: "R$ 4.000 - R$ 7.000",
+        salary: "250.000 Kz - 500.000 Kz",
         demand: "Alta"
       },
       {
@@ -56,7 +55,7 @@ export default function CareerDiscoveryPage() {
         match: 60,
         why: `Suas soft skills e visão estratégica detectadas na sua bio sugerem uma boa transição para gestão.`,
         gaps: ["Metodologias Ágeis", "Gestão de Stakeholders"],
-        salary: "R$ 6.000 - R$ 10.000",
+        salary: "450.000 Kz - 800.000 Kz",
         demand: "Média-Alta"
       }
     ]
