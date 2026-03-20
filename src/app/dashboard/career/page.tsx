@@ -46,6 +46,7 @@ export default function CareerDiscoveryPage() {
         role: `Especialista em ${interest}`,
         match: 85,
         why: `Seu perfil demonstra forte interesse em ${interest}. Com a base que você já tem, este é o caminho mais natural.`,
+        gaps: ["Certificação Avançada", "Experiência em Projetos Reais"],
         salary: "250.000 Kz - 500.000 Kz",
         demand: "Alta"
       },
