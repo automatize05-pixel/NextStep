@@ -187,7 +187,7 @@ export default function ProfilePage() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold">Localização</label>
-                <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="Ex: São Paulo, SP" />
+                <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="Ex: Luanda, Angola" />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold">LinkedIn URL</label>
