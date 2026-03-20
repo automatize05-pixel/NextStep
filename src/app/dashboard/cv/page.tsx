@@ -15,6 +15,8 @@ export default function CVBuilderPage() {
   const [educations, setEducations] = useState<any[]>([])
   const [skills, setSkills] = useState<any[]>([])
   
+  const [exporting, setExporting] = useState(false)
+  
   useEffect(() => {
     async function loadData() {
       const { data: { user } } = await supabase.auth.getUser()
@@ -41,6 +43,37 @@ export default function CVBuilderPage() {
     loadData()
   }, [])
 
+  const handleExportPDF = async () => {
+    setExporting(true)
+    try {
+      const element = document.getElementById('cv-preview')
+      if (!element) return
+
+      // Dynamic import to avoid SSR issues
+      const html2pdf = (await import('html2pdf.js')).default
+      
+      const opt = {
+        margin: 0,
+        filename: `Curriculo_${profile?.full_name?.replace(/\s+/g, '_') || 'NextStep'}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 2, 
+          useCORS: true,
+          letterRendering: true
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }
+
+      await html2pdf().from(element).set(opt).save()
+    } catch (error) {
+      console.error("PDF Export Error:", error)
+      // Fallback to print if library fails
+      window.print()
+    } finally {
+      setExporting(false)
+    }
+  }
+
   if (loading) return (
     <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -61,8 +94,16 @@ export default function CVBuilderPage() {
               <ArrowLeft className="h-4 w-4 mr-2" /> Editar Perfil
             </Button>
           </Link>
-          <Button onClick={() => window.print()} className="bg-primary hover:bg-primary/90">
-            <FileDown className="h-4 w-4 mr-2" /> Exportar PDF
+          <Button 
+            onClick={handleExportPDF} 
+            className="bg-primary hover:bg-primary/90"
+            disabled={exporting}
+          >
+            {exporting ? (
+              <><span className="animate-spin mr-2">...</span> Gerando...</>
+            ) : (
+              <><FileDown className="h-4 w-4 mr-2" /> Exportar PDF</>
+            )}
           </Button>
         </div>
       </div>
@@ -97,7 +138,10 @@ export default function CVBuilderPage() {
 
         {/* CV Preview Section */}
         <div className="md:col-span-3">
-          <div className="bg-white text-black p-12 shadow-2xl rounded-sm min-h-[1100px] font-serif print:shadow-none print:p-0 print:border-none">
+          <div 
+            id="cv-preview" 
+            className="bg-white text-black p-8 md:p-12 shadow-2xl rounded-sm min-h-[1100px] font-serif print:shadow-none print:p-0 print:border-none w-full"
+          >
             {/* Header */}
             <div className="text-center border-b-2 border-black pb-8 mb-8">
               <h1 className="text-4xl font-bold uppercase tracking-[0.1em]">{profile?.full_name || "Seu Nome Completo"}</h1>
