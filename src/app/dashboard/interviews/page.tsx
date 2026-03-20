@@ -1,139 +1,195 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
+import { createClient } from "@/lib/supabase/client"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { MessageSquare, Send, Play, RotateCcw, User, Bot, Loader2 } from "lucide-react"
+
+interface Message {
+  role: 'user' | 'ai'
+  content: string
+}
 
 export default function InterviewSimulatorPage() {
-  const [topic, setTopic] = useState("")
-  const [inSession, setInSession] = useState(false)
-  const [messages, setMessages] = useState<{role: 'ai' | 'user', content: string}[]>([])
-  const [input, setInput] = useState("")
+  const supabase = createClient()
   const [loading, setLoading] = useState(false)
+  const [started, setStarted] = useState(false)
+  const [topic, setTopic] = useState("")
+  const [history, setHistory] = useState<Message[]>([])
+  const [userInput, setUserInput] = useState("")
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    async function getProfile() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data } = await supabase.from('profiles').select('title').eq('id', user.id).single()
+        if (data?.title) setTopic(data.title)
+      }
+    }
+    getProfile()
+  }, [])
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [history])
 
   const startInterview = async () => {
-    if (!topic) return
-    setInSession(true)
+    if (!topic.trim()) return
     setLoading(true)
-    
-    // Call AI route
-    const res = await fetch('/api/ai/interview', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'start', topic })
-    })
-    
-    if (res.ok) {
+    try {
+      const res = await fetch('/api/ai/interview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'start', topic })
+      })
       const data = await res.json()
-      setMessages([{ role: 'ai', content: data.question }])
-    } else {
-      setMessages([{ role: 'ai', content: "Olá! Vamos simular sua entrevista. Fale um pouco sobre você e por que escolheu esta área." }])
+      if (data.question) {
+        setHistory([{ role: 'ai', content: data.question }])
+        setStarted(true)
+      }
+    } catch (error) {
+      console.error(error)
+      // Fallback message
+      setHistory([{ role: 'ai', content: "Olá! Vamos simular sua entrevista. Fale um pouco sobre você e por que escolheu esta área." }])
+      setStarted(true)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
-  const sendMessage = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!input.trim()) return
-
-    const newMessages = [...messages, { role: 'user', content: input } as const]
-    setMessages(newMessages)
-    setInput("")
+  const sendMessage = async () => {
+    if (!userInput.trim() || loading) return
+    
+    const newHistory: Message[] = [...history, { role: 'user', content: userInput }]
+    setHistory(newHistory)
+    setUserInput("")
     setLoading(true)
 
     try {
       const res = await fetch('/api/ai/interview', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'answer', topic, history: newMessages })
+        body: JSON.stringify({ action: 'answer', topic, history: newHistory })
       })
-      
-      if (res.ok) {
-        const data = await res.json()
-        setMessages([...newMessages, { role: 'ai', content: data.reply }])
+      const data = await res.json()
+      if (data.reply) {
+        setHistory([...newHistory, { role: 'ai', content: data.reply }])
       } else {
-        setMessages([...newMessages, { role: 'ai', content: "Ótima resposta! O que você considera como seu maior desafio até o momento?" }])
+        setHistory([...newHistory, { role: 'ai', content: "Ótima resposta! O que você considera como seu maior desafio até o momento?" }])
       }
-    } catch {
-      setMessages([...newMessages, { role: 'ai', content: "Excelente. Como você lida com situações de pressão ou prazos apertados?" }])
+    } catch (error) {
+      console.error(error)
+      setHistory([...newHistory, { role: 'ai', content: "Excelente. Como você lida com situações de pressão ou prazos apertados?" }])
+    } finally {
+      setLoading(false)
     }
+  }
 
-    setLoading(false)
+  const restart = () => {
+    setStarted(false)
+    setHistory([])
   }
 
   return (
-    <div className="space-y-8 h-full flex flex-col">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Simulador de Entrevista</h1>
-        <p className="text-muted-foreground">Treine suas respostas com a nossa Inteligência Artificial.</p>
+    <div className="flex flex-col h-[calc(100vh-10rem)] max-w-4xl mx-auto space-y-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Simulador de Entrevista</h1>
+          <p className="text-muted-foreground">Pratique suas respostas com nosso recrutador de IA.</p>
+        </div>
+        {started && (
+          <Button variant="outline" size="sm" onClick={restart}>
+            <RotateCcw className="h-4 w-4 mr-2" /> Reiniciar
+          </Button>
+        )}
       </div>
 
-      {!inSession ? (
-        <Card className="max-w-xl">
-          <CardHeader>
-            <CardTitle>Nova Simulação</CardTitle>
-            <CardDescription>Escolha o tema ou vaga desejada para iniciar o treinamento</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Cargo ou Tema da Entrevista</label>
+      {!started ? (
+        <Card className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gradient-to-b from-white to-primary/5 border-dashed border-2">
+          <div className="mb-6 rounded-full bg-primary/10 p-4">
+            <MessageSquare className="h-12 w-12 text-primary" />
+          </div>
+          <CardTitle className="mb-2 text-2xl">Pronto para começar?</CardTitle>
+          <CardDescription className="max-w-md mb-8">
+            Nossa IA irá assumir o papel de um recrutador experiente. 
+            Defina o cargo ou tecnologia que deseja praticar abaixo.
+          </CardDescription>
+          
+          <div className="w-full max-w-sm space-y-4">
+            <div className="space-y-2 text-left">
+              <label className="text-sm font-semibold">Cargo ou Tópico da Entrevista</label>
               <Input 
-                placeholder="Ex: Desenvolvedor Front-end, Assistente Administrativo..." 
+                placeholder="Ex: Desenvolvedor Frontend Jr, Vendedor, Gestor de RH..." 
                 value={topic}
-                onChange={e => setTopic(e.target.value)}
+                onChange={(e) => setTopic(e.target.value)}
+                className="bg-white"
               />
             </div>
-          </CardContent>
-          <CardFooter>
-            <Button onClick={startInterview} disabled={!topic || loading}>
-              {loading ? "Preparando..." : "Iniciar Entrevista"}
+            <Button className="w-full h-12 text-lg font-bold" onClick={startInterview} disabled={loading || !topic}>
+              {loading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Play className="h-5 w-5 mr-2" />}
+              {loading ? "Preparando..." : "Iniciar Simulação"}
             </Button>
-          </CardFooter>
+          </div>
         </Card>
       ) : (
-        <Card className="flex-1 flex flex-col max-h-[600px] max-w-3xl">
-          <CardHeader className="border-b">
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>Entrevista em andamento</CardTitle>
-                <CardDescription>Tema: {topic}</CardDescription>
-              </div>
-              <Button variant="outline" size="sm" onClick={() => setInSession(false)}>Encerrar / Voltar</Button>
+        <Card className="flex-1 flex flex-col overflow-hidden shadow-xl border-t-4 border-t-primary">
+          <CardHeader className="border-b bg-muted/30 py-3">
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
+              <span className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Sessão: {topic}</span>
             </div>
           </CardHeader>
-          <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.role === 'ai' ? 'justify-start' : 'justify-end'}`}>
-                <div className={`max-w-[80%] rounded-lg p-3 ${
-                  msg.role === 'ai' ? 'bg-secondary/10 border text-foreground' : 'bg-primary text-primary-foreground'
-                }`}>
-                  <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+          
+          <CardContent className="flex-1 overflow-y-auto p-4 space-y-6">
+            {history.map((msg, i) => (
+              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2`}>
+                <div className={`flex gap-3 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                  <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 ${msg.role === 'user' ? 'bg-primary shadow-sm' : 'bg-white border shadow-sm'}`}>
+                    {msg.role === 'user' ? <User className="h-4 w-4 text-white" /> : <Bot className="h-4 w-4 text-primary" />}
+                  </div>
+                  <div className={`p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === 'user' ? 'bg-primary text-primary-foreground rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none border'}`}>
+                    {msg.content}
+                  </div>
                 </div>
               </div>
             ))}
             {loading && (
-              <div className="flex justify-start">
-                <div className="bg-secondary/10 border text-foreground rounded-lg p-3">
-                  <span className="text-sm flex gap-1">
-                    <span className="animate-bounce">.</span>
-                    <span className="animate-bounce delay-75">.</span>
-                    <span className="animate-bounce delay-150">.</span>
-                  </span>
+              <div className="flex justify-start animate-in fade-in">
+                <div className="flex gap-3 max-w-[85%]">
+                  <div className="h-8 w-8 rounded-full flex items-center justify-center bg-white border shadow-sm">
+                    <Bot className="h-4 w-4 text-primary animate-pulse" />
+                  </div>
+                  <div className="py-2.5 px-4 rounded-2xl bg-white border text-sm flex gap-1 items-center">
+                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
+                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                  </div>
                 </div>
               </div>
             )}
+            <div ref={scrollRef} />
           </CardContent>
-          <CardFooter className="border-t p-4">
-            <form onSubmit={sendMessage} className="flex w-full gap-2">
+
+          <CardFooter className="p-4 border-t bg-white">
+            <form 
+              className="flex w-full gap-2" 
+              onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
+            >
               <Input 
-                placeholder="Sua resposta..." 
-                value={input}
-                onChange={e => setInput(e.target.value)}
+                placeholder="Descreva sua resposta com detalhes..." 
+                className="flex-1 h-12 focus-visible:ring-primary shadow-inner"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
                 disabled={loading}
-                className="flex-1"
               />
-              <Button type="submit" disabled={!input.trim() || loading}>Enviar</Button>
+              <Button type="submit" size="icon" className="h-12 w-12 shrink-0 shadow-md" disabled={loading || !userInput.trim()}>
+                {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
+              </Button>
             </form>
           </CardFooter>
         </Card>

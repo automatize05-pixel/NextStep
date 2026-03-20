@@ -26,7 +26,7 @@ export default function DashboardLayout({
     { name: "Meu Currículo", href: "/dashboard/cv", icon: FileText },
     { name: "Trilhas", href: "/dashboard/tracks", icon: Map },
     { name: "Entrevistas", href: "/dashboard/interviews", icon: MessageSquare },
-    { name: "Caminhos", href: "/dashboard/paths", icon: Briefcase },
+    { name: "Carreira", href: "/dashboard/career", icon: Briefcase },
   ]
 
   return (

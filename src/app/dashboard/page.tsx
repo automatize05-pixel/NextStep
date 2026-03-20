@@ -2,117 +2,193 @@ import { createClient } from "@/lib/supabase/server"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { CheckCircle2, Circle, Trophy, BarChart3, MessageSquare, FileText, UserCircle } from "lucide-react"
 
 export default async function DashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   let profile = null;
+  let expCount = 0;
+  let eduCount = 0;
+  let skillCount = 0;
+
   if (user) {
-    const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
-    profile = data;
+    const [profileRes, expRes, eduRes, skillRes] = await Promise.all([
+      supabase.from('profiles').select('*').eq('id', user.id).single(),
+      supabase.from('experiences').select('*', { count: 'exact', head: true }),
+      supabase.from('education').select('*', { count: 'exact', head: true }),
+      supabase.from('skills').select('*', { count: 'exact', head: true }),
+    ])
+    
+    profile = profileRes.data;
+    expCount = expRes.count || 0;
+    eduCount = eduRes.count || 0;
+    skillCount = skillRes.count || 0;
   }
 
-  // Calculate generic profile completeness
-  const completeness = profile?.full_name && profile?.current_level && profile?.field_of_interest ? 40 : 10;
+  // Calculate completeness based on real data
+  let points = 0;
+  if (profile?.full_name) points += 10;
+  if (profile?.title) points += 10;
+  if (profile?.bio) points += 10;
+  if (profile?.location) points += 10;
+  if (expCount > 0) points += 20;
+  if (eduCount > 0) points += 20;
+  if (skillCount >= 3) points += 20;
+  
+  const completeness = points;
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Olá, {profile?.full_name?.split(' ')[0] || 'Usuário'}!</h1>
-        <p className="text-muted-foreground">Bem-vindo(a) ao seu painel de evolução profissional.</p>
+    <div className="space-y-8 animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Olá, {profile?.full_name?.split(' ')[0] || 'Usuário'}!</h1>
+          <p className="text-muted-foreground text-lg">Aqui está o seu progresso na jornada NextStep.</p>
+        </div>
+        <Link href="/dashboard/profile">
+          <Button className="bg-primary hover:bg-primary/90 shadow-md">Atualizar Perfil</Button>
+        </Link>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+      {/* Stats Grid */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="border-l-4 border-l-primary shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Perfil Completo</CardTitle>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-muted-foreground"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
+            <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Perfil Completo</CardTitle>
+            <UserCircle className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{completeness}%</div>
-            <p className="text-xs text-muted-foreground">Preencha seus dados na aba Perfil</p>
-            <div className="w-full bg-secondary/20 h-2 mt-3 rounded-full overflow-hidden">
-              <div className="bg-primary h-full" style={{ width: `${completeness}%` }}></div>
+            <div className="text-3xl font-bold">{completeness}%</div>
+            <div className="w-full bg-secondary/30 h-1.5 mt-3 rounded-full overflow-hidden">
+              <div className="bg-primary h-full transition-all duration-1000" style={{ width: `${completeness}%` }}></div>
             </div>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="border-l-4 border-l-blue-500 shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Status do Currículo</CardTitle>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-muted-foreground"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">CV Otimizado</CardTitle>
+            <FileText className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{profile?.has_resume ? "Pronto" : "Pendente"}</div>
-            <p className="text-xs text-muted-foreground">Gere um PDF em "Meu Currículo"</p>
+            <div className="text-3xl font-bold">{profile?.has_resume ? "Pronto" : "Pendente"}</div>
+            <p className="text-xs text-muted-foreground mt-2">
+              {profile?.has_resume ? "Gerado com sucesso" : "Aguardando preenchimento"}
+            </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-l-4 border-l-purple-500 shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Trilhas Concluídas</CardTitle>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-muted-foreground"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Experiências</CardTitle>
+            <BarChart3 className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">0</div>
-            <p className="text-xs text-muted-foreground">Explore as opções em "Trilhas"</p>
+            <div className="text-3xl font-bold">{expCount}</div>
+            <p className="text-xs text-muted-foreground mt-2">Registos profissionais no perfil</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-l-4 border-l-orange-500 shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Entrevistas Simuladas</CardTitle>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-muted-foreground"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Competências</CardTitle>
+            <Trophy className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">0</div>
-            <p className="text-xs text-muted-foreground">Aumente sua confiança treinando</p>
+            <div className="text-3xl font-bold">{skillCount}</div>
+            <p className="text-xs text-muted-foreground mt-2">Habilidades técnicas e soft skills</p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
+      <div className="grid gap-6 md:grid-cols-7">
+        {/* Next Steps */}
+        <Card className="md:col-span-4 shadow-md">
           <CardHeader>
-            <CardTitle>Próximos Passos</CardTitle>
-            <CardDescription>Recomendações para sua evolução</CardDescription>
+            <CardTitle className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-500" />
+              Roteiro de Evolução
+            </CardTitle>
+            <CardDescription>Siga estas etapas para maximizar suas chances.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="bg-primary/10 p-2 rounded-full">
-                <span className="text-primary font-bold">1</span>
+          <CardContent className="space-y-6">
+            <div className={`flex items-start gap-4 p-3 rounded-lg border transition-colors ${completeness >= 60 ? 'bg-green-50/50 border-green-100' : 'bg-white'}`}>
+              <div className={`mt-1 ${completeness >= 60 ? 'text-green-500' : 'text-primary'}`}>
+                {completeness >= 60 ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
               </div>
               <div className="flex-1">
-                <h4 className="text-sm font-semibold">Completar Perfil Profissional</h4>
-                <p className="text-sm text-muted-foreground">Adicione suas experiências e formação.</p>
+                <h4 className="text-sm font-bold">1. Base Profissional</h4>
+                <p className="text-sm text-muted-foreground">Preencher dados básicos, bio e pelo menos 1 experiência.</p>
               </div>
-              <Link href="/dashboard/profile">
-                <Button variant="outline" size="sm">Fazer agora</Button>
-              </Link>
+              {completeness < 60 && (
+                <Link href="/dashboard/profile">
+                  <Button variant="outline" size="sm">Completar</Button>
+                </Link>
+              )}
             </div>
-            <div className="flex items-center gap-4 opacity-50">
-              <div className="bg-muted p-2 rounded-full">
-                <span className="text-muted-foreground font-bold">2</span>
+
+            <div className={`flex items-start gap-4 p-3 rounded-lg border transition-colors ${profile?.has_resume ? 'bg-green-50/50 border-green-100' : 'bg-white'}`}>
+              <div className={`mt-1 ${profile?.has_resume ? 'text-green-500' : 'text-muted-foreground'}`}>
+                {profile?.has_resume ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
               </div>
               <div className="flex-1">
-                <h4 className="text-sm font-semibold">Gerar Primeiro Currículo</h4>
-                <p className="text-sm text-muted-foreground">Precisa do perfil 100% preenchido.</p>
+                <h4 className="text-sm font-bold">2. Portfólio de Candidato</h4>
+                <p className="text-sm text-muted-foreground">Gerar a primeira versão do seu currículo otimizado.</p>
               </div>
-              <Button variant="outline" size="sm" disabled>Bloqueado</Button>
+              {!profile?.has_resume && (
+                <Link href="/dashboard/cv">
+                  <Button variant="outline" size="sm" disabled={completeness < 40}>Gerar CV</Button>
+                </Link>
+              )}
+            </div>
+
+            <div className="flex items-start gap-4 p-3 rounded-lg border bg-white opacity-60">
+              <div className="mt-1 text-muted-foreground">
+                <Circle className="h-5 w-5" />
+              </div>
+              <div className="flex-1">
+                <h4 className="text-sm font-bold">3. Simulação de Entrevistas</h4>
+                <p className="text-sm text-muted-foreground">Treinar com a IA para sua primeira oportunidade.</p>
+              </div>
+              <Link href="/dashboard/interviews">
+                <Button variant="outline" size="sm" disabled={!profile?.has_resume}>Treinar</Button>
+              </Link>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        {/* AI Suggestions */}
+        <Card className="md:col-span-3 shadow-md bg-gradient-to-br from-white to-primary/5">
           <CardHeader>
-            <CardTitle>Sua Prontidão (Análise IA)</CardTitle>
-            <CardDescription>Baseado nos dados do seu perfil</CardDescription>
+            <CardTitle className="flex items-center gap-2">
+              <MessageSquare className="h-5 w-5 text-primary" />
+              Advisor IA
+            </CardTitle>
+            <CardDescription>Análise personalizada do seu momento.</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="p-4 border rounded-md bg-accent/50 text-sm">
-              <p className="mb-2"><strong>Aviso do Orientador:</strong></p>
-              <p>Seu perfil ainda possui poucas informações para uma análise profunda. Recomendamos adicionar suas <strong>habilidades principais</strong> e <strong>experiências recentes</strong> para que a IA possa sugerir caminhos de carreira interessantes para a área de {profile?.field_of_interest || "tecnologia"}.</p>
+            <div className="p-4 rounded-xl bg-primary/10 border border-primary/20 text-sm leading-relaxed text-primary-foreground dark:text-primary">
+              <p className="font-bold mb-2">Insight de hoje:</p>
+              {completeness < 50 ? (
+                <p>Seu perfil ainda está muito básico. Adicionar pelo menos <strong>3 habilidades técnicas</strong> e detalhar suas <strong>conquistas</strong> na última experiência ajudará a IA a sugerir as melhores trilhas de estudo para você.</p>
+              ) : !profile?.has_resume ? (
+                <p>Ótimo trabalho preenchendo seu perfil! O próximo passo ideal é <strong>gerar seu currículo</strong>. Analisaremos as palavras-chave para garantir que você passe nos filtros automáticos (ATS).</p>
+              ) : (
+                <p>Seu currículo está pronto! Recomendamos agora a trilha de <strong>"Soft Skills para Entrevistas"</strong> para alinhar seu discurso técnico com o que os recrutadores buscam.</p>
+              )}
+            </div>
+            
+            <div className="mt-6 flex flex-col gap-3">
+              <h5 className="text-xs font-bold uppercase text-muted-foreground">Área de Interesse</h5>
+              <div className="flex items-center gap-2">
+                <div className="px-3 py-1 bg-white border rounded-full text-xs font-medium shadow-sm">
+                  {profile?.field_of_interest || "Geral"}
+                </div>
+                <div className="px-3 py-1 bg-white border rounded-full text-xs font-medium shadow-sm">
+                  {profile?.current_level || "Nível não definido"}
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
