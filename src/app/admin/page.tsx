@@ -2,6 +2,12 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Users, Activity, Settings, Database, ShieldAlert, BarChart3 } from "lucide-react"
 
+interface RecentUser {
+  id: string;
+  full_name: string | null;
+  created_at: string;
+}
+
 export default async function AdminPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -16,13 +22,15 @@ export default async function AdminPage() {
     .from('profiles')
     .select('*', { count: 'exact', head: true })
 
-  const { data: recentUsers } = await supabase
+  const { data: recentUsersRaw } = await supabase
     .from('profiles')
     .select('id, full_name, created_at')
     .order('created_at', { ascending: false })
     .limit(5)
 
-  // Mock stats for the ones we don't have tables for yet, but making them look more dynamic
+  const recentUsers = (recentUsersRaw as unknown as RecentUser[]) || []
+
+  // Mock stats for the ones we don't have tables for yet
   const stats = [
     { label: "Usuários Totais", value: userCount?.toString() || "0", icon: Users, color: "text-blue-600" },
     { label: "Oportunidades Web", value: "Rastreadas", icon: Database, color: "text-green-600" },
@@ -93,8 +101,8 @@ export default async function AdminPage() {
            <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-100 p-8 shadow-sm">
               <h3 className="text-xl font-black mb-6">Usuários Recentes</h3>
               <div className="space-y-4">
-                 {recentUsers && recentUsers.length > 0 ? (
-                   recentUsers.map((u) => (
+                 {recentUsers.length > 0 ? (
+                   recentUsers.map((u: RecentUser) => (
                      <div key={u.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
                         <div className="flex items-center gap-3">
                            <div className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center font-bold text-slate-500 text-[10px]">
@@ -125,7 +133,7 @@ export default async function AdminPage() {
                        <span>45%</span>
                     </div>
                     <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                       <div className="h-full bg-blue-500 w-[45%]"></div>
+                       <div className={`h-full bg-blue-500 w-[45%]`}></div>
                     </div>
                  </div>
                  <div className="space-y-2">
@@ -134,40 +142,7 @@ export default async function AdminPage() {
                        <span>82%</span>
                     </div>
                     <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                       <div className="h-full bg-green-500 w-[82%]"></div>
-                    </div>
-                 </div>
-                 <div className="mt-8 p-4 bg-slate-900 rounded-xl border border-slate-800">
-                    <p className="text-[10px] font-black uppercase text-slate-500 mb-2">Build Status</p>
-                    <p className="font-mono text-xs text-green-400 font-bold">Vercel: Success (master)</p>
-                 </div>
-              </div>
-           </div>
-        </div>
-      </main>
-    </div>
-  )
-}
-
-           <div className="bg-slate-950 text-white rounded-3xl p-8 shadow-xl">
-              <h3 className="text-xl font-black mb-6">Status da IA</h3>
-              <div className="space-y-6">
-                 <div className="space-y-2">
-                    <div className="flex justify-between text-xs font-bold mb-1">
-                       <span>Cota OpenAI Mensal</span>
-                       <span>45%</span>
-                    </div>
-                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                       <div className="h-full bg-blue-500 w-[45%]"></div>
-                    </div>
-                 </div>
-                 <div className="space-y-2">
-                    <div className="flex justify-between text-xs font-bold mb-1">
-                       <span>Processamento de Crawford</span>
-                       <span>82%</span>
-                    </div>
-                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                       <div className="h-full bg-green-500 w-[82%]"></div>
+                       <div className={`h-full bg-green-500 w-[82%]`}></div>
                     </div>
                  </div>
                  <div className="mt-8 p-4 bg-slate-900 rounded-xl border border-slate-800">
