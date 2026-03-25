@@ -120,3 +120,42 @@ $$ LANGUAGE plpgsql security definer;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+
+-- System Settings (Global Governance)
+CREATE TABLE public.system_settings (
+  id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+  maintenance_mode BOOLEAN DEFAULT FALSE,
+  daily_ai_limit INTEGER DEFAULT 5,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- Initialize global settings
+INSERT INTO public.system_settings (id, maintenance_mode, daily_ai_limit)
+VALUES (1, FALSE, 10)
+ON CONFLICT (id) DO NOTHING;
+
+-- User Usage Tracking (Quotas)
+CREATE TABLE public.user_usage (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+  action_type TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+ALTER TABLE public.system_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_usage ENABLE ROW LEVEL SECURITY;
+
+-- Admin can manage system settings
+CREATE POLICY "Admin can manage system settings"
+  ON public.system_settings FOR ALL
+  USING ( auth.jwt() ->> 'email' = 'automatize05@gmail.com' );
+
+-- Public can read system settings (to check maintenance mode)
+CREATE POLICY "Public can read system settings"
+  ON public.system_settings FOR SELECT
+  USING ( true );
+
+-- Users can see their own usage
+CREATE POLICY "Users can see own usage"
+  ON public.user_usage FOR SELECT
+  USING ( auth.uid() = user_id );

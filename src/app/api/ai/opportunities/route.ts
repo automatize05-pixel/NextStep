@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 import OpenAI from "openai"
+import { checkUserQuota, logUserAction } from "@/lib/security/quota"
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -13,6 +14,18 @@ export async function POST(request: Request) {
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
+
+  // 1. Check Quota (Real-time Governance)
+  const quota = await checkUserQuota(user.id, 'ai_search')
+  if (!quota.allowed && user.email !== 'automatize05@gmail.com') {
+    return NextResponse.json({ 
+      error: "Quota Exceeded", 
+      message: `Você atingiu seu limite diário de ${quota.limit} buscas. Volte amanhã ou faça upgrade para o plano Premium!` 
+    }, { status: 429 })
+  }
+
+  // Log the action effectively decrements the quota
+  await logUserAction(user.id, 'ai_search')
 
   // Fetch full profile for context
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single()

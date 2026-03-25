@@ -41,6 +41,31 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // --- MAINTENANCE MODE LOGIC ---
+  const { data: settings } = await supabase
+    .from('system_settings')
+    .select('maintenance_mode')
+    .eq('id', 1)
+    .single()
+
+  const isMaintenanceActive = settings?.maintenance_mode || false
+  const isAdmin = user?.email === 'automatize05@gmail.com'
+  const isMaintenancePath = request.nextUrl.pathname === '/maintenance'
+  const isPublicAsset = request.nextUrl.pathname.match(/\.(svg|png|jpg|jpeg|gif|webp)$/)
+
+  if (isMaintenanceActive && !isAdmin && !isMaintenancePath && !isPublicAsset && !request.nextUrl.pathname.startsWith('/_next')) {
+    const maintenanceUrl = request.nextUrl.clone()
+    maintenanceUrl.pathname = '/maintenance'
+    return NextResponse.redirect(maintenanceUrl)
+  }
+
+  // If maintenance is OFF but user is on /maintenance page, redirect them home
+  if (!isMaintenanceActive && isMaintenancePath) {
+    const homeUrl = request.nextUrl.clone()
+    homeUrl.pathname = '/'
+    return NextResponse.redirect(homeUrl)
+  }
+
   // We will handle redirects in the client/layouts for better mobile resilience
   /*
   const publicRoutes = ['/', '/login', '/register']
