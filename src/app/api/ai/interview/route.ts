@@ -1,3 +1,5 @@
+import { createClient } from "@/lib/supabase/server"
+import { checkUserQuota, logUserAction } from "@/lib/security/quota"
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
@@ -9,7 +11,26 @@ export async function POST(req: Request) {
   })
 
   try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    // Check Quota for Interview
+    const quota = await checkUserQuota(user.id, 'ai_interview')
+    if (!quota.allowed && user.email !== 'automatize05@gmail.com') {
+      return NextResponse.json({ 
+        error: "Quota Exceeded", 
+        message: `Você atingiu seu limite diário de ${quota.limit} simulações. Volte amanhã!` 
+      }, { status: 429 })
+    }
+
     const { action, topic, history } = await req.json()
+    
+    // Log action
+    await logUserAction(user.id, 'ai_interview')
 
     if (action === 'start') {
       const completion = await openai.chat.completions.create({
