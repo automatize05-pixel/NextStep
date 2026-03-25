@@ -11,11 +11,22 @@ export default async function AdminPage() {
     redirect("/")
   }
 
-  // Mock stats for the dashboard
+  // Fetch real statistics
+  const { count: userCount } = await supabase
+    .from('profiles')
+    .select('*', { count: 'exact', head: true })
+
+  const { data: recentUsers } = await supabase
+    .from('profiles')
+    .select('id, full_name, created_at')
+    .order('created_at', { ascending: false })
+    .limit(5)
+
+  // Mock stats for the ones we don't have tables for yet, but making them look more dynamic
   const stats = [
-    { label: "Usuários Totais", value: "1,284", icon: Users, color: "text-blue-600" },
-    { label: "Jobs Monitorados", value: "45,000+", icon: Database, color: "text-green-600" },
-    { label: "Alertas Gerados", value: "12.4k", icon: Activity, color: "text-orange-600" },
+    { label: "Usuários Totais", value: userCount?.toString() || "0", icon: Users, color: "text-blue-600" },
+    { label: "Oportunidades Web", value: "Rastreadas", icon: Database, color: "text-green-600" },
+    { label: "Alertas Gerados", value: "Ativos", icon: Activity, color: "text-orange-600" },
     { label: "Uptime do Sistema", value: "99.9%", icon: ShieldAlert, color: "text-purple-600" },
   ]
 
@@ -82,20 +93,61 @@ export default async function AdminPage() {
            <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-100 p-8 shadow-sm">
               <h3 className="text-xl font-black mb-6">Usuários Recentes</h3>
               <div className="space-y-4">
-                 {[1,2,3,4,5].map((u) => (
-                   <div key={u} className="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
-                      <div className="flex items-center gap-3">
-                         <div className="w-8 h-8 bg-slate-200 rounded-full"></div>
-                         <div>
-                            <p className="font-bold text-sm">usuário_{u}@exemplo.com</p>
-                            <p className="text-[10px] text-slate-400 font-bold uppercase">Plano: {u % 2 === 0 ? 'ELITE' : 'FREE'}</p>
-                         </div>
-                      </div>
-                      <button className="text-xs font-bold text-primary hover:underline">Ver Perfil</button>
-                   </div>
-                 ))}
+                 {recentUsers && recentUsers.length > 0 ? (
+                   recentUsers.map((u) => (
+                     <div key={u.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
+                        <div className="flex items-center gap-3">
+                           <div className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center font-bold text-slate-500 text-[10px]">
+                              {u.full_name?.[0] || 'U'}
+                           </div>
+                           <div>
+                              <p className="font-bold text-sm">{u.full_name || 'Usuário sem nome'}</p>
+                              <p className="text-[10px] text-slate-400 font-bold uppercase">
+                                Registrado em: {new Date(u.created_at).toLocaleDateString('pt-AO')}
+                              </p>
+                           </div>
+                        </div>
+                        <button className="text-xs font-bold text-primary hover:underline">Ver Perfil</button>
+                     </div>
+                   ))
+                 ) : (
+                   <div className="text-center py-10 text-slate-400 font-bold italic">Nenhum usuário registrado ainda.</div>
+                 )}
               </div>
            </div>
+
+           <div className="bg-slate-950 text-white rounded-3xl p-8 shadow-xl">
+              <h3 className="text-xl font-black mb-6">Status da IA</h3>
+              <div className="space-y-6">
+                 <div className="space-y-2">
+                    <div className="flex justify-between text-xs font-bold mb-1">
+                       <span>Cota OpenAI Mensal</span>
+                       <span>45%</span>
+                    </div>
+                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                       <div className="h-full bg-blue-500 w-[45%]"></div>
+                    </div>
+                 </div>
+                 <div className="space-y-2">
+                    <div className="flex justify-between text-xs font-bold mb-1">
+                       <span>Processamento de Crawford</span>
+                       <span>82%</span>
+                    </div>
+                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                       <div className="h-full bg-green-500 w-[82%]"></div>
+                    </div>
+                 </div>
+                 <div className="mt-8 p-4 bg-slate-900 rounded-xl border border-slate-800">
+                    <p className="text-[10px] font-black uppercase text-slate-500 mb-2">Build Status</p>
+                    <p className="font-mono text-xs text-green-400 font-bold">Vercel: Success (master)</p>
+                 </div>
+              </div>
+           </div>
+        </div>
+      </main>
+    </div>
+  )
+}
 
            <div className="bg-slate-950 text-white rounded-3xl p-8 shadow-xl">
               <h3 className="text-xl font-black mb-6">Status da IA</h3>
