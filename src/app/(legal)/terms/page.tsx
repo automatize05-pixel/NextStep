@@ -109,10 +109,76 @@ export default function TermsPage() {
           </ul>
         </section>
 
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">6. Rescisão e Suspensão</h2>
+          <p className="text-slate-700 leading-relaxed font-medium">
+            Reservamo-nos o direito de suspender ou encerrar seu acesso ao NextStep se detectarmos violações graves destes termos, comportamento abusivo com a IA ou fraude em pagamentos. O encerramento por justa causa não confere direito a reembolso.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">7. Exclusão de Garantias</h2>
+          <p className="text-slate-700 leading-relaxed font-medium">
+            O serviço é fornecido "como está". Embora busquemos a perfeição, não garantimos que a plataforma seja ininterrupta ou livre de erros. O matching de IA é uma ferramenta de suporte, não uma garantia de sucesso contratual.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">8. Limitação de Responsabilidade</h2>
+          <p className="text-slate-700 leading-relaxed">
+            O NextStep não será responsável por quaisquer danos indiretos, lucros cessantes ou perda de dados decorrentes do uso da plataforma. Nossa responsabilidade total em qualquer reclamação não excederá o valor pago pelo usuário nos últimos 12 meses.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">9. Indemnização</h2>
+          <p className="text-slate-700 leading-relaxed">
+            Você concorda em indemnizar e isentar o NextStep e seus parceiros de quaisquer reclamações decorrentes do seu uso indevido da plataforma ou da violação de direitos de terceiros (incluindo Propriedade Intelectual).
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">10. Política de Uso Aceitável</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-bold text-slate-600">
+             <li className="list-none">✓ Uso pessoal e intransmissível.</li>
+             <li className="list-none">✓ Respeito aos limites de cota diária.</li>
+             <li className="list-none">✗ Proibido engenharia reversa.</li>
+             <li className="list-none">✗ Proibido uso para fins ilícitos.</li>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">11. Termos de API e Desenvolvedores</h2>
+          <p className="text-slate-700 leading-relaxed">
+            Futuras integrações de API seguirão documentação específica. O uso não autorizado de nossos endpoints resultará em bloqueio imediato de IP e ações legais.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">12. Modificações no Serviço</h2>
+          <p className="text-slate-700 leading-relaxed">
+            Podemos atualizar funcionalidades ou alterar o design da plataforma a qualquer momento para melhorar a experiência do usuário, sem aviso prévio obrigatório.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">13. Licença de Conteúdo do Usuário</h2>
+          <p className="text-slate-700 leading-relaxed">
+            Ao carregar dados em seu perfil, você concede ao NextStep uma licença mundial e gratuita para processar esses dados a fim de fornecer os serviços de IA e matching contratados.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">14. Resolução de Disputas</h2>
+          <p className="text-slate-700 leading-relaxed">
+            Incentivamos a resolução amigável de conflitos. Caso não seja possível, as partes concordam em submeter a disputa ao Centro de Arbitragem de Luanda antes de qualquer acção judicial.
+          </p>
+        </section>
+
         <section className="pt-8 border-t">
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">5. Foro e Jurisdição</h2>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">15. Disposições Gerais</h2>
           <p className="text-slate-900 text-lg leading-relaxed font-black mb-10">
-            Para dirimir quaisquer questões oriundas deste contrato, fica eleito o <strong>Foro da Comarca de Luanda, Angola</strong>, com renúncia expressa a qualquer outro.
+            Se qualquer parte deste contrato for considerada inválida, as restantes permanecerão em pleno vigor. Estes termos constituem o acordo integral entre você e o NextStep.
           </p>
           <div className="p-10 border-4 border-slate-900 rounded-none bg-slate-50 flex items-center justify-center">
              <p className="text-center font-black text-xs uppercase tracking-[0.2em] text-slate-400">NextStep Strategic Platform Evolution 2026</p>

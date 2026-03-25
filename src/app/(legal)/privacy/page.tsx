@@ -111,20 +111,86 @@ export default function PrivacyPage() {
           </div>
         </section>
 
-        <section className="pt-8 border-t">
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">5. Seus Planos e Controlo</h2>
-          <p className="text-slate-600 text-lg leading-relaxed font-medium mb-8">
-            Diferentes níveis de conta têm diferentes níveis de processamento, mas a proteção é a mesma. Você pode exportar seus dados em formato JSON a qualquer momento via Dashboard.
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">6. Transferências Internacionais</h2>
+          <p className="text-slate-700 leading-relaxed font-medium">
+            O NextStep utiliza infraestruturas de nuvem globais para garantir alta disponibilidade. Seus dados podem ser processados em servidores localizados fora de Angola, garantindo sempre que o país de destino possua leis de proteção de dados equivalentes ou que existam cláusulas contratuais padrão aprovadas pela <strong>APD (Agência de Proteção de Dados)</strong>.
           </p>
-          <div className="flex gap-4">
-             <div className="flex-1 p-4 bg-green-50 border border-green-100 rounded-lg">
-                <h4 className="font-bold text-green-800 text-xs uppercase mb-1">Acesso</h4>
-                <p className="text-lg font-black text-green-900 tracking-tight">Total</p>
-             </div>
-             <div className="flex-1 p-4 bg-orange-50 border border-orange-100 rounded-lg">
-                <h4 className="font-bold text-orange-800 text-xs uppercase mb-1">Status</h4>
-                <p className="text-lg font-black text-orange-900 tracking-tight">Verificado</p>
-             </div>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">7. Decisões Automatizadas</h2>
+          <p className="text-slate-700 leading-relaxed font-medium">
+            Utilizamos algoritmos para classificar sua compatibilidade com vagas. Você tem o direito de solicitar uma revisão humana de qualquer decisão automatizada que afete significativamente seu estatuto jurídico ou financeiro na plataforma.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">8. Cookies e Tecnologias de Rastreio</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-4 border rounded-xl">
+              <p className="font-bold mb-1 italic">Essenciais</p>
+              <p className="text-xs text-slate-500">Necessários para login e segurança da sessão.</p>
+            </div>
+            <div className="p-4 border rounded-xl">
+              <p className="font-bold mb-1 italic">Performance</p>
+              <p className="text-xs text-slate-500">Analisa como você usa a IA para melhorarmos o motor.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">9. Dados Biométricos e Audiovisuais</h2>
+          <p className="text-slate-700 leading-relaxed">
+            Ao utilizar o simulador de vídeo-entrevista (Planos Elite), processamos dados de voz e imagem unicamente para análise de oratória e feedback comportamental. Estes dados são criptografados e não são utilizados para identificação civil.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">10. Cronograma de Retenção</h2>
+          <ul className="space-y-2 text-sm font-bold text-slate-600">
+             <li>• Dados de Conta: Até 30 dias após exclusão.</li>
+             <li>• Logs de Acesso: 1 ano (exigência legal).</li>
+             <li>• Currículos Gerados: 6 meses após última interação.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">11. Privacidade de Menores</h2>
+          <p className="text-slate-700 leading-relaxed">
+            Nossos serviços são destinados a profissionais maiores de 18 anos. Não coletamos intencionalmente dados de menores sem consentimento parental explícito para programas de Jovem Aprendiz.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">12. Protocolo de Violação de Dados</h2>
+          <p className="text-slate-700 leading-relaxed">
+            Em caso de incidente de segurança, notificaremos os usuários afetados e a APD em até 72 horas após a confirmação da violação, descrevendo as medidas de mitigação tomadas.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">13. Uso de APIs de Terceiros</h2>
+          <p className="text-slate-700 leading-relaxed font-bold">
+             Integramos serviços da OpenAI, WhatsApp Business e Google Cloud. Cada provedor segue suas próprias políticas de segurança em conformidade com o NextStep.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">14. Segurança da Infraestrutura</h2>
+          <p className="text-slate-700 leading-relaxed">
+            Utilizamos firewalls de aplicação, monitoramento heurístico de ameaças e testes de intrusão trimestrais para garantir a integridade do seu plano de carreira.
+          </p>
+        </section>
+
+        <section className="pt-8 border-t">
+          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">15. Governança e Alterações</h2>
+          <p className="text-slate-900 text-lg leading-relaxed font-black mb-10">
+            Esta política pode ser alterada. Notificaremos sobre mudanças significativas via Dashboard. O uso continuado da plataforma implica na aceitação das novas diretrizes.
+          </p>
+          <div className="p-10 border-4 border-slate-900 rounded-none bg-slate-50 flex flex-col items-center justify-center gap-2">
+             <p className="text-center font-black text-[10px] uppercase tracking-[0.3em] text-slate-400">Data Integrity Division</p>
+             <p className="text-center font-black text-lg text-slate-900">NEXTSTEP ANGOLA</p>
           </div>
         </section>
       </div>

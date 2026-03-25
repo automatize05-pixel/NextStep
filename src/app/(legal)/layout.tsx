@@ -40,13 +40,13 @@ export default function LegalLayout({
             </Link>
 
             <div className="pt-4 mt-4 border-t border-slate-100">
-               <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 cursor-not-allowed">
+               <Link href="/community" className="flex items-center gap-3 px-3 py-2 rounded-lg text-[#475569] hover:bg-slate-50 transition-colors">
                 <BookOpen className="h-5 w-5" />
-                <span className="text-sm font-medium">Diretrizes da Comunidade</span>
+                <span className="text-sm font-semibold">Diretrizes da Comunidade</span>
               </Link>
-               <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 cursor-not-allowed">
+               <Link href="/support" className="flex items-center gap-3 px-3 py-2 rounded-lg text-[#475569] hover:bg-slate-50 transition-colors">
                 <HelpCircle className="h-5 w-5" />
-                <span className="text-sm font-medium">Suporte</span>
+                <span className="text-sm font-semibold">Suporte</span>
               </Link>
             </div>
           </div>
