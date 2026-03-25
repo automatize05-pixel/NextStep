@@ -15,6 +15,7 @@ const withPWA = withPWAInit({
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
+  turbopack: {}, // Silence Next.js 16 build error with Webpack plugins
 };
 
 export default withPWA(nextConfig);
