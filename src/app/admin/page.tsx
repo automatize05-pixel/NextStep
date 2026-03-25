@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
-import { redirect } from "next/navigation"
-import { Users, Activity, Settings, Database, ShieldAlert, BarChart3 } from "lucide-react"
+import { Users, Activity, Database, ShieldAlert } from "lucide-react"
 
 interface RecentUser {
   id: string;
@@ -8,14 +7,8 @@ interface RecentUser {
   created_at: string;
 }
 
-export default async function AdminPage() {
+export default async function AdminOverview() {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  // STRICT ACCESS CONTROL
-  if (!user || user.email !== "automatize05@gmail.com") {
-    redirect("/")
-  }
 
   // Fetch real statistics
   const { count: userCount } = await supabase
@@ -30,129 +23,139 @@ export default async function AdminPage() {
 
   const recentUsers = (recentUsersRaw as unknown as RecentUser[]) || []
 
-  // Mock stats for the ones we don't have tables for yet
   const stats = [
-    { label: "Usuários Totais", value: userCount?.toString() || "0", icon: Users, color: "text-blue-600" },
-    { label: "Oportunidades Web", value: "Rastreadas", icon: Database, color: "text-green-600" },
-    { label: "Alertas Gerados", value: "Ativos", icon: Activity, color: "text-orange-600" },
-    { label: "Uptime do Sistema", value: "99.9%", icon: ShieldAlert, color: "text-purple-600" },
+    { 
+      label: "Usuários Totais", 
+      value: userCount?.toString() || "0", 
+      sub: "Registrados no DB",
+      icon: Users, 
+      color: "text-blue-600",
+      bg: "bg-blue-50"
+    },
+    { 
+      label: "Oportunidades", 
+      value: "Ativo", 
+      sub: "Auto-Scraping AI",
+      icon: Database, 
+      color: "text-green-600",
+      bg: "bg-green-50"
+    },
+    { 
+      label: "Alertas V5", 
+      value: "On", 
+      sub: "Push & WhatsApp",
+      icon: Activity, 
+      color: "text-orange-600",
+      bg: "bg-orange-50"
+    },
+    { 
+      label: "Segurança", 
+      value: "100%", 
+      sub: "Protocolo 22/11",
+      icon: ShieldAlert, 
+      color: "text-purple-600",
+      bg: "bg-purple-50"
+    },
   ]
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-[#1e293b]">
-      {/* Sidebar Admin */}
-      <aside className="fixed left-0 top-0 h-full w-64 bg-slate-900 text-white p-6 hidden lg:block">
-        <div className="mb-10">
-          <h1 className="text-2xl font-black tracking-tight text-primary">AdminHub</h1>
-          <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400">NextStep Control Center</p>
+    <div className="space-y-12 animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 overflow-hidden">
+        <div>
+          <h2 className="text-4xl lg:text-5xl font-black tracking-tight text-slate-900">Visão Geral</h2>
+          <p className="text-slate-500 font-bold mt-2 uppercase tracking-[0.2em] text-xs">Métricas da Plataforma em Tempo Real</p>
         </div>
-        
-        <nav className="space-y-4">
-           <div className="flex items-center gap-3 p-3 bg-primary/10 text-primary rounded-lg">
-             <BarChart3 className="h-5 w-5" />
-             <span className="font-bold">Overview</span>
-           </div>
-           <div className="flex items-center gap-3 p-3 text-slate-400 hover:text-white transition-colors cursor-pointer">
-             <Users className="h-5 w-5" />
-             <span className="font-medium">Gestão de Usuários</span>
-           </div>
-           <div className="flex items-center gap-3 p-3 text-slate-400 hover:text-white transition-colors cursor-pointer">
-             <Settings className="h-5 w-5" />
-             <span className="font-medium">Configurações</span>
-           </div>
-        </nav>
-        
-        <div className="absolute bottom-6 left-6">
-           <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-[10px] font-bold text-slate-400">Server Status: Online</span>
-           </div>
+        <div className="flex gap-3">
+           <button className="px-6 py-3 bg-white border-2 border-slate-200 rounded-2xl font-black text-xs uppercase tracking-wider hover:border-primary transition-all shadow-sm">Relatório Semanal</button>
+           <button className="px-6 py-3 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-wider hover:bg-primary transition-all shadow-lg">Exportar Tudo</button>
         </div>
-      </aside>
+      </div>
 
-      {/* Main Admin Content */}
-      <main className="lg:ml-64 p-8">
-        <header className="flex justify-between items-center mb-10">
-          <div>
-            <h2 className="text-3xl font-black tracking-tight">Dashboard Admin</h2>
-            <p className="text-slate-500 font-medium italic">Bem-vindo, {user.email}</p>
-          </div>
-          <div className="flex items-center gap-4">
-             <button className="px-4 py-2 bg-white border rounded-lg font-bold text-sm shadow-sm hover:bg-slate-50 transition-all">Exportar Relatórios</button>
-             <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center font-bold text-white uppercase">A</div>
-          </div>
-        </header>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-           {stats.map((stat, i) => (
-             <div key={i} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all">
-                <div className={`p-3 rounded-lg bg-slate-50 w-fit mb-4 ${stat.color}`}>
-                   <stat.icon className="h-6 w-6" />
-                </div>
-                <p className="text-slate-500 text-sm font-bold uppercase tracking-wider">{stat.label}</p>
-                <p className="text-3xl font-black tracking-tight mt-1">{stat.value}</p>
-             </div>
-           ))}
-        </div>
-
-        {/* Recent Activity Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-           <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-100 p-8 shadow-sm">
-              <h3 className="text-xl font-black mb-6">Usuários Recentes</h3>
-              <div className="space-y-4">
-                 {recentUsers.length > 0 ? (
-                   recentUsers.map((u: RecentUser) => (
-                     <div key={u.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
-                        <div className="flex items-center gap-3">
-                           <div className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center font-bold text-slate-500 text-[10px]">
-                              {u.full_name?.[0] || 'U'}
-                           </div>
-                           <div>
-                              <p className="font-bold text-sm">{u.full_name || 'Usuário sem nome'}</p>
-                              <p className="text-[10px] text-slate-400 font-bold uppercase">
-                                Registrado em: {new Date(u.created_at).toLocaleDateString('pt-AO')}
-                              </p>
-                           </div>
-                        </div>
-                        <button className="text-xs font-bold text-primary hover:underline">Ver Perfil</button>
-                     </div>
-                   ))
-                 ) : (
-                   <div className="text-center py-10 text-slate-400 font-bold italic">Nenhum usuário registrado ainda.</div>
-                 )}
+      {/* Stats Grid - Fixed Spacing and Overflow */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+         {stats.map((stat, i) => (
+           <div key={i} className="group bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <div className={`p-4 rounded-2xl ${stat.bg} w-fit mb-6 group-hover:scale-110 transition-transform`}>
+                 <stat.icon className={`h-8 w-8 ${stat.color}`} />
+              </div>
+              <div>
+                <p className="text-slate-400 text-xs font-black uppercase tracking-widest leading-none mb-2">{stat.label}</p>
+                <p className="text-4xl font-black tracking-tighter text-slate-900 truncate">{stat.value}</p>
+                <p className="text-[10px] font-bold text-slate-500 mt-2 italic">{stat.sub}</p>
               </div>
            </div>
+         ))}
+      </div>
 
-           <div className="bg-slate-950 text-white rounded-3xl p-8 shadow-xl">
-              <h3 className="text-xl font-black mb-6">Status da IA</h3>
-              <div className="space-y-6">
-                 <div className="space-y-2">
-                    <div className="flex justify-between text-xs font-bold mb-1">
-                       <span>Cota OpenAI Mensal</span>
-                       <span>45%</span>
-                    </div>
-                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                       <div className={`h-full bg-blue-500 w-[45%]`}></div>
-                    </div>
-                 </div>
-                 <div className="space-y-2">
-                    <div className="flex justify-between text-xs font-bold mb-1">
-                       <span>Processamento de Crawford</span>
-                       <span>82%</span>
-                    </div>
-                    <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                       <div className={`h-full bg-green-500 w-[82%]`}></div>
-                    </div>
-                 </div>
-                 <div className="mt-8 p-4 bg-slate-900 rounded-xl border border-slate-800">
-                    <p className="text-[10px] font-black uppercase text-slate-500 mb-2">Build Status</p>
-                    <p className="font-mono text-xs text-green-400 font-bold">Vercel: Success (master)</p>
-                 </div>
-              </div>
-           </div>
-        </div>
-      </main>
+      {/* Activity Grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+         <div className="xl:col-span-2 bg-white rounded-[3rem] border border-slate-100 p-10 shadow-sm relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full -mr-32 -mt-32 transition-transform group-hover:scale-110 duration-700 opacity-50" />
+            <h3 className="text-2xl font-black mb-10 flex items-center gap-3">
+               <Users className="h-6 w-6 text-primary" />
+               Novas Inscrições
+            </h3>
+            <div className="space-y-6 relative z-10">
+               {recentUsers.length > 0 ? (
+                 recentUsers.map((u) => (
+                   <div key={u.id} className="flex items-center justify-between p-6 bg-slate-50/80 backdrop-blur-sm rounded-[2rem] border border-white hover:border-primary/20 hover:bg-white transition-all">
+                      <div className="flex items-center gap-5">
+                         <div className="w-14 h-14 bg-gradient-to-br from-primary to-blue-600 rounded-2xl flex items-center justify-center font-black text-white text-xl shadow-lg shadow-primary/20">
+                            {u.full_name?.[0] || 'U'}
+                         </div>
+                         <div>
+                            <p className="font-extrabold text-slate-900 text-lg">{u.full_name || 'Usuário Anónimo'}</p>
+                            <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">
+                              Inscrito em: {new Date(u.created_at).toLocaleDateString('pt-AO', { month: 'long', day: 'numeric', year: 'numeric' })}
+                            </p>
+                         </div>
+                      </div>
+                      <button className="h-10 px-6 rounded-full bg-white border border-slate-200 font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all shadow-sm">Detalhes</button>
+                   </div>
+                 ))
+               ) : (
+                 <div className="text-center py-16 text-slate-300 font-black text-xl italic uppercase tracking-widest">Nenhum dado ativo</div>
+               )}
+            </div>
+         </div>
+
+         <div className="bg-slate-900 text-white rounded-[3rem] p-10 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] border border-white/5 rounded-full rotate-45 pointer-events-none" />
+            <h3 className="text-2xl font-black mb-10 flex items-center gap-3">
+               <Activity className="h-6 w-6 text-primary" />
+               Status IA V5
+            </h3>
+            <div className="space-y-10 relative z-10">
+               <div className="space-y-3">
+                  <div className="flex justify-between text-[11px] font-black uppercase tracking-[0.25em] text-slate-400">
+                     <span>OpenAI Cota</span>
+                     <span className="text-primary italic">45.2%</span>
+                  </div>
+                  <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden p-[2px]">
+                     <div className="h-full bg-primary rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)]" style={{ width: '45%' }} />
+                  </div>
+               </div>
+               <div className="space-y-3">
+                  <div className="flex justify-between text-[11px] font-black uppercase tracking-[0.25em] text-slate-400">
+                     <span>Matching Flow</span>
+                     <span className="text-green-400 italic">Estável</span>
+                  </div>
+                  <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden p-[2px]">
+                     <div className="h-full bg-green-500 rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(34,197,94,0.5)]" style={{ width: '88%' }} />
+                  </div>
+               </div>
+
+               <div className="mt-12 p-8 bg-slate-800/50 rounded-[2.5rem] border border-white/5 group hover:border-primary/30 transition-all">
+                  <p className="text-[10px] font-black uppercase text-slate-500 mb-3 tracking-[0.3em]">Deployment Status</p>
+                  <p className="font-mono text-xs text-green-400 font-bold flex items-center gap-2">
+                    <span className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
+                    Vercel Edge: Active
+                  </p>
+                  <p className="font-mono text-[10px] text-slate-600 mt-2">Commit: ba57ce7 (stable)</p>
+               </div>
+            </div>
+         </div>
+      </div>
     </div>
   )
 }
