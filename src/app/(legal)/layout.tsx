@@ -7,7 +7,7 @@ export default function LegalLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen bg-[#fafafa] text-[#171717]">
       {/* Top Header */}
       <header className="h-16 bg-white border-b sticky top-0 z-50 px-4 md:px-8 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -27,9 +27,9 @@ export default function LegalLayout({
         {/* Sidebar Nav */}
         <aside className="w-full md:w-64 md:h-[calc(100vh-64px)] md:sticky md:top-16 border-r bg-white p-4">
           <div className="space-y-1">
-            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Jurídico e Privacidade</p>
+            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#94a3b8] mb-4">Jurídico e Privacidade</p>
             
-            <Link href="/privacy" className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+            <Link href="/privacy" className="flex items-center gap-3 px-3 py-2 rounded-lg text-[#475569] hover:bg-slate-50 transition-colors">
               <Shield className="h-5 w-5" />
               <span className="text-sm font-semibold">Política de Privacidade</span>
             </Link>
@@ -40,11 +40,11 @@ export default function LegalLayout({
             </Link>
 
             <div className="pt-4 mt-4 border-t border-slate-100">
-               <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 cursor-not-allowed">
+               <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 cursor-not-allowed">
                 <BookOpen className="h-5 w-5" />
                 <span className="text-sm font-medium">Diretrizes da Comunidade</span>
               </Link>
-               <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 cursor-not-allowed">
+               <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 cursor-not-allowed">
                 <HelpCircle className="h-5 w-5" />
                 <span className="text-sm font-medium">Suporte</span>
               </Link>
@@ -53,7 +53,7 @@ export default function LegalLayout({
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 bg-white p-6 md:p-12 lg:p-20">
+        <main className="flex-1 bg-white p-6 md:p-12 lg:p-20 text-[#171717]">
           <div className="max-w-3xl mx-auto">
             {children}
           </div>
