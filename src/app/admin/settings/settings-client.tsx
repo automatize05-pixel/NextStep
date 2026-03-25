@@ -12,12 +12,11 @@ export default function SettingsClient({ initialSettings }: { initialSettings: a
 
   const handleToggleMaintenance = () => {
     startTransition(async () => {
-      try {
-        const newState = await toggleMaintenanceMode(maintenance)
-        setMaintenance(newState)
-      } catch (err) {
-        console.error(err)
-        alert("Erro ao alterar modo manutenção")
+      const result = await toggleMaintenanceMode(maintenance)
+      if (result.success) {
+        setMaintenance(result.newState)
+      } else {
+        alert(`Erro: ${result.error}`)
       }
     })
   }

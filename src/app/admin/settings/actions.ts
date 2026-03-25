@@ -19,11 +19,12 @@ export async function toggleMaintenanceMode(currentState: boolean) {
     .eq('id', 1)
 
   if (error) {
-    throw new Error(error.message)
+    console.error("Supabase Error toggleMaintenanceMode:", error)
+    return { success: false, error: error.message }
   }
 
   revalidatePath('/admin/settings')
-  return !currentState
+  return { success: true, newState: !currentState }
 }
 
 /**
