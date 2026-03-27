@@ -28,6 +28,7 @@ export default function Home() {
           <Link className="text-[11px] font-bold uppercase tracking-widest text-slate-300 hover:text-white transition-colors" href="/about">Sobre</Link>
           <Link className="text-[11px] font-bold uppercase tracking-widest text-slate-300 hover:text-white transition-colors" href="/collaborators">Colaboradores</Link>
           <Link className="text-[11px] font-bold uppercase tracking-widest text-slate-300 hover:text-white transition-colors" href="/partners">Parceiros</Link>
+          <Link className="text-[11px] font-bold uppercase tracking-widest text-slate-300 hover:text-white transition-colors" href="/contact">Contacto</Link>
           <Link className="text-[11px] font-bold uppercase tracking-widest text-slate-300 hover:text-white transition-colors" href="#pricing">Preços</Link>
         </nav>
 
@@ -55,6 +56,7 @@ export default function Home() {
           <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="/about">Sobre</Link>
           <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="/collaborators">Colaboradores</Link>
           <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="/partners">Parceiros</Link>
+          <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="/contact">Contacto</Link>
           <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="#pricing">Preços</Link>
           <Link onClick={() => setIsMenuOpen(false)} href="/register">
             <Button className="bg-[#2563EB] hover:bg-blue-700 text-white font-black text-xs uppercase tracking-widest px-12 h-16 rounded-2xl mt-6">Criar Conta</Button>
@@ -317,6 +319,7 @@ export default function Home() {
                 <li><Link href="/about" className="text-xs font-bold text-slate-500 hover:text-white transition-all italic">Conheça o Projecto</Link></li>
                 <li><Link href="/collaborators" className="text-xs font-bold text-slate-500 hover:text-white transition-all italic">Colaboradores & Doações</Link></li>
                 <li><Link href="/partners" className="text-xs font-bold text-slate-500 hover:text-white transition-all italic">Seja um Parceiro</Link></li>
+                <li><Link href="/contact" className="text-xs font-bold text-slate-500 hover:text-white transition-all italic">Fale Conosco</Link></li>
              </ul>
           </div>
 
