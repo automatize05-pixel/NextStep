@@ -196,7 +196,87 @@ export default async function Home() {
               </div>
            </div>
         </section>
+
+        {/* How It Works */}
+        <section className="w-full py-32 bg-slate-950/30">
+          <div className="container px-6 md:px-12 mx-auto">
+            <div className="text-center mb-20 space-y-4">
+              <p className="text-slate-500 font-black uppercase tracking-[0.3em] text-[10px]">Processo</p>
+              <h2 className="text-4xl md:text-6xl font-black tracking-tighter">Como <span className="text-[#2563EB]">Funciona</span></h2>
+              <p className="text-slate-400 font-bold max-w-xl mx-auto">Da inscrição à primeira oportunidade concretizada em 5 passos simples.</p>
+            </div>
+            <div className="relative max-w-4xl mx-auto">
+              <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent -translate-x-1/2" />
+              {[
+                { step: '01', title: 'Cria a tua conta', desc: 'Inscreve-te gratuitamente em 30 segundos. Sem cartão de crédito.', side: 'left' },
+                { step: '02', title: 'Constrói o teu perfil', desc: 'Adiciona experiência, competências e deixa a IA completar o teu CV.', side: 'right' },
+                { step: '03', title: 'Treina com a IA', desc: 'Simula entrevistas, otimiza o LinkedIn, analisa o teu valor de mercado.', side: 'left' },
+                { step: '04', title: 'O Job Hunter IA trabalha por ti', desc: 'A IA pesquisa vagas em tempo real adaptadas ao teu perfil.', side: 'right' },
+                { step: '05', title: 'Consegue o emprego', desc: 'Candidata-te com confiança e acompanha tudo no CRM de candidaturas.', side: 'left' },
+              ].map((item, i) => (
+                <div key={i} className={`flex items-center gap-8 mb-12 ${item.side === 'right' ? 'md:flex-row-reverse' : ''}`}>
+                  <div className={`flex-1 p-6 bg-slate-900/60 border border-white/5 rounded-2xl hover:border-[#2563EB]/30 transition-all ${item.side === 'right' ? 'text-right' : ''}`}>
+                    <span className="text-[#2563EB] font-black text-4xl opacity-30">{item.step}</span>
+                    <h3 className="font-black text-xl mt-2">{item.title}</h3>
+                    <p className="text-slate-400 font-bold text-sm mt-2 leading-relaxed">{item.desc}</p>
+                  </div>
+                  <div className="hidden md:flex w-10 h-10 rounded-full bg-[#2563EB] border-4 border-[#0B0F19] items-center justify-center shrink-0 z-10">
+                    <span className="text-white font-black text-xs">{i + 1}</span>
+                  </div>
+                  <div className="flex-1 hidden md:block" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Pricing Section */}
+        <section id="pricing" className="w-full py-32">
+          <div className="container px-6 md:px-12 mx-auto">
+            <div className="text-center mb-16 space-y-4">
+              <p className="text-slate-500 font-black uppercase tracking-[0.3em] text-[10px]">Acesso</p>
+              <h2 className="text-4xl md:text-6xl font-black tracking-tighter">Planos & <span className="text-[#FFD700]">Preços</span></h2>
+              <p className="text-slate-400 font-bold max-w-xl mx-auto">Invista na sua carreira. Pagamento simples via transferência bancária.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { id: 'free', name: 'Gratuito', price: 'Grátis', color: 'border-slate-700', btn: 'border-white/10 hover:bg-white/5 text-white', features: ['3 entrevistas IA/dia', '3 pesquisas de vagas/dia', '1 carta de apresentação/dia', 'CRM de candidaturas', 'CV Builder básico'] },
+                { id: 'essential', name: 'Essencial', price: '5.000 Kz', color: 'border-blue-500', btn: 'bg-[#2563EB] hover:bg-blue-700 text-white', features: ['20 entrevistas IA/dia', '15 pesquisas de vagas/dia', '5 cartas de apresentação/dia', 'LinkedIn Optimizer IA', 'Análise de Soft Skills'] },
+                { id: 'premium', name: 'Premium', price: '15.000 Kz', color: 'border-purple-500', badge: 'MAIS POPULAR', btn: 'bg-purple-600 hover:bg-purple-700 text-white', features: ['100 entrevistas IA/dia', '50 pesquisas de vagas/dia', 'Análise salarial avançada', 'Portfólio público', 'Alertas de vagas por email'] },
+                { id: 'elite', name: 'Elite', price: '25.000 Kz', color: 'border-yellow-400', btn: 'bg-yellow-500 hover:bg-yellow-600 text-black', features: ['IA ILIMITADA em tudo', 'Badge Elite no portfólio', 'CV em 3 idiomas (PT/EN/FR)', 'Suporte prioritário', 'Acesso antecipado beta'] },
+              ].map(plan => (
+                <div key={plan.id} className={`relative p-6 bg-slate-900/60 border-2 ${plan.color} rounded-2xl flex flex-col hover:scale-[1.02] transition-transform`}>
+                  {(plan as any).badge && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-purple-600 text-white text-[10px] font-black rounded-full uppercase tracking-wider">
+                      {(plan as any).badge}
+                    </div>
+                  )}
+                  <h3 className="font-black text-xl">{plan.name}</h3>
+                  <div className="my-4">
+                    <span className="text-3xl font-black text-white">{plan.price}</span>
+                    {plan.price !== 'Grátis' && <span className="text-slate-500 text-sm">/mês</span>}
+                  </div>
+                  <ul className="space-y-2 flex-1 mb-6">
+                    {plan.features.map((f, fi) => (
+                      <li key={fi} className="flex items-center gap-2 text-xs text-slate-300 font-bold">
+                        <span className="text-[#22C55E] font-black">✓</span>{f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href={plan.id === 'free' ? '/register' : `/checkout?plan=${plan.id}`}>
+                    <Button className={`w-full font-black text-xs uppercase tracking-wider ${plan.btn}`} variant={plan.id === 'free' ? 'outline' : 'default'}>
+                      {plan.id === 'free' ? 'Começar Grátis' : `Contratar ${plan.name}`}
+                    </Button>
+                  </Link>
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-slate-500 text-xs font-bold mt-8">Pagamento via transferência bancária (IBAN). Ativação em até 24h.</p>
+          </div>
+        </section>
+
       </main>
+
 
       {/* Footer - Matching Reference */}
       <footer className="w-full bg-[#0B0F19] border-t border-white/5 py-16 px-6 md:px-12">
