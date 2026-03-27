@@ -1,14 +1,16 @@
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
 import { createClient } from "@supabase/supabase-js"
 
-// Initialize Supabase with Service Role to bypass RLS for background jobs
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
 // Define the Next.js GET route for the cron job
 export async function GET(req: Request) {
+  // Initialize Supabase with Service Role to bypass RLS for background jobs inside the handler
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+
   // Verify Vercel Cron secret to prevent unauthorized execution
   const authHeader = req.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
