@@ -50,6 +50,10 @@ export default function TracksPage() {
     }
   }
 
+  const handleDownloadPDF = () => {
+    window.print()
+  }
+
   return (
     <div className="space-y-10 animate-in fade-in duration-1000">
       {/* Header Section */}
@@ -165,7 +169,11 @@ export default function TracksPage() {
                     </div>
                   </div>
 
-                  <Button className="w-full bg-slate-950 hover:bg-slate-800 border border-white/10 font-bold" variant="outline">
+                  <Button 
+                    className="w-full bg-slate-950 hover:bg-slate-800 border border-white/10 font-bold no-print" 
+                    variant="outline"
+                    onClick={handleDownloadPDF}
+                  >
                     Baixar Roadmap PDF
                   </Button>
                 </CardContent>

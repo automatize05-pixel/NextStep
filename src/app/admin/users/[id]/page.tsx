@@ -1,194 +1,146 @@
-export const dynamic = 'force-dynamic'
-
 import { createClient } from "@/lib/supabase/server"
+import { 
+  ArrowLeft, Mail, MapPin, Calendar, Shield, 
+  TrendingUp, Briefcase, MessageSquare, Award,
+  AlertTriangle, Trash2, Ban, CheckCircle2
+} from "lucide-react"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { notFound } from "next/navigation"
-import { ArrowLeft, User, MapPin, Briefcase, Mail, Calendar, CreditCard, ShieldAlert, Award, TrendingUp, Cpu } from "lucide-react"
 
-export default async function AdminUserDetails({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
+export default async function UserDetailsPage({ params }: { params: { id: string } }) {
   const supabase = await createClient()
 
-  // Fetch complete profile and subscription data
-  const { data: profile } = await supabase
+  // Fetch user profile and subscription details
+  const { data: profile, error } = await supabase
     .from('profiles')
     .select('*')
-    .eq('id', id)
+    .eq('id', params.id)
     .single()
 
-  if (!profile) return notFound()
+  if (error || !profile) return notFound()
 
-  // Fetch usage stats
-  const { data: usage } = await supabase
-    .from('user_usage')
-    .select('*')
-    .eq('user_id', id)
-    .single()
-
-  // Fetch job applications
-  const { count: appsCount } = await supabase
-    .from('applications')
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', id)
-
-  // Fetch active subscriptions if any
-  const { data: subscription } = await supabase
-    .from('subscriptions')
-    .select('*')
-    .eq('user_id', id)
-    .eq('status', 'active')
-    .single()
+  const stats = [
+    { label: "Candidaturas", value: "0", icon: Briefcase, color: "text-blue-500" },
+    { label: "Buscas IA", value: "0", icon: TrendingUp, color: "text-green-500" },
+    { label: "Entrevistas", value: "0", icon: MessageSquare, color: "text-purple-500" },
+    { label: "Cartas", value: "0", icon: Award, color: "text-orange-500" },
+  ]
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 pb-12">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <Link href="/admin/users" className="p-3 bg-white border border-slate-200 rounded-2xl hover:bg-slate-50 transition-colors">
-           <ArrowLeft className="h-5 w-5 text-slate-500" />
-        </Link>
-        <div>
-          <h2 className="text-3xl font-black tracking-tight text-slate-900">Detalhes do Usuário</h2>
-          <p className="text-slate-500 font-bold mt-1 text-sm">{profile.id}</p>
-        </div>
-      </div>
+    <div className="space-y-8 animate-in fade-in slide-in-from-left duration-500">
+      <Link href="/admin/users" className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors font-black uppercase tracking-widest text-[10px]">
+        <ArrowLeft className="h-4 w-4" /> Voltar à lista
+      </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Info Card */}
         <div className="lg:col-span-2 space-y-8">
-          <div className="bg-white rounded-[2.5rem] border border-slate-100 p-8 shadow-sm relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+          <div className="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full -mr-32 -mt-32 opacity-50 transition-transform group-hover:scale-110 duration-700" />
             
-            <div className="flex flex-col sm:flex-row gap-6 items-start relative z-10">
-              <div className="w-24 h-24 bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl flex items-center justify-center font-black text-white text-4xl shadow-xl shrink-0 border-4 border-white">
+            <div className="relative z-10 flex flex-col md:flex-row gap-8 items-start md:items-center">
+              <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center text-4xl font-black text-white shadow-2xl">
                 {profile.full_name?.[0] || 'U'}
               </div>
-              <div className="flex-1 space-y-4">
-                <div>
-                  <h3 className="text-3xl font-black text-slate-900">{profile.full_name || 'Usuário NS'}</h3>
-                  <p className="text-primary font-bold text-lg">{profile.title || 'Sem título profissional'}</p>
-                </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex items-center gap-2 text-slate-600 font-bold text-sm bg-slate-50 px-4 py-2 rounded-xl">
-                    <Mail className="h-4 w-4 text-slate-400" /> {profile.email || 'Sem email'}
+              <div className="space-y-2">
+                <h1 className="text-4xl font-black text-slate-900 tracking-tight">{profile.full_name || 'Usuário Sem Nome'}</h1>
+                <p className="text-primary font-bold text-lg">{profile.title || 'Sem título profissional'}</p>
+                <div className="flex flex-wrap gap-4 pt-2">
+                  <div className="flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest">
+                    <Mail className="h-4 w-4" /> {profile.email || 'Sem email'}
                   </div>
-                  <div className="flex items-center gap-2 text-slate-600 font-bold text-sm bg-slate-50 px-4 py-2 rounded-xl">
-                    <MapPin className="h-4 w-4 text-slate-400" /> {profile.location || 'Sem localização'}
+                  <div className="flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest">
+                    <MapPin className="h-4 w-4" /> {profile.location || 'Sem localização'}
                   </div>
-                  <div className="flex items-center gap-2 text-slate-600 font-bold text-sm bg-slate-50 px-4 py-2 rounded-xl">
-                    <Briefcase className="h-4 w-4 text-slate-400" /> {profile.field_of_interest || 'Geral'}
-                  </div>
-                  <div className="flex items-center gap-2 text-slate-600 font-bold text-sm bg-slate-50 px-4 py-2 rounded-xl">
-                    <Calendar className="h-4 w-4 text-slate-400" /> Registrado em {new Date(profile.created_at).toLocaleDateString('pt-AO')}
+                  <div className="flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest">
+                    <Calendar className="h-4 w-4" /> Registrado em {new Date(profile.created_at).toLocaleDateString('pt-AO')}
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="mt-8 pt-8 border-t border-slate-100 flex gap-4">
-               <a href={`/u/${profile.username || id}`} target="_blank" rel="noreferrer" className="flex-1 text-center py-3 bg-slate-900 text-white font-black text-xs uppercase tracking-widest rounded-xl hover:bg-primary transition-all shadow-md">
-                 Ver Portfólio Público
-               </a>
+            <div className="mt-12 pt-10 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-8">
+               <div className="space-y-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Bio / Sobre</p>
+                  <p className="text-slate-600 font-medium leading-relaxed italic">
+                    {profile.bio || "Este usuário ainda não preencheu a sua biografia."}
+                  </p>
+               </div>
+               <div className="space-y-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Interesse Principal</p>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-full text-orange-600 text-[10px] font-black uppercase tracking-widest italic">
+                     <CheckCircle2 className="h-3 w-3" /> {profile.field_of_interest || "Geral / Tecnologia"}
+                  </div>
+               </div>
+            </div>
+            
+            <div className="mt-10 pt-10 border-t border-slate-100">
+               <Button className="w-full md:w-auto px-10 h-14 rounded-2xl font-black uppercase tracking-widest text-xs bg-slate-900 hover:bg-primary transition-all shadow-lg">Ver Portfólio Público</Button>
             </div>
           </div>
 
-          {/* Platform Usage Stats */}
-          <div className="bg-white rounded-[2.5rem] border border-slate-100 p-8 shadow-sm">
-             <h3 className="text-xl font-black mb-6 flex items-center gap-2"><TrendingUp className="h-5 w-5 text-green-500" /> Engajamento na Plataforma</h3>
-             
-             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                   <p className="text-2xl font-black text-slate-900">{appsCount || 0}</p>
-                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Candidaturas</p>
+          {/* Engagement Stats */}
+          <div className="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-xl overflow-hidden group">
+            <h3 className="text-2xl font-black mb-8 flex items-center gap-3">
+              <TrendingUp className="h-6 w-6 text-primary" /> Engajamento na Plataforma
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {stats.map((s, i) => (
+                <div key={i} className="p-6 bg-slate-50 rounded-[2rem] border border-transparent hover:border-slate-200 hover:bg-white transition-all text-center space-y-3">
+                  <div className={`w-10 h-10 ${s.color} bg-white rounded-xl shadow-sm flex items-center justify-center mx-auto`}>
+                    <s.icon className="h-5 w-5" />
+                  </div>
+                  <p className="text-3xl font-black text-slate-900 tracking-tighter">{s.value}</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{s.label}</p>
                 </div>
-                <div className="p-4 bg-blue-50/50 rounded-2xl border border-blue-100">
-                   <p className="text-2xl font-black text-blue-600">{usage?.ai_searches_used || 0}</p>
-                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Buscas IA (Hoje)</p>
-                </div>
-                <div className="p-4 bg-purple-50/50 rounded-2xl border border-purple-100">
-                   <p className="text-2xl font-black text-purple-600">{usage?.interviews_used || 0}</p>
-                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Entrevistas (Hoje)</p>
-                </div>
-                <div className="p-4 bg-orange-50/50 rounded-2xl border border-orange-100">
-                   <p className="text-2xl font-black text-orange-600">{usage?.cover_letters_used || 0}</p>
-                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Cartas (Hoje)</p>
-                </div>
-             </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Sidebar Controls */}
-        <div className="space-y-6">
-          {/* Plan Management */}
-          <div className="bg-gradient-to-br from-slate-900 to-[#0B0F19] text-white rounded-[2.5rem] p-8 shadow-xl border border-slate-800">
-             <h3 className="text-xl font-black mb-6 flex items-center gap-2"><CrownIcon className="h-5 w-5 text-yellow-500" /> Plano Atual</h3>
-             
-             <div className="p-4 bg-white/5 border border-white/10 rounded-2xl mb-6">
-                <div className="flex justify-between items-center mb-2">
-                   <span className="text-xs font-black uppercase tracking-widest text-slate-400">Nível</span>
-                   <span className="px-3 py-1 bg-yellow-500/20 text-yellow-500 text-[10px] font-black uppercase tracking-widest rounded-full">{profile.plan || 'Free'}</span>
-                </div>
-                {subscription && (
-                  <div className="flex justify-between items-center">
-                     <span className="text-xs font-black uppercase tracking-widest text-slate-400">Expira em</span>
-                     <span className="text-sm font-bold">{new Date(subscription.end_date).toLocaleDateString('pt-AO')}</span>
-                  </div>
-                )}
-             </div>
-
-             <form action="/api/admin/users/update-plan" method="POST" className="space-y-4">
-                <input type="hidden" name="user_id" value={profile.id} />
-                <div className="space-y-2">
-                   <label className="text-xs font-black uppercase tracking-widest text-slate-400">Alterar Plano (Manual)</label>
-                   <select name="new_plan" className="w-full h-12 bg-white/10 border border-white/20 rounded-xl px-4 text-sm font-bold outline-none focus:border-primary">
-                     <option value="free" className="text-black">Free</option>
-                     <option value="essential" className="text-black">Essential</option>
-                     <option value="premium" className="text-black">Premium</option>
-                     <option value="elite" className="text-black">Elite</option>
-                   </select>
-                </div>
-                <button type="submit" className="w-full py-3 bg-primary hover:bg-blue-600 font-black text-xs uppercase tracking-widest rounded-xl transition-colors shadow-[0_0_20px_rgba(37,99,235,0.3)]">
-                  Atualizar Plano
-                </button>
-             </form>
+        {/* Action Sidebar */}
+        <div className="space-y-8">
+          {/* Plan Info */}
+          <div className="bg-slate-900 border border-white/5 p-8 rounded-[3rem] text-white shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[50px] rounded-full -mr-16 -mt-16" />
+            <h3 className="text-xl font-black mb-6 flex items-center gap-3 italic">
+              <Award className="h-5 w-5 text-primary" /> Plano Actual
+            </h3>
+            <div className="bg-white/5 border border-white/10 p-6 rounded-3xl flex items-center justify-between mb-8 group-hover:border-primary/50 transition-colors">
+               <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Nível</span>
+               <Badge className="bg-primary text-black font-black uppercase text-[10px] px-4 py-1">Gratuito</Badge>
+            </div>
+            <div className="space-y-4">
+               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-2">Alterar Plano (Manual)</p>
+               <select className="w-full bg-slate-800 border border-white/10 rounded-xl h-12 px-4 text-xs font-bold outline-none focus:border-primary">
+                  <option>Gratuito</option>
+                  <option>Essencial</option>
+                  <option>Premium</option>
+                  <option>Elite</option>
+               </select>
+               <Button className="w-full h-12 rounded-xl bg-primary text-black font-black uppercase text-[10px] tracking-widest hover:bg-white transition-all shadow-lg">Actualizar Plano</Button>
+            </div>
           </div>
 
-          {/* Danger Zone */}
-          <div className="bg-red-50 rounded-[2.5rem] border border-red-100 p-8">
-             <h3 className="text-xl font-black text-red-900 mb-4 flex items-center gap-2"><ShieldAlert className="h-5 w-5" /> Zona de Risco</h3>
-             <p className="text-sm font-bold text-red-700/80 mb-6">Ações irreversíveis que afetam permanentemente o acesso deste usuário.</p>
-             
+          {/* Risk Zone */}
+          <div className="bg-red-50/50 border border-red-100 p-8 rounded-[3rem] space-y-6 shadow-sm">
+             <div className="flex items-center gap-2 text-red-600 font-black uppercase tracking-widest text-[10px]">
+                <Shield className="h-4 w-4" /> Zona de Risco
+             </div>
+             <p className="text-xs text-red-800/60 font-medium leading-relaxed">Ações irreversíveis que afectam permanentemente o acesso deste usuário.</p>
              <div className="space-y-3">
-               <button className="w-full py-3 bg-white border border-red-200 text-red-600 font-black text-xs uppercase tracking-widest rounded-xl hover:bg-red-600 hover:text-white transition-all">
-                 Suspender Conta
-               </button>
-               <button className="w-full py-3 bg-red-600 px-4 text-white font-black text-xs uppercase tracking-widest rounded-xl hover:bg-red-700 transition-all opacity-50 cursor-not-allowed" title="Apenas via API do Supabase Auth no painel root.">
-                 Apagar Utilizador
-               </button>
+                <Button variant="outline" className="w-full border-red-200 text-red-600 hover:bg-red-600 hover:text-white rounded-xl h-12 font-black uppercase text-[10px] transition-all flex items-center gap-2">
+                   <Ban className="h-3 w-3" /> Suspender Conta
+                </Button>
+                <Button variant="outline" className="w-full border-red-200 text-red-600 hover:bg-red-600 hover:text-white rounded-xl h-12 font-black uppercase text-[10px] transition-all flex items-center gap-2">
+                   <Trash2 className="h-3 w-3" /> Apagar Utilizador
+                </Button>
              </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
-
-function CrownIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.518l4.276 3.664a1 1 0 0 0 1.516-.294z" />
-      <path d="M5 21h14" />
-    </svg>
   )
 }
