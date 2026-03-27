@@ -138,33 +138,33 @@ export default function JobsPage() {
       )}
 
       {/* Search Form */}
-      <Card className="border-slate-200 shadow-sm overflow-hidden">
-        <div className="h-1 bg-gradient-to-r from-primary via-purple-500 to-blue-500" />
-        <CardHeader className="bg-slate-900 border-b border-slate-800 pb-8">
-           <CardTitle className="text-2xl font-black text-white">O que procura hoje?</CardTitle>
-           <CardDescription className="text-slate-300 font-medium text-base">A IA vai rastrear a web por vagas de acordo com os filtros abaixo.</CardDescription>
+      <Card className="border-slate-800 shadow-2xl overflow-hidden bg-slate-900">
+        <div className="h-1.5 bg-gradient-to-r from-primary via-purple-500 to-blue-500" />
+        <CardHeader className="bg-slate-900 border-b border-slate-800 pb-8 px-8 pt-8">
+           <CardTitle className="text-3xl font-black text-white">O que procura hoje?</CardTitle>
+           <CardDescription className="text-slate-200 font-bold text-lg mt-2 opacity-100">A IA vai rastrear a web por vagas de acordo com os filtros abaixo.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <CardContent className="p-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label className="text-xs font-black uppercase text-slate-400 mb-2 block tracking-widest">Cargo / Área Atuação *</label>
-              <Input placeholder="Ex: Engenheiro de Software" value={jobTitle} onChange={e => setJobTitle(e.target.value)} className="bg-slate-50 border-slate-200 font-bold" />
+              <label className="text-xs font-black uppercase text-white mb-3 block tracking-[0.2em]">Cargo / Área Atuação *</label>
+              <Input placeholder="Ex: Engenheiro de Software" value={jobTitle} onChange={e => setJobTitle(e.target.value)} className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400 font-black h-12" />
             </div>
             <div>
-              <label className="text-xs font-black uppercase text-slate-400 mb-2 block tracking-widest">Localização (Filtro)</label>
-              <Input placeholder="Ex: Luanda, Angola" value={location} onChange={e => setLocation(e.target.value)} className="bg-slate-50 border-slate-200 font-bold" />
+              <label className="text-xs font-black uppercase text-white mb-3 block tracking-[0.2em]">Localização (Filtro)</label>
+              <Input placeholder="Ex: Luanda, Angola" value={location} onChange={e => setLocation(e.target.value)} className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400 font-black h-12" />
             </div>
             <div>
-              <label className="text-xs font-black uppercase text-slate-400 mb-2 block tracking-widest">Modelo de Trabalho</label>
-              <select value={jobType} onChange={e => setJobType(e.target.value)} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-slate-50 focus:outline-primary font-medium">
+              <label className="text-xs font-black uppercase text-white mb-3 block tracking-[0.2em]">Modelo de Trabalho</label>
+              <select value={jobType} onChange={e => setJobType(e.target.value)} className="w-full h-12 border border-slate-700 rounded-lg px-4 text-sm bg-slate-800 text-white focus:outline-primary font-black appearance-none">
                 <option value="onsite">Presencial (Angola)</option>
                 <option value="remote">Remoto / Internacional</option>
                 <option value="hybrid">Híbrido</option>
               </select>
             </div>
           </div>
-          <Button className="mt-4 w-full md:w-auto px-8 font-black" onClick={search} disabled={loading || !jobTitle}>
-            {loading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />A Rastrear a Web...</> : <><Zap className="h-4 w-4 mr-2" />Iniciar Caça IA</>}
+          <Button className="mt-8 w-full md:w-auto px-10 h-12 font-black text-sm uppercase tracking-widest bg-primary hover:bg-blue-600 shadow-lg shadow-primary/20" onClick={search} disabled={loading || !jobTitle}>
+            {loading ? <><Loader2 className="h-5 w-5 mr-3 animate-spin" />A Rastrear a Web...</> : <><Zap className="h-5 w-5 mr-3" />Iniciar Caça IA</>}
           </Button>
         </CardContent>
       </Card>
