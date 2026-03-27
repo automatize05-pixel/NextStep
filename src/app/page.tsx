@@ -18,10 +18,10 @@ export default async function Home() {
     <div className="flex flex-col min-h-screen bg-[#0B0F19] text-white font-sans selection:bg-primary/20">
       
       {/* Navigation - Matching Reference */}
-      <header className="px-6 md:px-12 h-20 flex items-center justify-between sticky top-0 bg-[#0B0F19]/80 backdrop-blur-xl z-[100]">
+      <header className="px-6 md:px-12 h-20 flex items-center justify-between sticky top-0 bg-[#0B0F19]/90 backdrop-blur-2xl z-[100] border-b border-white/5">
         <Link className="flex items-center gap-2 group" href="/">
-          <div className="w-8 h-8 bg-[#2563EB] rounded-lg flex items-center justify-center font-black text-white text-xl shadow-lg shadow-blue-500/20">N</div>
-          <span className="font-black text-2xl tracking-tighter">Next<span className="text-[#2563EB] italic">Step</span></span>
+          <div className="w-9 h-9 bg-[#2563EB] rounded-xl flex items-center justify-center font-black text-white text-xl shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-transform group-hover:scale-110">N</div>
+          <span className="font-black text-2xl tracking-tighter hover:opacity-80 transition-opacity">Next<span className="text-[#2563EB] italic">Step</span></span>
         </Link>
         
         <nav className="hidden md:flex gap-10 items-center">
@@ -56,13 +56,13 @@ export default async function Home() {
                    <span className="text-[11px] font-black uppercase tracking-[0.2em]">A IA que Impulsiona Carreiras em Angola</span>
                 </div>
                 
-                <h1 className="text-6xl lg:text-9xl font-black tracking-tighter leading-[0.85] text-white">
+                <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black tracking-tighter leading-[0.9] text-white">
                   Sua Carreira, <br />
                   <span className="text-blue-500">Elevada</span> <br />
                   Pela IA.
                 </h1>
                 
-                <p className="max-w-xl text-slate-300 text-xl font-bold leading-relaxed opacity-90">
+                <p className="max-w-xl text-slate-300 text-lg sm:text-xl font-bold leading-relaxed opacity-90">
                   A ferramenta definitiva para profissionais angolanos. 
                   Crie currículos de elite, treine entrevistas e encontre vagas reais em tempo real.
                 </p>
@@ -82,15 +82,16 @@ export default async function Home() {
               </div>
 
               {/* Hero Image & Floating Badges */}
-              <div className="relative flex justify-center lg:justify-end animate-in zoom-in duration-1000 delay-200">
-                <div className="relative w-full max-w-[500px] aspect-square rounded-[3rem] overflow-hidden border border-white/5 shadow-2xl">
+              <div className="relative flex justify-center lg:justify-end animate-in zoom-in duration-1000 delay-200 mt-12 lg:mt-0">
+                <div className="relative w-full max-w-[500px] aspect-square rounded-[2.5rem] sm:rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
                   <Image 
-                    src="file:///C:/Users/us/.gemini/antigravity/brain/767c7cce-c0c5-4cd8-8575-819af80868d4/nextstep_hero_premium_1774478125152.png"
+                    src="/hero-career.png"
                     alt="Profissional NextStep"
                     fill
                     className="object-cover"
+                    priority
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-transparent to-transparent opacity-40" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-transparent to-transparent opacity-60" />
                 </div>
 
                 {/* Floating Badges */}
@@ -137,40 +138,40 @@ export default async function Home() {
         {/* Features - "Recursos de Elite" */}
         <section id="features" className="w-full py-32">
           <div className="container px-6 md:px-12 mx-auto">
-            <div className="text-center space-y-4 mb-24">
-               <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-white">Tudo o que você precisa <br /><span className="text-blue-500">em um só lugar.</span></h2>
-               <p className="max-w-2xl mx-auto text-slate-300 font-bold text-lg">Tecnologia de ponta simplificada para que você foque no que importa: seu crescimento.</p>
+            <div className="text-center space-y-4 mb-24 max-w-4xl mx-auto">
+               <h2 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tighter text-white">Tudo o que você precisa <br /><span className="text-blue-500">em um só lugar.</span></h2>
+               <p className="max-w-2xl mx-auto text-slate-300 font-bold text-base sm:text-lg px-4">Tecnologia de ponta simplificada para que você foque no que importa: seu crescimento profissional em Angola.</p>
             </div>
 
-            <div className="grid gap-8 md:grid-cols-3">
-              <div className="p-12 bg-slate-900/40 rounded-[3rem] border border-slate-800 hover:border-blue-500/50 transition-all group relative overflow-hidden">
+            <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="p-8 sm:p-12 bg-slate-900/40 rounded-[2.5rem] sm:rounded-[3rem] border border-slate-800 hover:border-blue-500/50 transition-all group relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 blur-[50px]" />
-                <div className="h-16 w-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-8 border border-blue-500/20">
-                  <Globe className="h-8 w-8 text-blue-500" />
+                <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-8 border border-blue-500/20">
+                  <Globe className="h-7 w-7 sm:h-8 sm:w-8 text-blue-500" />
                 </div>
-                <h3 className="text-2xl font-black text-white mb-4 tracking-tight">Vagas em Tempo Real</h3>
-                <p className="text-slate-300 font-bold text-base leading-relaxed mb-8 opacity-80">Encontre oportunidades reais em Angola e no mundo. Nossa IA filtra o que realmente combina com você.</p>
-                <Link href="#" className="inline-flex items-center gap-3 text-[11px] font-black uppercase text-blue-500 tracking-[0.2em] hover:text-blue-400 transition-all">Explorar Vagas <ChevronRight className="h-4 w-4" /></Link>
+                <h3 className="text-xl sm:text-2xl font-black text-white mb-4 tracking-tight">Vagas em Tempo Real</h3>
+                <p className="text-slate-300 font-bold text-sm sm:text-base leading-relaxed mb-8 opacity-80">Encontre oportunidades reais em Angola e no mundo. Nossa IA filtra o que realmente combina com você.</p>
+                <Link href="#" className="inline-flex items-center gap-3 text-[10px] sm:text-[11px] font-black uppercase text-blue-500 tracking-[0.2em] hover:text-blue-400 transition-all">Explorar Vagas <ChevronRight className="h-4 w-4" /></Link>
               </div>
 
-              <div className="p-12 bg-slate-900/40 rounded-[3rem] border border-slate-800 hover:border-blue-500/50 transition-all group relative overflow-hidden">
+              <div className="p-8 sm:p-12 bg-slate-900/40 rounded-[2.5rem] sm:rounded-[3rem] border border-slate-800 hover:border-blue-500/50 transition-all group relative overflow-hidden">
                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 blur-[50px]" />
-                <div className="h-16 w-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-8 border border-blue-500/20">
-                  <MessageSquare className="h-8 w-8 text-blue-500" />
+                <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-8 border border-blue-500/20">
+                  <MessageSquare className="h-7 w-7 sm:h-8 sm:w-8 text-blue-500" />
                 </div>
-                <h3 className="text-2xl font-black text-white mb-4 tracking-tight">Simulador de Elite</h3>
-                <p className="text-slate-300 font-bold text-base leading-relaxed mb-8 opacity-80">Treine entrevistas com uma IA que responde como um recrutador real. Perca o medo e ganhe confiança.</p>
-                <Link href="#" className="inline-flex items-center gap-3 text-[11px] font-black uppercase text-blue-500 tracking-[0.2em] hover:text-blue-400 transition-all">Treinar Agora <ChevronRight className="h-4 w-4" /></Link>
+                <h3 className="text-xl sm:text-2xl font-black text-white mb-4 tracking-tight">Simulador de Elite</h3>
+                <p className="text-slate-300 font-bold text-sm sm:text-base leading-relaxed mb-8 opacity-80">Treine entrevistas com uma IA que responde como um recrutador real. Perca o medo e ganhe confiança.</p>
+                <Link href="#" className="inline-flex items-center gap-3 text-[10px] sm:text-[11px] font-black uppercase text-blue-500 tracking-[0.2em] hover:text-blue-400 transition-all">Treinar Agora <ChevronRight className="h-4 w-4" /></Link>
               </div>
 
-              <div className="p-12 bg-slate-900/40 rounded-[3rem] border border-slate-800 hover:border-blue-500/50 transition-all group relative overflow-hidden">
+              <div className="p-8 sm:p-12 bg-slate-900/40 rounded-[2.5rem] sm:rounded-[3rem] border border-slate-800 hover:border-blue-500/50 transition-all group relative overflow-hidden col-span-1 sm:col-span-2 lg:col-span-1">
                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 blur-[50px]" />
-                <div className="h-16 w-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-8 border border-blue-500/20">
-                   <ShieldCheck className="h-8 w-8 text-white" />
+                <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-8 border border-blue-500/20">
+                   <ShieldCheck className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-black text-white mb-4 tracking-tight">Currículo de Impacto</h3>
-                <p className="text-slate-300 font-bold text-base leading-relaxed mb-8 opacity-80">Gere currículos profissionais prontos para sistemas de seleção (ATS) em segundos. Destaque-se na multidão.</p>
-                <Link href="#" className="inline-flex items-center gap-3 text-[11px] font-black uppercase text-white tracking-[0.2em] hover:opacity-80 transition-all">Ver Modelos <ChevronRight className="h-4 w-4" /></Link>
+                <h3 className="text-xl sm:text-2xl font-black text-white mb-4 tracking-tight">Currículo de Impacto</h3>
+                <p className="text-slate-300 font-bold text-sm sm:text-base leading-relaxed mb-8 opacity-80">Gere currículos profissionais prontos para sistemas de seleção (ATS) em segundos. Destaque-se na multidão.</p>
+                <Link href="#" className="inline-flex items-center gap-3 text-[10px] sm:text-[11px] font-black uppercase text-white tracking-[0.2em] hover:opacity-80 transition-all">Ver Modelos <ChevronRight className="h-4 w-4" /></Link>
               </div>
             </div>
           </div>
