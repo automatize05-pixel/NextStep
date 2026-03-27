@@ -38,21 +38,22 @@ export default function Home() {
 
         {/* Mobile Hamburger Toggle */}
         <button 
-          className="md:hidden p-2 text-white z-[110]"
+          className="md:hidden p-2 text-white z-[210] relative"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle Menu"
         >
-          {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {isMenuOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
         </button>
 
         {/* Mobile Menu Overlay */}
         {isMenuOpen && (
-          <div className="fixed inset-0 bg-[#0B0F19] z-[100] flex flex-col items-center justify-center gap-8 animate-in fade-in duration-300">
-            <Link onClick={() => setIsMenuOpen(false)} className="text-xl font-black uppercase tracking-[0.3em] hover:text-[#2563EB]" href="/">Início</Link>
-            <Link onClick={() => setIsMenuOpen(false)} className="text-xl font-black uppercase tracking-[0.3em] hover:text-[#2563EB]" href="#features">Recursos</Link>
-            <Link onClick={() => setIsMenuOpen(false)} className="text-xl font-black uppercase tracking-[0.3em] hover:text-[#2563EB]" href="#pricing">Preços</Link>
-            <Link onClick={() => setIsMenuOpen(false)} className="text-xl font-black uppercase tracking-[0.3em] text-primary" href="/about">Sobre</Link>
+          <div className="fixed inset-0 bg-[#0B0F19] z-[200] flex flex-col items-center justify-center gap-10 animate-in fade-in zoom-in duration-300">
+            <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="/">Início</Link>
+            <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="#features">Recursos</Link>
+            <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="#pricing">Preços</Link>
+            <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] text-primary transition-all" href="/about">Sobre</Link>
             <Link onClick={() => setIsMenuOpen(false)} href="/register">
-              <Button className="bg-[#2563EB] hover:bg-blue-700 text-white font-black text-xs uppercase tracking-wider px-12 h-14 rounded-2xl mt-4">Criar Conta</Button>
+              <Button className="bg-[#2563EB] hover:bg-blue-700 text-white font-black text-xs uppercase tracking-widest px-12 h-16 rounded-2xl mt-6">Criar Conta</Button>
             </Link>
           </div>
         )}
