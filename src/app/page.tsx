@@ -246,7 +246,7 @@ export default async function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 { id: 'free', name: 'Gratuito', price: 'Grátis', color: 'border-slate-700', btn: 'border-white/10 hover:bg-white/5 text-white', features: ['3 entrevistas IA/dia', '3 pesquisas de vagas/dia', '1 carta de apresentação/dia', 'CRM de candidaturas', 'CV Builder básico'] },
-                { id: 'essential', name: 'Essencial', price: '5.000 Kz', color: 'border-blue-500', btn: 'bg-[#2563EB] hover:bg-blue-700 text-white', features: ['20 entrevistas IA/dia', '15 pesquisas de vagas/dia', '5 cartas de apresentação/dia', 'LinkedIn Optimizer IA', 'Análise de Soft Skills'] },
+                { id: 'essential', name: 'Essencial', price: '3.500 Kz', color: 'border-blue-500', btn: 'bg-[#2563EB] hover:bg-blue-700 text-white', features: ['20 entrevistas IA/dia', '15 pesquisas de vagas/dia', '5 cartas de apresentação/dia', 'LinkedIn Optimizer IA', 'Análise de Soft Skills'] },
                 { id: 'premium', name: 'Premium', price: '15.000 Kz', color: 'border-purple-500', badge: 'MAIS POPULAR', btn: 'bg-purple-600 hover:bg-purple-700 text-white', features: ['100 entrevistas IA/dia', '50 pesquisas de vagas/dia', 'Análise salarial avançada', 'Portfólio público', 'Alertas de vagas por email'] },
                 { id: 'elite', name: 'Elite', price: '25.000 Kz', color: 'border-yellow-400', btn: 'bg-yellow-500 hover:bg-yellow-600 text-black', features: ['IA ILIMITADA em tudo', 'Badge Elite no portfólio', 'CV em 3 idiomas (PT/EN/FR)', 'Suporte prioritário', 'Acesso antecipado beta'] },
               ].map(plan => (
