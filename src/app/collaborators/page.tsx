@@ -87,13 +87,26 @@ export default function CollaboratorsPage() {
                       <DollarSign className="h-16 w-16 text-white mx-auto animate-bounce" />
                       <h3 className="text-3xl font-black text-white">Faça uma Doação</h3>
                       <p className="text-blue-100 font-bold">Aceitamos contribuições via IBAN, Multicaixa Express ou Cartão Internacional.</p>
-                      <div className="bg-white/10 p-6 rounded-2xl border border-white/20">
-                         <p className="text-[10px] font-black uppercase tracking-widest text-blue-100 mb-2">IBAN (Angola)</p>
-                         <code className="text-lg font-black text-white">AO06 0000 0000 0000 0000 0000 0</code>
+                      <div className="bg-white/10 p-6 rounded-2xl border border-white/20 space-y-4">
+                         <div>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-blue-100 mb-1">Pagamento por Referência</p>
+                            <div className="flex justify-between text-sm py-1 border-b border-white/10">
+                               <span className="text-blue-200">Entidade:</span>
+                               <span className="text-white font-black">10116</span>
+                            </div>
+                            <div className="flex justify-between text-sm py-1">
+                               <span className="text-blue-200">Referência:</span>
+                               <span className="text-white font-black">947005277</span>
+                            </div>
+                         </div>
+                         <div className="pt-2">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-blue-100 mb-1">IBAN (NextStep Lda)</p>
+                            <code className="text-sm md:text-base font-black text-white block bg-black/20 p-2 rounded-lg">AO06 0420 0000 0000 0006 1077 260</code>
+                         </div>
                       </div>
-                      <Link href="mailto:apoio@nextstep.ao?subject=Comprovativo de Doação" className="w-full">
+                      <a href="mailto:apoio@nextstep.ao?subject=Comprovativo de Doação" className="block w-full">
                          <Button className="w-full bg-white text-[#2563EB] hover:bg-blue-50 h-16 rounded-2xl font-black uppercase tracking-widest">Enviar Comprovativo</Button>
-                      </Link>
+                      </a>
                    </div>
                 </div>
             </div>
