@@ -1,15 +1,16 @@
 @import "tailwindcss";
 
+/* NextStep Design System — CSS Variables */
 :root {
   --background: #ffffff;
   --foreground: #171717;
   
-  /* NextStep Brand Colors */
-  --primary: #2563eb; /* Blue */
+  /* Brand Colors */
+  --primary: #2563eb;
   --primary-foreground: #ffffff;
-  --secondary: #8b5cf6; /* Soft Purple */
+  --secondary: #8b5cf6;
   --secondary-foreground: #ffffff;
-  --muted: #f3f4f6; /* Light gray */
+  --muted: #f3f4f6;
   --muted-foreground: #6b7280;
   --accent: #f8fafc;
   --accent-foreground: #0f172a;
@@ -17,8 +18,14 @@
   
   /* Radii */
   --radius: 0.5rem;
+
+  /* Font */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+/* Tailwind v4 Theme Mapping */
+/* stylelint-disable-next-line at-rule-no-unknown */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -36,7 +43,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
   
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-sans: var(--font-sans);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -58,4 +65,3 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
