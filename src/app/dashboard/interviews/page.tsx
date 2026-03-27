@@ -96,43 +96,52 @@ export default function InterviewSimulatorPage() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-10rem)] max-w-4xl mx-auto space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Simulador de Entrevista</h1>
-          <p className="text-muted-foreground">Pratique suas respostas com nosso recrutador de IA.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-900 p-8 rounded-3xl border border-slate-700 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -mr-32 -mt-32 rounded-full" />
+        <div className="relative z-10 space-y-3">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
+            </span>
+            <span className="text-[11px] font-black uppercase tracking-[0.2em] text-blue-400">IA de Recrutamento Ativa</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-2">Simulador de Entrevista</h1>
+          <p className="text-white text-lg font-bold max-w-2xl leading-relaxed opacity-100">
+            Pratique suas respostas em tempo real com nosso recrutador de IA treinado nos padrões globais de contratação.
+          </p>
         </div>
         {started && (
-          <Button variant="outline" size="sm" onClick={restart}>
+          <Button variant="outline" size="sm" onClick={restart} className="relative z-10 border-slate-600 text-white hover:bg-slate-800 font-black h-11 px-6 shadow-md">
             <RotateCcw className="h-4 w-4 mr-2" /> Reiniciar
           </Button>
         )}
       </div>
 
-      {!started ? (
-        <Card className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gradient-to-b from-white to-primary/5 border-dashed border-2">
-          <div className="mb-6 rounded-full bg-primary/10 p-4">
-            <MessageSquare className="h-12 w-12 text-primary" />
+        <Card className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-slate-900 border-slate-700 shadow-2xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+          <div className="mb-8 rounded-full bg-primary/20 p-6 border border-primary/20 shadow-[0_0_30px_rgba(37,99,235,0.2)] relative z-10">
+            <MessageSquare className="h-16 w-16 text-primary" />
           </div>
-          <CardTitle className="mb-2 text-2xl">Pronto para começar?</CardTitle>
-          <CardDescription className="max-w-md mb-8">
+          <CardTitle className="mb-4 text-3xl font-black text-white relative z-10 tracking-tight">Pronto para o próximo nível?</CardTitle>
+          <CardDescription className="max-w-md mb-10 text-slate-200 font-bold text-lg opacity-100 relative z-10 leading-relaxed">
             Nossa IA irá assumir o papel de um recrutador experiente. 
             Defina o cargo ou tecnologia que deseja praticar abaixo.
           </CardDescription>
           
-          <div className="w-full max-w-sm space-y-4">
-            <div className="space-y-2 text-left">
-              <label className="text-sm font-semibold">Cargo ou Tópico da Entrevista</label>
+          <div className="w-full max-w-sm space-y-6 relative z-10">
+            <div className="space-y-3 text-left">
+              <label className="text-xs font-black uppercase text-white tracking-[0.2em] mb-3 block">Cargo ou Tópico da Entrevista *</label>
               <Input 
                 placeholder="Ex: Desenvolvedor Frontend Jr, Vendedor, Gestor de RH..." 
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
-                className="bg-white"
+                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400 font-black h-12 px-4 shadow-inner"
               />
             </div>
-            <Button className="w-full h-12 text-lg font-bold" onClick={startInterview} disabled={loading || !topic}>
-              {loading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <Play className="h-5 w-5 mr-2" />}
-              {loading ? "Preparando..." : "Iniciar Simulação"}
+            <Button className="w-full h-14 text-sm font-black uppercase tracking-widest bg-primary hover:bg-blue-600 shadow-lg shadow-primary/30" onClick={startInterview} disabled={loading || !topic}>
+              {loading ? <Loader2 className="h-5 w-5 animate-spin mr-3" /> : <Play className="h-5 w-5 mr-3" />}
+              {loading ? "Preparando Sessão..." : "Iniciar Simulação de Elite"}
             </Button>
           </div>
         </Card>
