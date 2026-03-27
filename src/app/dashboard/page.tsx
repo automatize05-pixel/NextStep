@@ -43,39 +43,40 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 font-heading">Olá, {profile?.full_name?.split(' ')[0] || 'Usuário'}!</h1>
-          <p className="text-slate-500 text-base md:text-lg">Aqui está o seu progresso na jornada NextStep.</p>
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-slate-900 p-8 rounded-3xl border border-slate-700 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -mr-32 -mt-32 rounded-full" />
+        <div className="relative z-10">
+          <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white mb-2">Olá, {profile?.full_name?.split(' ')[0] || 'Usuário'}! 👋</h1>
+          <p className="text-slate-200 text-lg font-bold opacity-100">Aqui está o seu progresso na jornada NextStep.</p>
         </div>
-        <Link href="/dashboard/profile" className="w-full lg:w-auto">
-          <Button className="w-full lg:w-auto bg-primary hover:bg-primary/90 shadow-md h-11 px-6 font-bold">Atualizar Perfil</Button>
+        <Link href="/dashboard/profile" className="relative z-10 w-full lg:w-auto">
+          <Button className="w-full lg:w-auto bg-primary hover:bg-blue-600 shadow-lg shadow-primary/20 h-12 px-10 font-black text-sm uppercase tracking-widest">Atualizar Perfil</Button>
         </Link>
       </div>
 
       {/* Stats Grid */}
       <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-l-4 border-l-primary shadow-sm hover:shadow-md transition-shadow">
+        <Card className="bg-slate-900 border-slate-800 shadow-xl border-l-4 border-l-primary transition-transform hover:scale-[1.02]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Perfil Completo</CardTitle>
+            <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400">Perfil Completo</CardTitle>
             <UserCircle className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl md:text-3xl font-bold">{completeness}%</div>
+            <div className="text-3xl font-black text-white">{completeness}%</div>
             <div className="w-full bg-slate-100 h-2 mt-3 rounded-full overflow-hidden">
               <div className="bg-primary h-full transition-all duration-1000" style={{ width: `${completeness}%` }}></div>
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-l-4 border-l-blue-500 shadow-sm hover:shadow-md transition-shadow">
+        <Card className="bg-slate-900 border-slate-800 shadow-xl border-l-4 border-l-blue-500 transition-transform hover:scale-[1.02]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">CV Otimizado</CardTitle>
-            <FileText className="h-4 w-4 text-blue-500" />
+            <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400">CV Otimizado</CardTitle>
+            <FileText className="h-4 w-4 text-blue-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl md:text-3xl font-bold">{profile?.has_resume ? "Pronto" : "Pendente"}</div>
-            <p className="text-[10px] md:text-xs text-muted-foreground mt-2 font-medium">
+            <div className="text-3xl font-black text-white">{profile?.has_resume ? "Pronto" : "Pendente"}</div>
+            <p className="text-xs text-white mt-2 font-black uppercase tracking-widest opacity-80">
               {profile?.has_resume ? "Gerado com sucesso" : "Aguardando preenchimento"}
             </p>
           </CardContent>
