@@ -8,6 +8,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { LayoutDashboard, User, FileText, Map, MessageSquare, Briefcase, LogOut, Clipboard, DollarSign, Linkedin, FileEdit, Search, Crown, Users, GraduationCap } from "lucide-react"
 
 import { createClient } from "@/lib/supabase/client"
+import { RealTimeClock } from "@/components/shared/real-time-clock"
 
 export default function DashboardLayout({
   children,
@@ -113,7 +114,8 @@ export default function DashboardLayout({
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden w-full">
         <header className="h-16 border-b bg-background flex items-center justify-between px-6 md:hidden shrink-0">
-          <Link href="/dashboard" className="text-xl font-bold text-primary">NextStep</Link>
+          </div>
+          <RealTimeClock className="hidden lg:flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-500" />
           <button 
             className="p-2 text-muted-foreground hover:text-primary transition-colors"
             onClick={() => setIsMobileMenuOpen(true)}

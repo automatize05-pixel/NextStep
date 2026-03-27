@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Users, Settings, BarChart3, ShieldAlert, CreditCard } from "lucide-react"
+import { RealTimeClock } from "@/components/shared/real-time-clock"
 
 
 export default async function AdminLayout({
@@ -68,7 +69,7 @@ export default async function AdminLayout({
       <div className="lg:ml-72 min-h-screen flex flex-col">
         <header className="sticky top-0 h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 z-40 px-8 flex items-center justify-between">
            <div className="lg:hidden font-black text-xl italic text-primary">NS-ADMIN</div>
-           <div className="text-[10px] uppercase font-bold tracking-widest text-slate-400 hidden lg:block">Quarta-feira, 25 de Março de 2026</div>
+           <RealTimeClock className="hidden lg:flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-500" />
            <div className="flex items-center gap-4">
               <div className="flex -space-x-2">
                  {[1,2,3].map(i => <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-100" />)}
