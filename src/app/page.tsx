@@ -56,18 +56,18 @@ export default async function Home() {
                    <span className="text-[11px] font-black uppercase tracking-[0.2em]">A IA que Impulsiona Carreiras em Angola</span>
                 </div>
                 
-                <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black tracking-tighter leading-[0.9] text-white">
+                <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black tracking-tighter leading-[0.9] text-white animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-100">
                   Sua Carreira, <br />
                   <span className="text-blue-500">Elevada</span> <br />
                   Pela IA.
                 </h1>
                 
-                <p className="max-w-xl text-slate-300 text-lg sm:text-xl font-bold leading-relaxed opacity-90">
+                <p className="max-w-xl text-slate-300 text-lg sm:text-xl font-bold leading-relaxed opacity-90 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-300">
                   A ferramenta definitiva para profissionais angolanos. 
                   Crie currículos de elite, treine entrevistas e encontre vagas reais em tempo real.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-6 pt-4">
+                <div className="flex flex-col sm:flex-row gap-6 pt-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
                   <Link href="/register">
                     <Button size="lg" className="h-16 px-12 rounded-2xl bg-[#2563EB] hover:bg-blue-600 text-white font-black uppercase text-sm tracking-widest transition-all shadow-[0_0_40px_rgba(37,99,235,0.3)] border-none">
                       Começar Agora — É Grátis
@@ -138,13 +138,13 @@ export default async function Home() {
         {/* Features - "Recursos de Elite" */}
         <section id="features" className="w-full py-32">
           <div className="container px-6 md:px-12 mx-auto">
-            <div className="text-center space-y-4 mb-24 max-w-4xl mx-auto">
+            <div className="text-center space-y-4 mb-24 max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-10 duration-1000">
                <h2 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tighter text-white">Tudo o que você precisa <br /><span className="text-blue-500">em um só lugar.</span></h2>
                <p className="max-w-2xl mx-auto text-slate-300 font-bold text-base sm:text-lg px-4">Tecnologia de ponta simplificada para que você foque no que importa: seu crescimento profissional em Angola.</p>
             </div>
 
             <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="p-8 sm:p-12 bg-slate-900/40 rounded-[2.5rem] sm:rounded-[3rem] border border-slate-800 hover:border-blue-500/50 transition-all group relative overflow-hidden">
+              <div className="p-8 sm:p-12 bg-slate-900/40 rounded-[2.5rem] sm:rounded-[3rem] border border-slate-800 hover:border-blue-500/50 transition-all group relative overflow-hidden animate-in fade-in zoom-in duration-1000 delay-100">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 blur-[50px]" />
                 <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-8 border border-blue-500/20">
                   <Globe className="h-7 w-7 sm:h-8 sm:w-8 text-blue-500" />
@@ -164,7 +164,7 @@ export default async function Home() {
                 <Link href="#" className="inline-flex items-center gap-3 text-[10px] sm:text-[11px] font-black uppercase text-blue-500 tracking-[0.2em] hover:text-blue-400 transition-all">Treinar Agora <ChevronRight className="h-4 w-4" /></Link>
               </div>
 
-              <div className="p-8 sm:p-12 bg-slate-900/40 rounded-[2.5rem] sm:rounded-[3rem] border border-slate-800 hover:border-blue-500/50 transition-all group relative overflow-hidden col-span-1 sm:col-span-2 lg:col-span-1">
+              <div className="p-8 sm:p-12 bg-slate-900/40 rounded-[2.5rem] sm:rounded-[3rem] border border-slate-800 hover:border-blue-500/50 transition-all group relative overflow-hidden col-span-1 sm:col-span-2 lg:col-span-1 animate-in fade-in zoom-in duration-1000 delay-500">
                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 blur-[50px]" />
                 <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-8 border border-blue-500/20">
                    <ShieldCheck className="h-7 w-7 sm:h-8 sm:w-8 text-white" />

@@ -26,16 +26,16 @@ export default function AboutPage() {
 
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="py-24 px-6 md:px-12">
+        <section className="py-20 px-6 md:px-12">
             <div className="container mx-auto text-center max-w-4xl">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-500 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-500 mb-8">
                    <ShieldCheck className="h-4 w-4" />
                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">O Futuro do Trabalho em Angola</span>
                 </div>
-                <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8">
-                  Redefinindo o <span className="text-blue-500 text-shadow-glow">Sucesso</span> <br /> Através da IA.
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-tight mb-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                  Redefinindo o <span className="text-blue-500">Sucesso</span> <br /> Através da IA.
                 </h1>
-                <p className="text-slate-400 text-lg md:text-xl font-bold leading-relaxed max-w-2xl mx-auto italic">
+                <p className="text-slate-400 text-base md:text-lg font-bold leading-relaxed max-w-2xl mx-auto italic opacity-80">
                   "A nossa missão é empoderar cada profissional angolano com as mesmas ferramentas de elite utilizadas nos maiores centros tecnológicos do mundo."
                 </p>
             </div>
@@ -46,9 +46,9 @@ export default function AboutPage() {
             <div className="container mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
                 <div className="space-y-12">
                    <div className="space-y-4">
-                      <h2 className="text-4xl font-black tracking-tight text-white">Nossa Visão</h2>
-                      <div className="h-1.5 w-20 bg-blue-500 rounded-full" />
-                      <p className="text-slate-300 font-bold leading-relaxed text-lg">
+                      <h2 className="text-3xl md:text-4xl font-black tracking-tight text-white">Nossa Visão</h2>
+                      <div className="h-1.5 w-16 bg-blue-500 rounded-full" />
+                      <p className="text-slate-300 font-bold leading-relaxed text-base md:text-lg">
                         Fundada em Luanda, a NextStep nasceu de uma lacuna clara no mercado: o acesso desigual a tecnologias de preparação de carreira. Acreditamos que o talento angolano é mundial e merece ser apresentado com excelência.
                       </p>
                    </div>
@@ -68,12 +68,12 @@ export default function AboutPage() {
                 </div>
 
                 <div className="relative">
-                   <div className="aspect-square bg-gradient-to-br from-blue-600 to-indigo-900 rounded-[3rem] p-1 shadow-2xl relative overflow-hidden group">
-                      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay opacity-40 group-hover:scale-110 transition-transform duration-1000" />
-                      <div className="h-full w-full bg-slate-900/40 backdrop-blur-sm p-12 flex flex-col justify-end">
+                   <div className="aspect-square bg-gradient-to-br from-blue-600 to-indigo-900 rounded-[2.5rem] p-1 shadow-2xl relative overflow-hidden group">
+                      <div className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-40 group-hover:scale-110 transition-transform duration-1000" style={{ backgroundImage: "url('/about-hero.png')" }} />
+                      <div className="h-full w-full bg-slate-900/40 backdrop-blur-sm p-8 md:p-12 flex flex-col justify-end">
                          <Zap className="h-12 w-12 text-blue-500 mb-6" />
-                         <h3 className="text-3xl font-black mb-4">Inovação sem Fronteiras</h3>
-                         <p className="text-slate-300 font-bold">Lideramos a integração de Inteligência Artificial Generativa no ecossistema laboral angolano.</p>
+                         <h3 className="text-2xl md:text-3xl font-black mb-4">Inovação sem Fronteiras</h3>
+                         <p className="text-slate-300 font-bold text-sm md:text-base leading-relaxed">Lideramos a integração de Inteligência Artificial Generativa no ecossistema laboral angolano.</p>
                       </div>
                    </div>
                 </div>
