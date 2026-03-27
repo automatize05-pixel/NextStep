@@ -96,6 +96,8 @@ export default function InterviewSimulatorPage() {
   }
 
   return (
+    <div className="space-y-10 animate-in fade-in duration-1000 max-w-5xl mx-auto pb-20">
+      {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-900 p-8 rounded-3xl border border-slate-700 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -mr-32 -mt-32 rounded-full" />
         <div className="relative z-10 space-y-3">
@@ -112,13 +114,14 @@ export default function InterviewSimulatorPage() {
           </p>
         </div>
         {started && (
-          <Button variant="outline" size="sm" onClick={restart} className="relative z-10 border-slate-600 text-white hover:bg-slate-800 font-black h-11 px-6 shadow-md">
+          <Button variant="outline" size="sm" onClick={restart} className="relative z-10 border-slate-600 text-white hover:bg-slate-800 font-black h-11 px-6 shadow-md rounded-xl">
             <RotateCcw className="h-4 w-4 mr-2" /> Reiniciar
           </Button>
         )}
       </div>
 
-        <Card className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-slate-900 border-slate-700 shadow-2xl relative overflow-hidden">
+      {!started ? (
+        <Card className="flex-1 min-h-[500px] flex flex-col items-center justify-center p-12 text-center bg-slate-900 border-slate-700 shadow-2xl relative overflow-hidden rounded-[2.5rem]">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
           <div className="mb-8 rounded-full bg-primary/20 p-6 border border-primary/20 shadow-[0_0_30px_rgba(37,99,235,0.2)] relative z-10">
             <MessageSquare className="h-16 w-16 text-primary" />
@@ -131,52 +134,52 @@ export default function InterviewSimulatorPage() {
           
           <div className="w-full max-w-sm space-y-6 relative z-10">
             <div className="space-y-3 text-left">
-              <label className="text-xs font-black uppercase text-white tracking-[0.2em] mb-3 block">Cargo ou Tópico da Entrevista *</label>
+              <label className="text-xs font-black uppercase text-white tracking-[0.2em] mb-3 block text-center">Cargo ou Tópico da Entrevista *</label>
               <Input 
-                placeholder="Ex: Desenvolvedor Frontend Jr, Vendedor, Gestor de RH..." 
+                placeholder="Ex: Desenvolvedor Frontend Jr..." 
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
-                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400 font-black h-12 px-4 shadow-inner"
+                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 font-black h-14 px-6 shadow-inner rounded-2xl text-center focus-visible:ring-primary"
               />
             </div>
-            <Button className="w-full h-14 text-sm font-black uppercase tracking-widest bg-primary hover:bg-blue-600 shadow-lg shadow-primary/30" onClick={startInterview} disabled={loading || !topic}>
+            <Button className="w-full h-14 text-sm font-black uppercase tracking-widest bg-primary hover:bg-blue-600 shadow-lg shadow-primary/30 rounded-2xl transition-all active:scale-95" onClick={startInterview} disabled={loading || !topic}>
               {loading ? <Loader2 className="h-5 w-5 animate-spin mr-3" /> : <Play className="h-5 w-5 mr-3" />}
               {loading ? "Preparando Sessão..." : "Iniciar Simulação de Elite"}
             </Button>
           </div>
         </Card>
       ) : (
-        <Card className="flex-1 flex flex-col overflow-hidden shadow-xl border-t-4 border-t-primary">
-          <CardHeader className="border-b bg-muted/30 py-3">
-            <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
-              <span className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Sessão: {topic}</span>
+        <Card className="flex-1 flex flex-col h-[650px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-800 bg-slate-900 rounded-[2.5rem]">
+          <CardHeader className="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md py-5 px-10">
+            <div className="flex items-center gap-3">
+              <div className="h-3 w-3 rounded-full bg-green-500 animate-pulse shadow-[0_0_15px_rgba(34,197,94,0.6)]"></div>
+              <span className="text-sm font-black uppercase tracking-[0.2em] text-blue-400">Sessão Ativa: {topic}</span>
             </div>
           </CardHeader>
           
-          <CardContent className="flex-1 overflow-y-auto p-4 space-y-6">
+          <CardContent className="flex-1 overflow-y-auto p-10 space-y-10 scrollbar-hide">
             {history.map((msg, i) => (
-              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2`}>
-                <div className={`flex gap-3 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                  <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 ${msg.role === 'user' ? 'bg-primary shadow-sm' : 'bg-white border shadow-sm'}`}>
-                    {msg.role === 'user' ? <User className="h-4 w-4 text-white" /> : <Bot className="h-4 w-4 text-primary" />}
+              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-6 duration-700 fade-in`}>
+                <div className={`flex gap-5 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                  <div className={`h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 shadow-2xl transition-transform hover:scale-110 ${msg.role === 'user' ? 'bg-primary' : 'bg-slate-800 border border-slate-700 font-black'}`}>
+                    {msg.role === 'user' ? <User className="h-6 w-6 text-white" /> : <Bot className="h-6 w-6 text-primary" />}
                   </div>
-                  <div className={`p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === 'user' ? 'bg-primary text-primary-foreground rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none border'}`}>
+                  <div className={`p-6 rounded-[2rem] text-base leading-relaxed shadow-2xl ${msg.role === 'user' ? 'bg-primary text-white rounded-tr-none font-bold' : 'bg-slate-800 text-slate-100 rounded-tl-none border border-slate-700 font-medium'}`}>
                     {msg.content}
                   </div>
                 </div>
               </div>
             ))}
-            {loading && (
-              <div className="flex justify-start animate-in fade-in">
-                <div className="flex gap-3 max-w-[85%]">
-                  <div className="h-8 w-8 rounded-full flex items-center justify-center bg-white border shadow-sm">
-                    <Bot className="h-4 w-4 text-primary animate-pulse" />
+            {loading && (history[history.length-1]?.role === 'user') && (
+              <div className="flex justify-start animate-in fade-in duration-500">
+                <div className="flex gap-5 max-w-[85%]">
+                  <div className="h-12 w-12 rounded-2xl flex items-center justify-center bg-slate-800 border border-slate-700 shadow-2xl">
+                    <Bot className="h-6 w-6 text-primary animate-pulse" />
                   </div>
-                  <div className="py-2.5 px-4 rounded-2xl bg-white border text-sm flex gap-1 items-center">
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                  <div className="p-5 rounded-[2rem] bg-slate-800 border border-slate-700 flex gap-2 items-center rounded-tl-none">
+                    <span className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce"></span>
+                    <span className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                    <span className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce [animation-delay:0.4s]"></span>
                   </div>
                 </div>
               </div>
@@ -184,20 +187,20 @@ export default function InterviewSimulatorPage() {
             <div ref={scrollRef} />
           </CardContent>
 
-          <CardFooter className="p-4 border-t bg-white">
+          <CardFooter className="p-8 border-t border-slate-800 bg-slate-900/90 backdrop-blur-2xl">
             <form 
-              className="flex w-full gap-2" 
+              className="flex w-full gap-4" 
               onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
             >
               <Input 
                 placeholder="Descreva sua resposta com detalhes..." 
-                className="flex-1 h-12 focus-visible:ring-primary shadow-inner bg-white text-gray-900"
+                className="flex-1 h-16 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 font-bold focus-visible:ring-primary shadow-inner rounded-2xl px-8 text-lg"
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 disabled={loading}
               />
-              <Button type="submit" size="icon" className="h-12 w-12 shrink-0 shadow-md" disabled={loading || !userInput.trim()}>
-                {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
+              <Button type="submit" size="icon" className="h-16 w-16 shrink-0 shadow-2xl bg-primary hover:bg-blue-600 rounded-2xl transition-all active:scale-95" disabled={loading || !userInput.trim()}>
+                {loading ? <Loader2 className="h-7 w-7 animate-spin" /> : <Send className="h-7 w-7" />}
               </Button>
             </form>
           </CardFooter>
