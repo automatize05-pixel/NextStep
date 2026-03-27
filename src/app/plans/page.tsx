@@ -32,7 +32,7 @@ const PLANS = [
   {
     id: 'essential',
     name: 'Essencial',
-    price: 5000,
+    price: 3500,
     icon: <Zap className="h-6 w-6 text-blue-600" />,
     color: 'border-blue-400',
     badge: null,
