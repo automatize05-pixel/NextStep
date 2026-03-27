@@ -166,7 +166,7 @@ export async function getUserQuotaStatus(userId: string) {
     .gte('created_at', today.toISOString())
 
   const usageCount: Record<string, number> = {}
-  usageData?.forEach(u => {
+  usageData?.forEach((u: any) => {
     usageCount[u.action_type] = (usageCount[u.action_type] || 0) + 1
   })
 

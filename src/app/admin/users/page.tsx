@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { Search, Filter, UserCog, MoreVertical, MapPin, Target } from "lucide-react"
+import Link from "next/link"
 
 interface Profile {
   id: string;
@@ -78,12 +79,12 @@ export default async function AdminUsersPage() {
                   </td>
                   <td className="px-8 py-6">
                     <div className="flex justify-center gap-2">
-                       <button title="Gerir" className="p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-900 hover:text-white transition-all shadow-sm">
+                       <Link href={`/admin/users/${profile.id}`} title="Gerir" className="p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-900 hover:text-white transition-all shadow-sm flex items-center justify-center">
                           <UserCog className="h-4 w-4" />
-                       </button>
-                       <button className="p-3 bg-white border border-slate-200 rounded-xl hover:bg-red-50 hover:border-red-100 hover:text-red-600 transition-all shadow-sm">
+                       </Link>
+                       <Link href={`/admin/users/${profile.id}`} className="p-3 bg-white border border-slate-200 rounded-xl hover:bg-blue-50 hover:border-blue-100 hover:text-blue-600 transition-all shadow-sm flex items-center justify-center">
                           <MoreVertical className="h-4 w-4" />
-                       </button>
+                       </Link>
                     </div>
                   </td>
                 </tr>

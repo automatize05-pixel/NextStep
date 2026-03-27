@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { Users, Activity, Database, ShieldAlert } from "lucide-react"
+import Link from "next/link"
 
 interface RecentUser {
   id: string;
@@ -110,7 +111,7 @@ export default async function AdminOverview() {
                             </p>
                          </div>
                       </div>
-                      <button className="h-10 px-6 rounded-full bg-white border border-slate-200 font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all shadow-sm">Detalhes</button>
+                      <Link href={`/admin/users/${u.id}`} className="h-10 px-6 rounded-full bg-white border border-slate-200 font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 hover:text-white flex items-center justify-center transition-all shadow-sm">Detalhes</Link>
                    </div>
                  ))
                ) : (
