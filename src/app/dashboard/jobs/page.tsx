@@ -123,14 +123,16 @@ export default function JobsPage() {
 
       {/* Free plan notice */}
       {userPlan === 'free' && (
-        <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-center gap-4">
-          <Lock className="h-5 w-5 text-amber-600 shrink-0" />
+        <div className="p-6 bg-white border border-slate-200 rounded-2xl flex items-center gap-5 shadow-sm">
+          <div className="h-12 w-12 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
+             <Lock className="h-6 w-6 text-amber-600" />
+          </div>
           <div className="flex-1">
-            <p className="font-black text-amber-800 text-sm">Plano Gratuito: Acesso Limitado</p>
-            <p className="text-amber-600 text-xs">A pesquisa web em tempo real consome mais recursos. Evolua para o plano Essencial para 15 buscas/dia.</p>
+            <p className="font-black text-slate-900 text-base">Plano Gratuito: Acesso Limitado</p>
+            <p className="text-slate-600 text-sm font-medium">A pesquisa web em tempo real consome mais recursos. Evolua para o plano Essencial para 15 buscas/dia.</p>
           </div>
           <Link href="/plans">
-            <Button size="sm" variant="outline" className="border-amber-400 text-amber-700 hover:bg-amber-100 font-black">Ver Planos</Button>
+            <Button size="lg" className="bg-slate-900 hover:bg-black text-white px-8 font-black">Ver Planos</Button>
           </Link>
         </div>
       )}
@@ -138,19 +140,22 @@ export default function JobsPage() {
       {/* Search Form */}
       <Card className="border-slate-200 shadow-sm overflow-hidden">
         <div className="h-1 bg-gradient-to-r from-primary via-purple-500 to-blue-500" />
-        <CardHeader><CardTitle className="text-xl">O que procura hoje?</CardTitle><CardDescription>A IA vai rastrear a web por vagas de acordo com os filtros abaixo.</CardDescription></CardHeader>
+        <CardHeader className="bg-slate-900 border-b border-slate-800 pb-8">
+           <CardTitle className="text-2xl font-black text-white">O que procura hoje?</CardTitle>
+           <CardDescription className="text-slate-300 font-medium text-base">A IA vai rastrear a web por vagas de acordo com os filtros abaixo.</CardDescription>
+        </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="text-xs font-black uppercase text-slate-500 mb-1 block">Cargo / Área Atuação *</label>
-              <Input placeholder="Ex: Engenheiro de Software" value={jobTitle} onChange={e => setJobTitle(e.target.value)} className="bg-slate-50" />
+              <label className="text-xs font-black uppercase text-slate-400 mb-2 block tracking-widest">Cargo / Área Atuação *</label>
+              <Input placeholder="Ex: Engenheiro de Software" value={jobTitle} onChange={e => setJobTitle(e.target.value)} className="bg-slate-50 border-slate-200 font-bold" />
             </div>
             <div>
-              <label className="text-xs font-black uppercase text-slate-500 mb-1 block">Localização (Filtro)</label>
-              <Input placeholder="Ex: Luanda, Angola" value={location} onChange={e => setLocation(e.target.value)} className="bg-slate-50" />
+              <label className="text-xs font-black uppercase text-slate-400 mb-2 block tracking-widest">Localização (Filtro)</label>
+              <Input placeholder="Ex: Luanda, Angola" value={location} onChange={e => setLocation(e.target.value)} className="bg-slate-50 border-slate-200 font-bold" />
             </div>
             <div>
-              <label className="text-xs font-black uppercase text-slate-500 mb-1 block">Modelo de Trabalho</label>
+              <label className="text-xs font-black uppercase text-slate-400 mb-2 block tracking-widest">Modelo de Trabalho</label>
               <select value={jobType} onChange={e => setJobType(e.target.value)} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-slate-50 focus:outline-primary font-medium">
                 <option value="onsite">Presencial (Angola)</option>
                 <option value="remote">Remoto / Internacional</option>
