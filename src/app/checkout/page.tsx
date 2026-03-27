@@ -82,7 +82,7 @@ function CheckoutContent() {
           </div>
           <h1 className="text-3xl font-black text-white">Comprovativo Enviado!</h1>
           <p className="text-slate-400">O seu pagamento está em análise. A activação do plano <span className="text-white font-black">{planInfo.name}</span> será feita em até 24 horas úteis.</p>
-          <p className="text-slate-500 text-sm">Receberá uma notificação assim que o seu plano for ativado.</p>
+          <p className="text-slate-200 text-sm">Receberá uma notificação assim que o seu plano for ativado.</p>
           <Button onClick={() => router.push('/dashboard')} className="w-full">← Ir ao Dashboard</Button>
         </div>
       </div>
@@ -102,7 +102,7 @@ function CheckoutContent() {
             <Crown className="h-6 w-6 text-yellow-400" />
             <div>
               <p className="text-white font-black text-lg">Plano {planInfo.name}</p>
-              <p className="text-slate-400 text-sm">Activação em até 24h após confirmação do pagamento</p>
+              <p className="text-slate-300 text-sm">Activação em até 24h após confirmação do pagamento</p>
             </div>
             <div className="ml-auto text-right">
               <p className="text-2xl font-black text-white">{planInfo.price.toLocaleString('pt-AO')} Kz</p>
@@ -149,12 +149,12 @@ function CheckoutContent() {
         <Card className="bg-slate-900 border-slate-700">
           <CardHeader>
             <CardTitle className="text-white">2. Envie o Comprovativo</CardTitle>
-            <CardDescription className="text-slate-400">Após a transferência, envie a prova de pagamento</CardDescription>
+            <CardDescription className="text-slate-300">Após a transferência, envie a prova de pagamento</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <label className="text-xs font-black uppercase text-slate-400 mb-2 block">O seu nome completo *</label>
-              <Input placeholder="Nome completo" value={name} onChange={e => setName(e.target.value)} className="bg-slate-800 border-slate-600 text-white placeholder:text-slate-500" />
+              <Input placeholder="Nome completo" value={name} onChange={e => setName(e.target.value)} className="bg-slate-800 border-slate-600 text-white placeholder:text-slate-400 font-bold" />
             </div>
             <div>
               <label className="text-xs font-black uppercase text-slate-400 mb-2 block">Comprovativo (imagem ou PDF) *</label>
