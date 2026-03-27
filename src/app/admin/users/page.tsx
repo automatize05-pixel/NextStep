@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
-import { Search, Filter, UserCog, MoreVertical, MapPin, Target } from "lucide-react"
-import Link from "next/link"
+import { Search, Filter, UserCog, MoreVertical, MapPin, Target, Users } from "lucide-react"
 
 interface Profile {
   id: string;
@@ -25,13 +24,13 @@ export default async function AdminUsersPage() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <h2 className="text-4xl lg:text-5xl font-black tracking-tight text-slate-900">Gestão de Usuários</h2>
-          <p className="text-slate-500 font-bold mt-2 uppercase tracking-[0.2em] text-xs">Controle e Governança da Base de Talentos</p>
+          <p className="text-slate-500 font-bold mt-2 uppercase tracking-[0.2em] text-xs">Controle da Base de Talentos</p>
         </div>
         <div className="relative group min-w-[300px]">
            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
            <input 
              type="text" 
-             placeholder="Procurar por nome ou e-mail..." 
+             placeholder="Procurar por nome..." 
              className="w-full pl-12 pr-4 py-4 bg-white border-2 border-slate-100 rounded-[1.5rem] focus:outline-none focus:border-primary focus:shadow-xl transition-all font-bold text-sm"
            />
         </div>
@@ -46,7 +45,6 @@ export default async function AdminUsersPage() {
                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Localização</th>
                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Interesse</th>
                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Data de Registro</th>
-                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 text-center">Acções</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
@@ -77,20 +75,16 @@ export default async function AdminUsersPage() {
                       {new Date(profile.created_at).toLocaleDateString('pt-AO')}
                     </span>
                   </td>
-                  <td className="px-8 py-6">
-                    <div className="flex justify-center gap-2">
-                       <Link href={`/admin/users/${profile.id}`} title="Gerir" className="p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-900 hover:text-white transition-all shadow-sm flex items-center justify-center">
-                          <UserCog className="h-4 w-4" />
-                       </Link>
-                       <Link href={`/admin/users/${profile.id}`} className="p-3 bg-white border border-slate-200 rounded-xl hover:bg-blue-50 hover:border-blue-100 hover:text-blue-600 transition-all shadow-sm flex items-center justify-center">
-                          <MoreVertical className="h-4 w-4" />
-                       </Link>
-                    </div>
-                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          {users.length === 0 && (
+             <div className="p-20 text-center space-y-4">
+                <Users className="h-12 w-12 text-slate-200 mx-auto" />
+                <p className="text-slate-400 font-bold italic">Nenhum usuário encontrado na base de dados.</p>
+             </div>
+          )}
         </div>
       </div>
     </div>
