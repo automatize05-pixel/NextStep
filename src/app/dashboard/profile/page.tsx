@@ -160,52 +160,57 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Minha Jornada Profissional</h1>
-        <p className="text-muted-foreground text-lg">Mantenha seu perfil atualizado para que a IA possa guiar sua carreira e gerar currículos assertivos.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-900 p-8 rounded-3xl border border-slate-700 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -mr-32 -mt-32 rounded-full" />
+        <div className="relative z-10 space-y-3">
+          <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-2">Minha Jornada Profissional</h1>
+          <p className="text-white text-lg font-bold max-w-2xl leading-relaxed opacity-100 italic">
+            Mantenha seu perfil atualizado para que a IA possa guiar sua carreira e gerar currículos assertivos.
+          </p>
+        </div>
       </div>
 
       {/* Basic Info */}
-      <Card className="border-primary/10 shadow-lg shadow-primary/5">
-        <CardHeader className="border-b border-primary/5">
-          <CardTitle className="flex items-center gap-2">
-            <Award className="h-5 w-5 text-primary" />
+      <Card className="bg-slate-900 border-slate-800 shadow-xl overflow-hidden">
+        <CardHeader className="border-b border-slate-800 bg-slate-900 p-8">
+          <CardTitle className="flex items-center gap-3 text-2xl font-black text-white">
+            <Award className="h-6 w-6 text-primary" />
             Informações Básicas
           </CardTitle>
-          <CardDescription>Estes dados são o cartão de visita do seu currículo.</CardDescription>
+          <CardDescription className="text-slate-200 font-bold text-base mt-2">Estes dados são o cartão de visita do seu currículo.</CardDescription>
         </CardHeader>
         <form onSubmit={handleSaveBasicInfo}>
           <CardContent className="space-y-6 pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-sm font-semibold">Nome Completo</label>
-                <Input value={fullName} onChange={e => setFullName(e.target.value)} required />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <label className="text-xs font-black uppercase text-white tracking-[0.2em]">Nome Completo</label>
+                <Input value={fullName} onChange={e => setFullName(e.target.value)} required className="bg-slate-800 border-slate-700 text-white font-black h-12" />
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-semibold">Título Profissional</label>
-                <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="Ex: Desenvolvedor Front-end Júnior" />
+              <div className="space-y-3">
+                <label className="text-xs font-black uppercase text-white tracking-[0.2em]">Título Profissional</label>
+                <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="Ex: Desenvolvedor Front-end Júnior" className="bg-slate-800 border-slate-700 text-white font-black h-12" />
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-semibold">Localização</label>
-                <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="Ex: Luanda, Angola" />
+              <div className="space-y-3">
+                <label className="text-xs font-black uppercase text-white tracking-[0.2em]">Localização</label>
+                <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="Ex: Luanda, Angola" className="bg-slate-800 border-slate-700 text-white font-black h-12" />
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-semibold">LinkedIn URL</label>
-                <Input value={linkedin} onChange={e => setLinkedin(e.target.value)} placeholder="https://linkedin.com/in/..." />
+              <div className="space-y-3">
+                <label className="text-xs font-black uppercase text-white tracking-[0.2em]">LinkedIn URL</label>
+                <Input value={linkedin} onChange={e => setLinkedin(e.target.value)} placeholder="https://linkedin.com/in/..." className="bg-slate-800 border-slate-700 text-white font-black h-12" />
               </div>
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold">Resumo Profissional / Bio</label>
+            <div className="space-y-3 mt-6">
+              <label className="text-xs font-black uppercase text-white tracking-[0.2em]">Resumo Profissional / Bio</label>
               <textarea 
-                className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring min-h-[120px]"
+                className="flex w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white text-base font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[150px]"
                 value={bio} 
                 onChange={e => setBio(e.target.value)}
                 placeholder="Conte quem você é, o que faz de melhor e quais seus objetivos."
               />
             </div>
           </CardContent>
-          <CardFooter className="bg-muted/50 border-t">
-            <Button type="submit" disabled={saving} className="bg-primary hover:bg-primary/90">
+          <CardFooter className="bg-slate-950/50 border-t border-slate-800 p-6">
+            <Button type="submit" disabled={saving} className="bg-primary hover:bg-blue-600 text-white font-black h-12 px-8 shadow-lg shadow-primary/20">
               {saving ? "Guardando..." : "Guardar Alterações"}
             </Button>
           </CardFooter>
