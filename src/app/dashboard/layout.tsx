@@ -5,7 +5,8 @@ export const dynamic = 'force-dynamic'
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LayoutDashboard, User, FileText, Map, MessageSquare, Briefcase, LogOut } from "lucide-react"
+import { LayoutDashboard, User, FileText, Map, MessageSquare, Briefcase, LogOut, Clipboard, DollarSign, Linkedin, FileEdit } from "lucide-react"
+
 import { createClient } from "@/lib/supabase/client"
 
 export default function DashboardLayout({
@@ -39,9 +40,14 @@ export default function DashboardLayout({
     { name: "Meu Perfil", href: "/dashboard/profile", icon: User },
     { name: "Meu Currículo", href: "/dashboard/cv", icon: FileText },
     { name: "Trilhas", href: "/dashboard/tracks", icon: Map },
-    { name: "Entrevistas", href: "/dashboard/interviews", icon: MessageSquare },
-    { name: "Carreira", href: "/dashboard/career", icon: Briefcase },
+    { name: "Entrevistas IA", href: "/dashboard/interviews", icon: MessageSquare },
+    { name: "Oportunidades", href: "/dashboard/career", icon: Briefcase },
+    { name: "Candidaturas", href: "/dashboard/applications", icon: Clipboard },
+    { name: "Carta de Apresentação", href: "/dashboard/cover-letter", icon: FileEdit },
+    { name: "Análise Salarial", href: "/dashboard/salary", icon: DollarSign },
+    { name: "LinkedIn IA", href: "/dashboard/linkedin", icon: Linkedin },
   ]
+
 
   return (
     <div className="flex h-screen bg-muted/30 overflow-hidden">
