@@ -35,39 +35,47 @@ export async function POST(req: Request) {
       jobType === 'remote' ? 'remoto ou teletrabalho' : '',
     ].filter(Boolean).join(' ')
 
-    const systemPrompt = `Você é um especialista em recrutamento e pesquisa de vagas de emprego. 
-Baseado no perfil do candidato e nas preferências fornecidas, gere uma lista realista e específica de 8 vagas de emprego atuais e relevantes para ele.
-Adapte ao mercado angolano e inclua vagas locais e remotas internacionais quando aplicável.
-Responda APENAS em JSON com este formato exato:
+    const systemPrompt = `Você é um especialista em recrutamento atuando em Angola.
+Sua tarefa é cruzar o perfil do candidato com o mercado e sugerir 8 oportunidades de carreira realistas.
+IMPORTANTE: Como você não tem acesso em tempo real à internet, VOCÊ É ESTRITAMENTE PROIBIDO de inventar URLs de sites de empresas (ex: nomedaempresa.co.ao). Isso quebra a aplicação.
+Para o campo "apply_link", você DEVE OBRIGATORIAMENTE gerar um link de pesquisa dinâmico e funcional para que o usuário encontre a vaga real.
+Use um destes três formatos de links dinâmicos substituindo os espaços por %20:
+1. LinkedIn: https://www.linkedin.com/jobs/search/?keywords=[Nome%20da%20Empresa]%20[Cargo]&location=Angola
+2. Jobartis: https://www.jobartis.com/vagas?q=[Cargo]&location=Luanda
+3. AngoEmprego: https://www.angoemprego.com/?s=[Cargo]
+
+Para vagas remotas internacionais, direcione sempre para o LinkedIn ou plataformas conhecidas como Toptal/WeWorkRemotely.
+
+Responda APENAS em JSON:
 {
   "jobs": [
     {
-      "title": "Nome do cargo",
-      "company": "Nome da empresa (real ou plausível para Angola)",
+      "title": "Nome exato do cargo",
+      "company": "Empresa real em Angola (ex: BAI, Unitel, Africell, Sonangol) ou Global",
       "location": "Luanda, Angola | Remoto",
       "type": "Presencial|Remoto|Híbrido",
       "salary_range": "150.000 - 300.000 Kz/mês",
       "match_score": 87,
-      "match_reasons": ["Razão 1", "Razão 2"],
+      "match_reasons": ["Motivo 1", "Motivo 2"],
       "requirements": ["Req 1", "Req 2", "Req 3"],
-      "description": "Descrição curta da vaga (2 frases)",
-      "apply_link": "https://linkedin.com/jobs (ou URL plausível)",
+      "description": "Descrição curta da vaga.",
+      "apply_link": "https://www.linkedin.com/jobs/search/?keywords=Unitel%20Desenvolvedor&location=Angola",
       "posted_days_ago": 3
     }
   ],
-  "search_context": "Resumo da pesquisa realizada",
-  "market_insight": "1 insight sobre o mercado para este perfil"
+  "search_context": "Breve análise do mercado atual para este perfil",
+  "market_insight": "Um conselho prático estratégico"
 }`
 
-    const userMessage = `Pesquisa vagas para este candidato:
+    const userMessage = `Pesquisa vagas para este candidato evitando links falsos:
 - Cargo/Área pretendida: ${jobTitle || 'Não especificado'}
 - Localização preferida: ${location || 'Angola (Geral)'}
 - Tipo de trabalho: ${jobType === 'remote' ? 'Remoto/Internacional' : jobType === 'hybrid' ? 'Híbrido' : 'Presencial em Angola'}
 - Skills principais: ${skills?.join(', ') || 'Não especificado'}
-- Perfil resumido: ${bio || 'Profissional angolano em busca de oportunidades'}
+- Perfil resumido: ${bio || 'Profissional angolano'}
 
-Data atual: ${new Date().toLocaleDateString('pt-AO', { year: 'numeric', month: 'long', day: 'numeric' })}
-Foca em vagas que sejam genuinamente compatíveis com este perfil. Match score deve ser honesto (50-99).`
+Data atual: ${new Date().toLocaleDateString('pt-AO')}
+Regra Dourada: O "apply_link" DEVE encaminhar estruturalmente para uma pesquisa real no LinkedIn ou Jobartis. Nunca invente o dominio da empresa.`
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
