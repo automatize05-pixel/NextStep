@@ -39,18 +39,19 @@ export default function AboutPage() {
           {isMenuOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
         </button>
 
-        {/* Mobile Menu Overlay */}
-        {isMenuOpen && (
-          <div className="fixed inset-0 bg-[#0B0F19] z-[200] flex flex-col items-center justify-center gap-10 animate-in fade-in zoom-in duration-300">
-            <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="/">Início</Link>
-            <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] text-primary transition-all" href="/about">Sobre</Link>
-            <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="/#pricing">Preços</Link>
-            <Link onClick={() => setIsMenuOpen(false)} href="/login">
-              <Button className="bg-[#2563EB] hover:bg-blue-700 text-white font-black text-xs uppercase tracking-widest px-12 h-16 rounded-2xl mt-6">Entrar</Button>
-            </Link>
-          </div>
-        )}
       </header>
+
+      {/* Mobile Menu Overlay - Outside Header */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 bg-[#0B0F19] z-[200] flex flex-col items-center justify-center gap-10 animate-in fade-in zoom-in duration-300 md:hidden">
+          <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="/">Início</Link>
+          <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] text-primary transition-all" href="/about">Sobre</Link>
+          <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="/#pricing">Preços</Link>
+          <Link onClick={() => setIsMenuOpen(false)} href="/login">
+            <Button className="bg-[#2563EB] hover:bg-blue-700 text-white font-black text-xs uppercase tracking-widest px-12 h-16 rounded-2xl mt-6">Entrar</Button>
+          </Link>
+        </div>
+      )}
 
       <main className="flex-grow">
         {/* Hero Section */}
