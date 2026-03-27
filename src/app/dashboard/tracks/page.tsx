@@ -60,7 +60,7 @@ export default function TracksPage() {
             <Sparkles className="h-3 w-3 mr-1 animate-pulse" /> IA Career Architect
           </Badge>
           <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white">Trilhas de Elite 2026</h1>
-          <p className="text-slate-400 text-lg max-w-2xl leading-relaxed">
+          <p className="text-white text-xl font-bold max-w-2xl leading-relaxed opacity-100">
             Mapeamos o mercado em tempo real para criar o seu roadmap personalizado. Não estude o que é estático, domine o que o mercado pede hoje.
           </p>
         </div>
@@ -72,9 +72,9 @@ export default function TracksPage() {
           <div className="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto">
             <Target className="h-8 w-8 text-primary" />
           </div>
-          <div className="space-y-2">
-            <h2 className="text-2xl font-black text-white">Qual seu próximo passo?</h2>
-            <p className="text-slate-400">Insira o cargo que deseja alcançar ou a área que quer dominar.</p>
+          <div className="space-y-4">
+            <h2 className="text-3xl font-black text-white tracking-tight">Qual seu próximo passo?</h2>
+            <p className="text-slate-200 font-bold text-lg">Insira o cargo que deseja alcançar ou a área que quer dominar.</p>
           </div>
           <div className="flex flex-col md:flex-row gap-3">
             <Input 

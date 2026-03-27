@@ -152,17 +152,17 @@ export default function CVBuilderPage() {
             </CardContent>
           </Card>
           
-          <Card className="bg-blue-500/5 border-blue-500/20">
+          <Card className="bg-slate-900 border-slate-800 shadow-xl mt-6">
             <CardHeader className="pb-2">
-              <CardTitle className="text-xs font-black uppercase text-blue-400">Guia de Impacto</CardTitle>
+              <CardTitle className="text-xs font-black uppercase text-blue-400 tracking-[0.2em]">Guia de Impacto</CardTitle>
             </CardHeader>
-            <CardContent className="text-[11px] space-y-3 text-slate-400 font-medium">
-              <div className="p-2 bg-slate-950 rounded flex gap-2">
-                <span className="text-blue-500">✓</span> 
+            <CardContent className="text-[12px] space-y-4 text-white font-bold">
+              <div className="p-3 bg-slate-950/80 border border-slate-800 rounded-xl flex gap-3">
+                <span className="text-blue-500 font-black">✓</span> 
                 <p>O seu currículo segue agora o **Método STAR** de descrição.</p>
               </div>
-              <div className="p-2 bg-slate-950 rounded flex gap-2">
-                <span className="text-blue-500">✓</span> 
+              <div className="p-3 bg-slate-950/80 border border-slate-800 rounded-xl flex gap-3">
+                <span className="text-blue-500 font-black">✓</span> 
                 <p>Cabeçalho desenhado para máxima legibilidade (ATS Friendly).</p>
               </div>
               {optimizedData?.recommendation && (
