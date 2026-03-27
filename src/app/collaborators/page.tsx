@@ -104,7 +104,7 @@ export default function CollaboratorsPage() {
                             <code className="text-sm md:text-base font-black text-white block bg-black/20 p-2 rounded-lg">AO06 0420 0000 0000 0006 1077 260</code>
                          </div>
                       </div>
-                      <a href="mailto:apoio@nextstep.ao?subject=Comprovativo de Doação" className="block w-full">
+                      <a href="mailto:nextstep.ao@outlook.pt?subject=Comprovativo de Doação" className="block w-full">
                          <Button className="w-full bg-white text-[#2563EB] hover:bg-blue-50 h-16 rounded-2xl font-black uppercase tracking-widest">Enviar Comprovativo</Button>
                       </a>
                    </div>
