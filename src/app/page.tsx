@@ -5,6 +5,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ShieldCheck, Zap, Globe, MessageSquare, CheckCircle2, Star, Menu, X } from "lucide-react"
 import { useState } from "react"
+import { Logo } from "@/components/shared/logo"
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -17,9 +18,8 @@ export default function Home() {
       
       {/* Navigation - Matching Reference */}
       <header className="px-6 md:px-12 h-20 flex items-center justify-between sticky top-0 bg-[#0B0F19]/90 backdrop-blur-2xl z-[100] border-b border-white/5">
-        <Link className="flex items-center gap-2 group z-[110]" href="/">
-          <div className="w-8 h-8 bg-[#2563EB] rounded-lg flex items-center justify-center font-black text-white text-lg shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-transform group-hover:scale-110">N</div>
-          <span className="font-black text-xl tracking-tighter hover:opacity-80 transition-opacity">Next<span className="text-[#2563EB] italic">Step</span></span>
+        <Link href="/">
+          <Logo />
         </Link>
         
         {/* Desktop Nav */}
@@ -303,9 +303,8 @@ export default function Home() {
       <footer className="w-full bg-[#0B0F19] border-t border-white/5 py-16 px-6 md:px-12">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="space-y-6">
-            <Link className="flex items-center gap-2" href="/">
-              <div className="w-8 h-8 bg-[#2563EB] rounded-lg flex items-center justify-center font-black text-white text-xl">N</div>
-              <span className="font-black text-2xl tracking-tighter">Next<span className="text-[#2563EB] italic">Step</span></span>
+            <Link href="/">
+              <Logo />
             </Link>
             <p className="text-slate-500 font-bold text-xs leading-relaxed max-w-xs">Redefinindo o futuro do trabalho em Angola através da inteligência artificial e excelência tecnológica.</p>
           </div>

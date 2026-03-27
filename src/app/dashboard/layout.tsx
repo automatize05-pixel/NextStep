@@ -9,6 +9,7 @@ import { LayoutDashboard, User, FileText, Map, MessageSquare, Briefcase, LogOut,
 
 import { createClient } from "@/lib/supabase/client"
 import { RealTimeClock } from "@/components/shared/real-time-clock"
+import { Logo } from "@/components/shared/logo"
 
 export default function DashboardLayout({
   children,
@@ -71,7 +72,9 @@ export default function DashboardLayout({
         ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
       `}>
         <div className="h-16 flex items-center justify-between px-6 border-b">
-          <Link href="/dashboard" className="text-xl font-bold text-primary">NextStep</Link>
+          <Link href="/dashboard">
+            <Logo className="scale-75 origin-left" />
+          </Link>
           <button 
             className="md:hidden p-2 text-muted-foreground"
             onClick={() => setIsMobileMenuOpen(false)}
