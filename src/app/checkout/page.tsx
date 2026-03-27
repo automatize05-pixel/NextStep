@@ -15,7 +15,7 @@ const PLAN_INFO: Record<string, { name: string; price: number; color: string }> 
 }
 
 const IBAN_INFO = {
-  bank: "BFA – Banco de Fomento Angola",
+  bank: "IBAN KWik",
   iban: "AO06.0420.0000.0000.0006.1077.260",
   account_holder: "NextStep Lda.",
   entity: "10116",
