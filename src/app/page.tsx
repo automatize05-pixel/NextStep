@@ -28,7 +28,7 @@ export default async function Home() {
           <Link className="text-[11px] font-bold uppercase tracking-widest text-slate-300 hover:text-white transition-colors" href="/">Início</Link>
           <Link className="text-[11px] font-bold uppercase tracking-widest text-slate-300 hover:text-white transition-colors" href="#features">Recursos</Link>
           <Link className="text-[11px] font-bold uppercase tracking-widest text-slate-300 hover:text-white transition-colors" href="#pricing">Preços</Link>
-          <Link className="text-[11px] font-bold uppercase tracking-widest text-slate-300 hover:text-white transition-colors" href="/support">Sobre</Link>
+          <Link className="text-[11px] font-bold uppercase tracking-widest text-slate-300 hover:text-white transition-colors" href="/about">Sobre</Link>
         </nav>
 
         <div className="flex items-center gap-4">
@@ -304,11 +304,11 @@ export default async function Home() {
           </div>
 
           <div className="space-y-6">
-             <h4 className="font-black uppercase tracking-widest text-[10px] text-white">Suporte</h4>
+             <h4 className="font-black uppercase tracking-widest text-[10px] text-white">Sobre Nós</h4>
              <ul className="space-y-4">
-                <li><Link href="/support" className="text-xs font-bold text-slate-500 hover:text-white transition-all">Ajuda</Link></li>
-                <li><Link href="/privacy" className="text-xs font-bold text-slate-500 hover:text-white transition-all">Privacidade</Link></li>
-                <li><Link href="/terms" className="text-xs font-bold text-slate-500 hover:text-white transition-all">Termos</Link></li>
+                <li><Link href="/about" className="text-xs font-bold text-slate-500 hover:text-white transition-all underline decoration-primary underline-offset-4">Nossa Missão</Link></li>
+                <li><Link href="/#pricing" className="text-xs font-bold text-slate-500 hover:text-white transition-all">Planos</Link></li>
+                <li><Link href="/support" className="text-xs font-bold text-slate-500 hover:text-white transition-all">Suporte</Link></li>
              </ul>
           </div>
 
