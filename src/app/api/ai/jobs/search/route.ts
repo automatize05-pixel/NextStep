@@ -28,23 +28,40 @@ export async function POST(req: Request) {
 
     const { jobTitle, location, jobType, skills, bio } = await req.json()
 
-    // Build a rich context prompt to search the web for real jobs
-    const searchQuery = [
-      jobTitle && `vagas de ${jobTitle}`,
-      location && location !== 'Angola (Geral)' ? `em ${location}` : 'em Angola',
-      jobType === 'remote' ? 'remoto ou teletrabalho' : '',
-    ].filter(Boolean).join(' ')
+    // Build a search query to pull real jobs
+    const jobKeywords = jobTitle || skills?.[0] || 'Emprego'
+    const locationKeyword = location && location !== 'Angola (Geral)' ? location : 'Angola'
+    const searchQuery = `Vagas de ${jobKeywords} em ${locationKeyword} ${jobType === 'remote' ? 'remoto' : ''}`
+
+    let webResultsText = ""
+    
+    // Perform Real-Time Web Search if Tavily API Key is present
+    if (process.env.TAVILY_API_KEY) {
+      try {
+        const tavilyRes = await fetch('https://api.tavily.com/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            api_key: process.env.TAVILY_API_KEY,
+            query: searchQuery,
+            search_depth: "basic",
+            include_domains: ["linkedin.com/jobs", "jobartis.com", "angoemprego.com"],
+            max_results: 6
+          })
+        })
+        const tavilyData = await tavilyRes.json()
+        if (tavilyData.results && tavilyData.results.length > 0) {
+           webResultsText = tavilyData.results.map((r: any) => `[VAGA REAL]\nTítulo/Empresa na Web: ${r.title}\nLink Original: ${r.url}\nDescrição Encontrada: ${r.content}`).join('\n\n')
+        }
+      } catch (e) {
+        console.error("Tavily API Fetch failed:", e)
+      }
+    }
 
     const systemPrompt = `Você é um especialista em recrutamento atuando em Angola.
-Sua tarefa é cruzar o perfil do candidato com o mercado e sugerir 8 oportunidades de carreira realistas.
-IMPORTANTE: Como você não tem acesso em tempo real à internet, VOCÊ É ESTRITAMENTE PROIBIDO de inventar URLs de sites de empresas (ex: nomedaempresa.co.ao). Isso quebra a aplicação.
-Para o campo "apply_link", você DEVE OBRIGATORIAMENTE gerar um link de pesquisa dinâmico e funcional para que o usuário encontre a vaga real.
-Use um destes três formatos de links dinâmicos substituindo os espaços por %20:
-1. LinkedIn: https://www.linkedin.com/jobs/search/?keywords=[Nome%20da%20Empresa]%20[Cargo]&location=Angola
-2. Jobartis: https://www.jobartis.com/vagas?q=[Cargo]&location=Luanda
-3. AngoEmprego: https://www.angoemprego.com/?s=[Cargo]
-
-Para vagas remotas internacionais, direcione sempre para o LinkedIn ou plataformas conhecidas como Toptal/WeWorkRemotely.
+Sua tarefa é cruzar o perfil do candidato com o mercado e sugerir oportunidades de carreira.
+IMPORTANTE: Se lhe forem fornecidos [RESULTADOS WEB REAIS], você deve EXATAMENTE extrair as vagas contidas nesses resultados. Não mude o nome da empresa, nem tente inventar. O "apply_link" deve ser exatamente o "Link Original" retornado da web.
+Se não houver resultados da web, você DEVE gerar pesquisas dinâmicas funcionais (ex: https://www.linkedin.com/jobs/search/?keywords=...).
 
 Responda APENAS em JSON:
 {
@@ -54,20 +71,20 @@ Responda APENAS em JSON:
       "company": "Empresa real em Angola (ex: BAI, Unitel, Africell, Sonangol) ou Global",
       "location": "Luanda, Angola | Remoto",
       "type": "Presencial|Remoto|Híbrido",
-      "salary_range": "150.000 - 300.000 Kz/mês",
+      "salary_range": "150.000 - 300.000 Kz/mês (Estimar se não estiver na web)",
       "match_score": 87,
       "match_reasons": ["Motivo 1", "Motivo 2"],
       "requirements": ["Req 1", "Req 2", "Req 3"],
       "description": "Descrição curta da vaga.",
-      "apply_link": "https://www.linkedin.com/jobs/search/?keywords=Unitel%20Desenvolvedor&location=Angola",
+      "apply_link": "https://www.linkedin.com/... (Link Exato da Web ou Link Dinâmico)",
       "posted_days_ago": 3
     }
   ],
-  "search_context": "Breve análise do mercado atual para este perfil",
-  "market_insight": "Um conselho prático estratégico"
+  "search_context": "Breve análise de mercado baseada nos resultados",
+  "market_insight": "Um conselho prático"
 }`
 
-    const userMessage = `Pesquisa vagas para este candidato evitando links falsos:
+    const userMessage = `Pesquisa vagas para este candidato:
 - Cargo/Área pretendida: ${jobTitle || 'Não especificado'}
 - Localização preferida: ${location || 'Angola (Geral)'}
 - Tipo de trabalho: ${jobType === 'remote' ? 'Remoto/Internacional' : jobType === 'hybrid' ? 'Híbrido' : 'Presencial em Angola'}
@@ -75,7 +92,8 @@ Responda APENAS em JSON:
 - Perfil resumido: ${bio || 'Profissional angolano'}
 
 Data atual: ${new Date().toLocaleDateString('pt-AO')}
-Regra Dourada: O "apply_link" DEVE encaminhar estruturalmente para uma pesquisa real no LinkedIn ou Jobartis. Nunca invente o dominio da empresa.`
+${webResultsText ? `\n[RESULTADOS WEB REAIS OBTIDOS NESTE SEGUNDO VIA TAVILY]\nBaseia a tua recomendação de vagas a 100% nos seguintes dados extraídos diretamente da Web (aplica os URLs reais):\n\n${webResultsText}` : `\nRegra Dourada: Sem resultados web ao vivo. O "apply_link" DEVE encaminhar estruturalmente para uma pesquisa real no LinkedIn (https://www.linkedin.com/jobs/search/?keywords=...). Nunca invente.`}
+`
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -84,7 +102,7 @@ Regra Dourada: O "apply_link" DEVE encaminhar estruturalmente para uma pesquisa 
         { role: "user", content: userMessage }
       ],
       response_format: { type: "json_object" },
-      temperature: 0.7,
+      temperature: 0.3, // Lower temperature since we extract precise data now
       max_tokens: 2000,
     })
 
