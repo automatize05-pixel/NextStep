@@ -91,7 +91,9 @@ export default function CollaboratorsPage() {
                          <p className="text-[10px] font-black uppercase tracking-widest text-blue-100 mb-2">IBAN (Angola)</p>
                          <code className="text-lg font-black text-white">AO06 0000 0000 0000 0000 0000 0</code>
                       </div>
-                      <Button className="w-full bg-white text-[#2563EB] hover:bg-blue-50 h-16 rounded-2xl font-black uppercase tracking-widest">Enviar Comprovativo</Button>
+                      <Link href="mailto:apoio@nextstep.ao?subject=Comprovativo de Doação" className="w-full">
+                         <Button className="w-full bg-white text-[#2563EB] hover:bg-blue-50 h-16 rounded-2xl font-black uppercase tracking-widest">Enviar Comprovativo</Button>
+                      </Link>
                    </div>
                 </div>
             </div>

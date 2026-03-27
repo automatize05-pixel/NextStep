@@ -56,9 +56,11 @@ export default function PartnersPage() {
                   Conecte sua organização à plataforma de IA líder em preparação profissional em Angola. Recrute os melhores perfis com dados e inteligência.
                 </p>
                 <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
-                   <Button className="bg-[#2563EB] hover:bg-blue-700 px-10 h-16 rounded-2xl font-black uppercase tracking-widest text-sm flex items-center gap-3">
-                      Seja um Parceiro <Handshake className="h-5 w-5" />
-                   </Button>
+                   <Link href="#contact-form">
+                      <Button className="bg-[#2563EB] hover:bg-blue-700 px-10 h-16 rounded-2xl font-black uppercase tracking-widest text-sm flex items-center gap-3">
+                         Seja um Parceiro <Handshake className="h-5 w-5" />
+                      </Button>
+                   </Link>
                 </div>
             </div>
         </section>
@@ -89,7 +91,7 @@ export default function PartnersPage() {
                  <h2 className="text-3xl font-black">Fale com nosso Gestor</h2>
                  <p className="text-slate-500 font-bold text-sm">Preencha os dados e entramos em contacto em menos de 24 horas.</p>
               </div>
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); alert('Obrigado pelo interesse! Nossa equipe de parcerias entrará em contacto em breve.'); }}>
                  <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Nome da Organização</label>
                     <input type="text" className="w-full bg-slate-900/50 border border-white/10 rounded-xl h-14 px-6 outline-none focus:border-blue-500 transition-colors" />
