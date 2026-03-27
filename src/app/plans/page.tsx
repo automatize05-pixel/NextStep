@@ -191,9 +191,9 @@ export default async function PlansPage() {
         {/* IBAN Payment Info */}
         <div className="mt-16 p-8 bg-slate-900/60 border border-slate-700 rounded-2xl text-center space-y-4">
           <h3 className="text-xl font-black text-white">💳 Como Funciona o Pagamento?</h3>
-          <p className="text-slate-400 max-w-2xl mx-auto">Após selecionar um plano, você receberá as instruções de transferência bancária (IBAN). Após o comprovativo ser enviado, a ativação é feita em até 24 horas úteis.</p>
+          <p className="text-slate-400 max-w-2xl mx-auto">Após selecionar um plano, utilize a **Entidade 10116** e **Referência 947005277** para pagamento via Multicaixa, ou faça a transferência bancária para o IBAN oficial. A activação é feita em até 24 horas úteis.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto mt-6">
-            {['1. Escolha o seu plano', '2. Faça a transferência via IBAN', '3. Envie o comprovativo'].map((step, i) => (
+            {['1. Escolha o seu plano', '2. Pague por Referência ou IBAN', '3. Envie o comprovativo'].map((step, i) => (
               <div key={i} className="p-4 bg-slate-800/60 rounded-xl border border-slate-700">
                 <p className="text-white font-black text-sm">{step}</p>
               </div>

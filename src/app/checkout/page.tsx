@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,15 +16,18 @@ const PLAN_INFO: Record<string, { name: string; price: number; color: string }> 
 
 const IBAN_INFO = {
   bank: "BFA – Banco de Fomento Angola",
-  iban: "AO06.0006.0000.0000.0000.0000.0",
+  iban: "AO06.0420.0000.0000.0006.1077.260",
   account_holder: "NextStep Lda.",
-  reference: "NEXTSTEP",
+  entity: "10116",
+  reference: "947005277",
 }
 
-export default function CheckoutPage({ searchParams }: { searchParams: { plan?: string } }) {
+export default function CheckoutPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
-  const plan = searchParams.plan || 'essential'
+  
+  const plan = searchParams.get('plan') || 'essential'
   const planInfo = PLAN_INFO[plan] || PLAN_INFO.essential
 
   const [file, setFile] = useState<File | null>(null)
@@ -115,11 +118,23 @@ export default function CheckoutPage({ searchParams }: { searchParams: { plan?: 
             <CardDescription className="text-slate-400">Transfira o valor para a conta abaixo</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
+            <div className="p-4 bg-primary/10 border border-primary/20 rounded-xl mb-4">
+              <p className="text-[10px] font-black uppercase text-primary mb-2 tracking-widest text-center">Recomendado: Pagamento por Referência</p>
+              <div className="flex justify-between items-center py-2 border-b border-primary/10">
+                <span className="text-slate-400 text-sm font-bold">Entidade</span>
+                <span className="text-white font-black text-sm">{IBAN_INFO.entity}</span>
+              </div>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-slate-400 text-sm font-bold">Referência</span>
+                <span className="text-primary font-black text-sm">{IBAN_INFO.reference}</span>
+              </div>
+            </div>
+
+            <p className="text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest text-center">Ou via IBAN</p>
             {[
               { label: 'Banco', value: IBAN_INFO.bank },
               { label: 'IBAN', value: IBAN_INFO.iban },
               { label: 'Titular', value: IBAN_INFO.account_holder },
-              { label: 'Referência', value: `${IBAN_INFO.reference}-${plan.toUpperCase()}` },
               { label: 'Montante', value: `${planInfo.price.toLocaleString('pt-AO')} Kz` },
             ].map(({ label, value }) => (
               <div key={label} className="flex justify-between items-center py-2 border-b border-slate-800 last:border-0">

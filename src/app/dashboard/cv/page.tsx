@@ -16,6 +16,8 @@ export default function CVBuilderPage() {
   const [skills, setSkills] = useState<any[]>([])
   
   const [exporting, setExporting] = useState(false)
+  const [optimizing, setOptimizing] = useState(false)
+  const [optimizedData, setOptimizedData] = useState<any>(null)
   
   useEffect(() => {
     async function loadData() {
@@ -23,16 +25,13 @@ export default function CVBuilderPage() {
       if (user) {
         const [profileRes, expRes, eduRes, skillRes] = await Promise.all([
           supabase.from('profiles').select('*').eq('id', user.id).single(),
-          supabase.from('experiences').select('*').order('created_at', { ascending: false }),
-          supabase.from('education').select('*').order('created_at', { ascending: false }),
-          supabase.from('skills').select('*').order('created_at', { ascending: false }),
+          supabase.from('experiences').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
+          supabase.from('education').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
+          supabase.from('skills').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
         ])
 
         if (profileRes.data) {
           setProfile(profileRes.data)
-          if (!profileRes.data.has_resume) {
-            await supabase.from('profiles').update({ has_resume: true }).eq('id', user.id)
-          }
         }
         if (expRes.data) setExperiences(expRes.data)
         if (eduRes.data) setEducations(eduRes.data)
@@ -42,6 +41,26 @@ export default function CVBuilderPage() {
     }
     loadData()
   }, [])
+
+  const handleOptimizeAI = async () => {
+    if (!profile) return
+    setOptimizing(true)
+    try {
+      const res = await fetch('/api/ai/cv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profile, experiences, educations, skills })
+      })
+      const data = await res.json()
+      if (data.error) throw new Error(data.error)
+      setOptimizedData(data)
+    } catch (err) {
+      console.error(err)
+      alert("Falha ao otimizar com IA. Verifique sua quota.")
+    } finally {
+      setOptimizing(false)
+    }
+  }
 
   const handleExportPDF = async () => {
     setExporting(true)
@@ -57,7 +76,7 @@ export default function CVBuilderPage() {
         filename: `Curriculo_${profile?.full_name?.replace(/\s+/g, '_') || 'NextStep'}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
-          scale: 2, 
+          scale: 3, 
           useCORS: true,
           letterRendering: true
         },
@@ -67,7 +86,6 @@ export default function CVBuilderPage() {
       await (html2pdf() as any).from(element).set(opt).save()
     } catch (error) {
       console.error("PDF Export Error:", error)
-      // Fallback to print if library fails
       window.print()
     } finally {
       setExporting(false)
@@ -77,107 +95,144 @@ export default function CVBuilderPage() {
   if (loading) return (
     <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      <p className="text-muted-foreground animate-pulse">Gerando seu currículo profissional...</p>
+      <p className="text-muted-foreground animate-pulse font-black uppercase text-xs tracking-widest">A carregar o laboratório de CVs...</p>
     </div>
   )
 
+  const activeProfile = optimizedData ? { ...profile, bio: optimizedData.optimized_summary } : profile
+  const activeExperiences = optimizedData ? optimizedData.optimized_experiences : experiences
+
   return (
-    <div className="space-y-8 print:m-0 print:p-0">
-      <div className="flex items-center justify-between no-print">
+    <div className="space-y-8 print:m-0 print:p-0 pb-20">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 no-print bg-slate-900/50 p-6 rounded-2xl border border-white/5">
         <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">Gerador de Currículo</h1>
-          <p className="text-muted-foreground">Otimizado para ATS e recrutadores. Clique em exportar para salvar em PDF.</p>
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-green-500">Pronto a Exportar</span>
+          </div>
+          <h1 className="text-3xl font-black text-white tracking-tighter">Gerador de CV Elite</h1>
+          <p className="text-slate-400 text-sm font-medium">Otimizado por IA para passar por qualquer processo de recrutamento.</p>
         </div>
-        <div className="flex gap-4">
-          <Link href="/dashboard/profile">
-            <Button variant="outline">
-              <ArrowLeft className="h-4 w-4 mr-2" /> Editar Perfil
-            </Button>
-          </Link>
+        <div className="flex flex-wrap gap-3">
+          <Button 
+            variant="outline" 
+            onClick={handleOptimizeAI}
+            disabled={optimizing}
+            className="border-primary/30 bg-primary/5 text-primary hover:bg-primary/10 font-black"
+          >
+            {optimizing ? "A Otimizar..." : "Otimizar com IA ✨"}
+          </Button>
           <Button 
             onClick={handleExportPDF} 
-            className="bg-primary hover:bg-primary/90"
+            className="bg-primary hover:bg-primary/90 font-black"
             disabled={exporting}
           >
-            {exporting ? (
-              <><span className="animate-spin mr-2">...</span> Gerando...</>
-            ) : (
-              <><FileDown className="h-4 w-4 mr-2" /> Exportar PDF</>
-            )}
+            {exporting ? "A Gerar..." : "Exportar PDF de Elite"}
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 print:block">
-        <div className="md:col-span-1 space-y-4 no-print">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm uppercase tracking-wider text-muted-foreground">Modelo Atual</CardTitle>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 print:block">
+        {/* Sidebar Settings */}
+        <div className="lg:col-span-3 space-y-4 no-print">
+          <Card className="bg-slate-900 border-white/5">
+            <CardHeader className="pb-3 text-center border-b border-white/5">
+              <CardTitle className="text-[10px] uppercase tracking-widest text-slate-500 font-black">Estilo do Documento</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              <Button variant="secondary" className="w-full justify-start text-primary">
-                <FileText className="h-4 w-4 mr-2" /> Profissional Clássico
+            <CardContent className="p-4 space-y-2">
+              <Button variant="secondary" className="w-full justify-start text-xs font-black h-9 bg-primary/10 text-primary border border-primary/20">
+                <FileText className="h-4 w-4 mr-2" /> Harvard Elite (Ativo)
               </Button>
-              <Button variant="ghost" className="w-full justify-start disabled:opacity-50" disabled>
-                Moderno Clean (Em breve)
+              <Button variant="ghost" className="w-full justify-start text-xs font-bold h-9 text-slate-500 cursor-not-allowed opacity-50">
+                <FileText className="h-4 w-4 mr-2" /> Moderno Creative
+              </Button>
+              <Button variant="ghost" className="w-full justify-start text-xs font-bold h-9 text-slate-500 cursor-not-allowed opacity-50">
+                <FileText className="h-4 w-4 mr-2" /> Minimalist ATS
               </Button>
             </CardContent>
           </Card>
           
-          <Card className="bg-primary/5 border-primary/20">
-            <CardHeader>
-              <CardTitle className="text-sm">Feedback IA</CardTitle>
+          <Card className="bg-blue-500/5 border-blue-500/20">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xs font-black uppercase text-blue-400">Guia de Impacto</CardTitle>
             </CardHeader>
-            <CardContent className="text-xs space-y-2">
-              <p>✅ Cabeçalho completo.</p>
-              {experiences.length === 0 && <p className="text-orange-600 font-medium">⚠️ Adicione experiências para destacar seu perfil.</p>}
-              {skills.length < 5 && <p className="text-blue-600">💡 Liste pelo menos 5 habilidades para melhor indexação.</p>}
+            <CardContent className="text-[11px] space-y-3 text-slate-400 font-medium">
+              <div className="p-2 bg-slate-950 rounded flex gap-2">
+                <span className="text-blue-500">✓</span> 
+                <p>O seu currículo segue agora o **Método STAR** de descrição.</p>
+              </div>
+              <div className="p-2 bg-slate-950 rounded flex gap-2">
+                <span className="text-blue-500">✓</span> 
+                <p>Cabeçalho desenhado para máxima legibilidade (ATS Friendly).</p>
+              </div>
+              {optimizedData?.recommendation && (
+                <div className="p-2 bg-primary/10 border border-primary/20 rounded text-primary">
+                   💡 {optimizedData.recommendation}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
 
-        {/* CV Preview Section */}
-        <div className="md:col-span-3">
+        {/* CV Real Preview - Elite Harvard Style */}
+        <div className="lg:col-span-9">
           <div 
             id="cv-preview" 
-            className="bg-white text-black p-8 md:p-12 shadow-2xl rounded-sm min-h-[1100px] font-serif print:shadow-none print:p-0 print:border-none w-full"
+            className="bg-white text-[#1a1a1a] p-12 md:p-16 shadow-2xl rounded-sm min-h-[1100px] print:shadow-none print:p-0 print:border-none w-full max-w-[800px] mx-auto select-none overflow-hidden"
+            style={{ fontFamily: "'Times New Roman', Times, serif" }}
           >
-            {/* Header */}
-            <div className="text-center border-b-2 border-black pb-8 mb-8">
-              <h1 className="text-4xl font-bold uppercase tracking-[0.1em]">{profile?.full_name || "Seu Nome Completo"}</h1>
-              <p className="text-xl text-gray-700 mt-2 font-medium tracking-wide">{profile?.title || "Seu Cargo / Área de Atuação"}</p>
-              
-              <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 mt-6 text-sm text-gray-600 italic">
-                {profile?.location && <span>{profile.location}</span>}
-                {profile?.linkedin_url && <span>LinkedIn: {profile.linkedin_url.split('/in/')[1] || "perfil"}</span>}
-                {profile?.github_url && <span>GitHub: {profile.github_url.split('.com/')[1] || "perfil"}</span>}
+            {/* Header - Centered & Bold */}
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold uppercase tracking-tight leading-none mb-1 text-black">
+                {activeProfile?.full_name || "Seu Nome Completo"}
+              </h1>
+              <div className="flex flex-wrap justify-center items-center gap-2 text-[12px] font-medium text-gray-700">
+                {activeProfile?.location && <span>{activeProfile.location}</span>}
+                <span className="text-gray-300">•</span>
+                <span>{activeProfile?.email || "seuemail@exemplo.com"}</span>
+                {activeProfile?.phone && (
+                   <><span className="text-gray-300">•</span><span>{activeProfile.phone}</span></>
+                )}
+                {activeProfile?.linkedin_url && (
+                   <><span className="text-gray-300">•</span><span>linkedin.com/in/{activeProfile.linkedin_url.split('/in/')[1] || "perfil"}</span></>
+                )}
               </div>
             </div>
 
-            {/* Profile Summary */}
-            <div className="mb-10">
-              <h2 className="text-lg font-bold uppercase border-b border-gray-300 pb-1 mb-4">Resumo Profissional</h2>
-              <p className="leading-relaxed text-gray-800 text-justify italic px-1">
-                {profile?.bio || "Complete seu resumo no seu perfil para aparecer aqui."}
+            {/* Summary */}
+            <div className="mb-6">
+              <h2 className="text-[14px] font-bold uppercase border-b-2 border-black pb-0.5 mb-2 leading-none">Resumo Profissional</h2>
+              <p className="text-[12px] leading-relaxed text-justify">
+                {activeProfile?.bio || "Defina o seu perfil profissional para gerar um resumo de alto impacto."}
               </p>
             </div>
 
-            {/* Experiences */}
-            <div className="mb-10">
-              <h2 className="text-lg font-bold uppercase border-b border-gray-300 pb-1 mb-4">Experiência Profissional</h2>
-              <div className="space-y-6">
-                {experiences.length === 0 ? (
-                  <p className="text-gray-400 italic text-sm">Nenhuma experiência registrada.</p>
+            {/* Work Experience */}
+            <div className="mb-6">
+              <h2 className="text-[14px] font-bold uppercase border-b-2 border-black pb-0.5 mb-3 leading-none">Experiência Profissional</h2>
+              <div className="space-y-5">
+                {activeExperiences.length === 0 ? (
+                  <p className="text-gray-400 italic text-xs">Nenhuma experiência adicionada.</p>
                 ) : (
-                  experiences.map((exp) => (
-                    <div key={exp.id}>
-                      <div className="flex justify-between items-baseline">
-                        <h3 className="font-bold text-lg">{exp.company}</h3>
-                        <span className="text-sm font-medium">{exp.position}</span>
+                  activeExperiences.map((exp: any, i: number) => (
+                    <div key={i}>
+                      <div className="flex justify-between items-baseline mb-1">
+                        <span className="font-bold text-[13px]">{exp.company}</span>
+                        <span className="text-[12px] italic">{exp.start_date || "2023"} – {exp.end_date || "Presente"}</span>
                       </div>
-                      <p className="text-sm text-gray-700 mt-2 whitespace-pre-line leading-relaxed">
-                        {exp.description}
-                      </p>
+                      <div className="flex justify-between items-baseline mb-2">
+                        <span className="italic text-[12px]">{exp.position}</span>
+                        <span className="text-[11px] text-gray-500">{exp.location || "Luanda, AO"}</span>
+                      </div>
+                      <ul className="list-disc ml-4 space-y-1">
+                        {exp.bullet_points ? (
+                           exp.bullet_points.map((pt: string, pi: number) => (
+                             <li key={pi} className="text-[12px] leading-snug pl-1">{pt}</li>
+                           ))
+                        ) : (
+                          <li className="text-[12px] leading-snug pl-1 text-justify">{exp.description}</li>
+                        )}
+                      </ul>
                     </div>
                   ))
                 )}
@@ -185,42 +240,47 @@ export default function CVBuilderPage() {
             </div>
 
             {/* Education */}
-            <div className="mb-10">
-              <h2 className="text-lg font-bold uppercase border-b border-gray-300 pb-1 mb-4">Formação Acadêmica</h2>
-              <div className="space-y-4">
+            <div className="mb-6">
+              <h2 className="text-[14px] font-bold uppercase border-b-2 border-black pb-0.5 mb-3 leading-none">Educação e Formação</h2>
+              <div className="space-y-3">
                 {educations.length === 0 ? (
-                  <p className="text-gray-400 italic text-sm">Nenhuma formação registrada.</p>
+                  <p className="text-gray-400 italic text-xs">Nenhuma formação registrada.</p>
                 ) : (
-                  educations.map((edu) => (
-                    <div key={edu.id} className="flex justify-between">
-                      <div>
-                        <span className="font-bold">{edu.course}</span>
-                        <span className="mx-2 text-gray-400">|</span>
-                        <span>{edu.institution}</span>
+                  educations.map((edu, i) => (
+                    <div key={i}>
+                      <div className="flex justify-between items-baseline">
+                        <span className="font-bold text-[13px]">{edu.institution}</span>
+                        <span className="text-[12px] italic">Grau: {edu.degree || "Licenciatura"}</span>
                       </div>
-                      <span className="text-sm italic">{edu.degree}</span>
+                      <div className="flex justify-between items-baseline leading-tight">
+                        <span className="text-[12px] italic">{edu.course}</span>
+                        <span className="text-[11px] text-gray-500">Concluído em: 2022</span>
+                      </div>
                     </div>
                   ))
                 )}
               </div>
             </div>
 
-            {/* Skills */}
+            {/* Skills - Grouped */}
             <div>
-              <h2 className="text-lg font-bold uppercase border-b border-gray-300 pb-1 mb-4">Competências Técnicas e Habilidades</h2>
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-y-2 gap-x-8 px-2">
-                {skills.length === 0 ? (
-                  <p className="text-gray-400 italic text-sm col-span-full">Nenhuma habilidade listada.</p>
-                ) : (
-                  skills.map((skill) => (
-                    <div key={skill.id} className="flex items-center gap-2 text-sm">
-                      <div className="w-1.5 h-1.5 rounded-full bg-black"></div>
-                      <span className="font-bold">{skill.name}</span>
-                      <span className="text-gray-500 text-[10px] uppercase">[{skill.level}]</span>
+              <h2 className="text-[14px] font-bold uppercase border-b-2 border-black pb-0.5 mb-2 leading-none">Habilidades e Linguagens</h2>
+              
+              {optimizedData?.skill_groups ? (
+                <div className="space-y-1">
+                  {optimizedData.skill_groups.map((group: any, i: number) => (
+                    <div key={i} className="text-[12px]">
+                      <span className="font-bold mr-1">{group.category}:</span>
+                      <span>{group.skills.join(', ')}</span>
                     </div>
-                  ))
-                )}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-[12px]">
+                  <span className="font-bold mr-1">Técnicas:</span>
+                  <span>{skills.map(s => s.name).join(', ') || "A registrar"}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -233,8 +293,14 @@ export default function CVBuilderPage() {
           .print\:block { display: block !important; }
           .print\:p-0 { padding: 0 !important; }
           .print\:m-0 { margin: 0 !important; }
-          .print\:shadow-none { shadow: none !important; }
+          .print\:shadow-none { shadow: none !important; box-shadow: none !important; }
           .print\:border-none { border: none !important; }
+          #cv-preview { 
+            width: 100% !important; 
+            max-width: none !important; 
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
         }
       `}</style>
     </div>

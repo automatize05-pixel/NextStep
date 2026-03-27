@@ -271,7 +271,7 @@ export default async function Home() {
                 </div>
               ))}
             </div>
-            <p className="text-center text-slate-500 text-xs font-bold mt-8">Pagamento via transferência bancária (IBAN). Ativação em até 24h.</p>
+            <p className="text-center text-slate-500 text-xs font-bold mt-8">Pagamento via Referência Multicaixa ou IBAN. Ativação em até 24h.</p>
           </div>
         </section>
 
