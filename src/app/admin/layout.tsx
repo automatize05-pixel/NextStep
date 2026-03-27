@@ -1,7 +1,8 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Users, Settings, BarChart3, ShieldAlert } from "lucide-react"
+import { Users, Settings, BarChart3, ShieldAlert, CreditCard } from "lucide-react"
+
 
 export default async function AdminLayout({
   children,
@@ -19,8 +20,10 @@ export default async function AdminLayout({
   const navItems = [
     { label: "Overview", href: "/admin", icon: BarChart3 },
     { label: "Gestão de Usuários", href: "/admin/users", icon: Users },
+    { label: "Pagamentos", href: "/admin/payments", icon: CreditCard },
     { label: "Configurações", href: "/admin/settings", icon: Settings },
   ]
+
 
   return (
     <div className="min-h-screen bg-[#f1f5f9] text-[#0f172a] selection:bg-primary selection:text-white">

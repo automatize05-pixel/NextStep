@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LayoutDashboard, User, FileText, Map, MessageSquare, Briefcase, LogOut, Clipboard, DollarSign, Linkedin, FileEdit } from "lucide-react"
+import { LayoutDashboard, User, FileText, Map, MessageSquare, Briefcase, LogOut, Clipboard, DollarSign, Linkedin, FileEdit, Search, Crown } from "lucide-react"
 
 import { createClient } from "@/lib/supabase/client"
 
@@ -37,6 +37,7 @@ export default function DashboardLayout({
 
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Job Hunter IA", href: "/dashboard/jobs", icon: Search, highlight: true },
     { name: "Meu Perfil", href: "/dashboard/profile", icon: User },
     { name: "Meu Currículo", href: "/dashboard/cv", icon: FileText },
     { name: "Trilhas", href: "/dashboard/tracks", icon: Map },
@@ -46,6 +47,7 @@ export default function DashboardLayout({
     { name: "Carta de Apresentação", href: "/dashboard/cover-letter", icon: FileEdit },
     { name: "Análise Salarial", href: "/dashboard/salary", icon: DollarSign },
     { name: "LinkedIn IA", href: "/dashboard/linkedin", icon: Linkedin },
+    { name: "Ver Planos", href: "/plans", icon: Crown },
   ]
 
 
@@ -74,7 +76,7 @@ export default function DashboardLayout({
           </button>
         </div>
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          {navItems.map((item) => {
+          {navItems.map((item: any) => {
             const isActive = pathname === item.href
             return (
               <Link 
@@ -82,11 +84,14 @@ export default function DashboardLayout({
                 href={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
-                  isActive ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  item.highlight && !isActive
+                    ? "text-primary font-bold bg-primary/5 hover:bg-primary/10 border border-primary/20"
+                    : isActive ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
               >
                 <item.icon className="h-5 w-5" />
                 {item.name}
+                {item.highlight && !isActive && <span className="ml-auto text-[9px] font-black px-1.5 py-0.5 bg-primary text-white rounded-full">IA</span>}
               </Link>
             )
           })}
