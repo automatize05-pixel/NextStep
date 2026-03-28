@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
-import { Search, Filter, UserCog, MoreVertical, MapPin, Target, Users } from "lucide-react"
+import { Search, Filter, UserCog, MoreVertical, MapPin, Target, Users, ChevronRight } from "lucide-react"
+import Link from "next/link"
 
 interface Profile {
   id: string;
@@ -44,7 +45,7 @@ export default async function AdminUsersPage() {
                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Usuário</th>
                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Localização</th>
                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Interesse</th>
-                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Data de Registro</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 text-center">Ações</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
@@ -74,6 +75,15 @@ export default async function AdminUsersPage() {
                     <span className="bg-slate-100 px-3 py-1 rounded-full text-[10px] font-black text-slate-500 uppercase">
                       {new Date(profile.created_at).toLocaleDateString('pt-AO')}
                     </span>
+                  </td>
+                  <td className="px-8 py-6 text-right">
+                    <Link 
+                      href={`/admin/users/${profile.id}`}
+                      className="inline-flex items-center gap-2 h-10 px-6 rounded-full bg-white border border-slate-200 font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all shadow-sm group-hover:border-primary/20"
+                    >
+                      Detalhes 
+                      <ChevronRight className="h-3 w-3" />
+                    </Link>
                   </td>
                 </tr>
               ))}
