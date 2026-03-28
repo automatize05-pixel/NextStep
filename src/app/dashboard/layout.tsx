@@ -58,7 +58,7 @@ export default function DashboardLayout({
   ]
 
   return (
-    <div className="flex h-screen bg-muted/30 overflow-hidden text-foreground">
+    <div className="flex h-screen bg-background overflow-hidden text-foreground selection:bg-primary/20 transition-colors">
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
         <div 
@@ -101,7 +101,7 @@ export default function DashboardLayout({
               >
                 <item.icon className={cn("h-5 w-5 transition-transform group-hover:scale-110", isActive && "text-primary")} />
                 <span className="text-[13px] tracking-tight">{item.name}</span>
-                {item.highlight && !isActive && <span className="ml-auto text-[9px] font-black px-2 py-0.5 bg-primary text-white rounded-full uppercase tracking-widest shadow-lg shadow-primary/20 animate-pulse">IA</span>}
+                {item.highlight && !isActive && <span className="ml-auto text-[9px] font-black px-2 py-0.5 bg-primary text-primary-foreground rounded-full uppercase tracking-widest shadow-lg shadow-primary/20 animate-pulse">IA</span>}
               </Link>
             )
           })}
