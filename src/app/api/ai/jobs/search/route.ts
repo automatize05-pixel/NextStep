@@ -26,12 +26,15 @@ export async function POST(req: Request) {
       }
     }
 
-    const { jobTitle, location, jobType, skills, bio } = await req.json()
+    const { jobTitle, location, jobType, skills, bio, isFirstJob } = await req.json()
 
     // Build a search query to pull real jobs
     const jobKeywords = jobTitle || skills?.[0] || 'Emprego'
     const locationKeyword = location && location !== 'Angola (Geral)' ? location : 'Angola'
-    const searchQuery = `Vagas de ${jobKeywords} em ${locationKeyword} ${jobType === 'remote' ? 'remoto' : ''}`
+    
+    // Se for Modo Primeiro Emprego, adicionamos modificadores de busca para vagas Junior/Estágio
+    const firstJobModifiers = isFirstJob ? " (junior OR estagio OR sem experiencia)" : ""
+    const searchQuery = `Vagas de ${jobKeywords}${firstJobModifiers} em ${locationKeyword} ${jobType === 'remote' ? 'remoto' : ''}`
 
     let webResultsText = ""
     
@@ -90,6 +93,7 @@ Responda APENAS em JSON:
 - Tipo de trabalho: ${jobType === 'remote' ? 'Remoto/Internacional' : jobType === 'hybrid' ? 'Híbrido' : 'Presencial em Angola'}
 - Skills principais: ${skills?.join(', ') || 'Não especificado'}
 - Perfil resumido: ${bio || 'Profissional angolano'}
+- MODO PRIMEIRO EMPREGO ATIVO: ${isFirstJob ? 'SIM (Priorizar vagas que NÃO exigem experiência ou são de nível Junior/Estágio)' : 'NÃO (Pesquisa normal de mercado)'}
 
 Data atual: ${new Date().toLocaleDateString('pt-AO')}
 ${webResultsText ? `\n[RESULTADOS WEB REAIS OBTIDOS NESTE SEGUNDO VIA TAVILY]\nBaseia a tua recomendação de vagas a 100% nos seguintes dados extraídos diretamente da Web (aplica os URLs reais):\n\n${webResultsText}` : `\nRegra Dourada: Sem resultados web ao vivo. O "apply_link" DEVE encaminhar estruturalmente para uma pesquisa real no LinkedIn (https://www.linkedin.com/jobs/search/?keywords=...). Nunca invente.`}

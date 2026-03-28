@@ -26,6 +26,7 @@ export default function JobsPage() {
   const [jobType, setJobType] = useState("onsite")
   const [marketInsight, setMarketInsight] = useState("")
   const [searched, setSearched] = useState(false)
+  const [isFirstJob, setIsFirstJob] = useState(false)
   const [userPlan, setUserPlan] = useState("free")
   const [quotaRemaining, setQuotaRemaining] = useState<number | null>(null)
   const [profile, setProfile] = useState<any>(null)
@@ -60,6 +61,7 @@ export default function JobsPage() {
           jobTitle: jobTitle || profile?.title,
           location,
           jobType,
+          isFirstJob,
           skills: skillsRes?.map((s: any) => s.name) || [],
           bio: profile?.bio
         })
@@ -163,6 +165,23 @@ export default function JobsPage() {
               </select>
             </div>
           </div>
+
+          {/* First Job Toggle */}
+          <div className="mt-6 flex items-center justify-between p-4 bg-slate-800/50 border border-slate-700 rounded-xl group hover:border-primary/50 transition-all cursor-pointer" onClick={() => setIsFirstJob(!isFirstJob)}>
+            <div className="flex items-center gap-4">
+              <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${isFirstJob ? 'bg-primary text-white' : 'bg-slate-700 text-slate-400'}`}>
+                 <TrendingUp className="h-6 w-6" />
+              </div>
+              <div>
+                <p className="text-sm font-black text-white uppercase tracking-wider">Modo Primeiro Emprego</p>
+                <p className="text-xs text-slate-400 font-bold">A IA prioriza vagas que não exigem experiência prévia.</p>
+              </div>
+            </div>
+            <div className={`w-14 h-7 rounded-full p-1 transition-all ${isFirstJob ? 'bg-primary' : 'bg-slate-700'}`}>
+              <div className={`h-5 w-5 bg-white rounded-full shadow-lg transition-all transform ${isFirstJob ? 'translate-x-7' : 'translate-x-0'}`} />
+            </div>
+          </div>
+
           <Button className="mt-8 w-full md:w-auto px-10 h-12 font-black text-sm uppercase tracking-widest bg-primary hover:bg-blue-600 shadow-lg shadow-primary/20" onClick={search} disabled={loading || !jobTitle}>
             {loading ? <><Loader2 className="h-5 w-5 mr-3 animate-spin" />A Rastrear a Web...</> : <><Zap className="h-5 w-5 mr-3" />Iniciar Caça IA</>}
           </Button>

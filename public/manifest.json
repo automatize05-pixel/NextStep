@@ -1,7 +1,7 @@
 {
-  "name": "NextStep Carreras Angola",
+  "name": "NextStep Career Angola",
   "short_name": "NextStep",
-  "description": "A plataforma de carreira inteligente líder em Angola. Encontre vagas ajustadas por IA, simule entrevistas e construa currículos.",
+  "description": "Treinador de Carreira Inteligente líder em Angola. Encontre vagas reais, treine entrevistas e crie currículos imbatíveis.",
   "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#0B0F19",
@@ -17,6 +17,29 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Buscar Vagas",
+      "short_name": "Vagas",
+      "description": "Pesquisar vagas reais em tempo real em Angola",
+      "url": "/dashboard/jobs",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Criar Currículo",
+      "short_name": "CV",
+      "description": "Gerar currículo profissional com IA",
+      "url": "/dashboard/cv",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Treinar Entrevista",
+      "short_name": "Treinar",
+      "description": "Praticar entrevista com IA",
+      "url": "/dashboard/interview",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
     }
   ]
 }

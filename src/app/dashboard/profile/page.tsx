@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/client"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Trash2, Plus, Briefcase, GraduationCap, Award } from "lucide-react"
+import { Trash2, Plus, Briefcase, GraduationCap, Award, Globe, Zap } from "lucide-react"
 
 export default function ProfilePage() {
   const supabase = createClient()
@@ -20,6 +20,9 @@ export default function ProfilePage() {
   const [location, setLocation] = useState("")
   const [github, setGithub] = useState("")
   const [linkedin, setLinkedin] = useState("")
+  const [whatsapp, setWhatsapp] = useState("")
+  const [whatsappEnabled, setWhatsappEnabled] = useState(false)
+  const [alertFrequency, setAlertFrequency] = useState("daily")
 
   // Lists State
   const [experiences, setExperiences] = useState<any[]>([])
@@ -50,6 +53,9 @@ export default function ProfilePage() {
           setLocation(profileData.location || "")
           setGithub(profileData.github_url || "")
           setLinkedin(profileData.linkedin_url || "")
+          setWhatsapp(profileData.phone_number || "")
+          setWhatsappEnabled(profileData.whatsapp_enabled || false)
+          setAlertFrequency(profileData.alert_frequency || "daily")
         }
 
         // Load Related
@@ -79,7 +85,10 @@ export default function ProfilePage() {
         bio,
         location,
         github_url: github,
-        linkedin_url: linkedin
+        linkedin_url: linkedin,
+        phone_number: whatsapp,
+        whatsapp_enabled: whatsappEnabled,
+        alert_frequency: alertFrequency
       }).eq('id', user.id)
       alert("Perfil atualizado!")
     }
@@ -207,6 +216,56 @@ export default function ProfilePage() {
                 onChange={e => setBio(e.target.value)}
                 placeholder="Conte quem você é, o que faz de melhor e quais seus objetivos."
               />
+            </div>
+
+            {/* WhatsApp Notifications Section */}
+            <div className="mt-10 pt-10 border-t border-slate-800 space-y-6">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="h-10 w-10 bg-green-500/10 rounded-full flex items-center justify-center">
+                   <Globe className="h-5 w-5 text-green-500" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-black text-white uppercase tracking-wider">Alertas via WhatsApp</h3>
+                  <p className="text-slate-400 text-sm font-bold">Receba vagas reais e dicas diretamente no seu telemóvel.</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
+                <div className="space-y-3">
+                  <label className="text-xs font-black uppercase text-white tracking-[0.2em]">Telemóvel (WhatsApp)</label>
+                  <Input 
+                    value={whatsapp} 
+                    onChange={e => setWhatsapp(e.target.value)} 
+                    placeholder="Ex: +244 9..." 
+                    className="bg-slate-800 border-slate-700 text-white font-black h-12" 
+                  />
+                </div>
+                
+                <div className="space-y-3">
+                  <label className="text-xs font-black uppercase text-white tracking-[0.2em]">Frequência de Alertas</label>
+                  <select 
+                    value={alertFrequency} 
+                    onChange={e => setAlertFrequency(e.target.value)} 
+                    className="w-full h-12 border border-slate-700 rounded-xl px-4 text-sm bg-slate-800 text-white focus:outline-primary font-black appearance-none"
+                  >
+                    <option value="realtime">Tempo Real (Imediato)</option>
+                    <option value="daily">Diário (Resumo)</option>
+                    <option value="weekly">Semanal</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-slate-800/50 border border-slate-700 rounded-2xl cursor-pointer hover:border-green-500/50 transition-all" onClick={() => setWhatsappEnabled(!whatsappEnabled)}>
+                <div className="flex items-center gap-4">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${whatsappEnabled ? 'bg-green-500 text-white' : 'bg-slate-700 text-slate-400'}`}>
+                     <Zap className="h-5 w-5" />
+                  </div>
+                  <span className="text-sm font-black text-white uppercase">Ativar Notificações</span>
+                </div>
+                <div className={`w-12 h-6 rounded-full p-1 transition-all ${whatsappEnabled ? 'bg-green-500' : 'bg-slate-700'}`}>
+                  <div className={`h-4 w-4 bg-white rounded-full transition-all transform ${whatsappEnabled ? 'translate-x-6' : 'translate-x-0'}`} />
+                </div>
+              </div>
             </div>
           </CardContent>
           <CardFooter className="bg-slate-950/50 border-t border-slate-800 p-6">
