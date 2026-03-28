@@ -32,9 +32,12 @@ export default function Home() {
           <Link className="text-[11px] font-bold uppercase tracking-widest text-slate-300 hover:text-white transition-colors" href="#pricing">Preços</Link>
         </nav>
 
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-6">
+          <Link href="/login" className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-300 hover:text-white transition-all">
+            Entrar
+          </Link>
           <Link href="/register">
-            <Button className="bg-[#2563EB] hover:bg-blue-700 rounded-full px-8 font-black uppercase text-[10px] tracking-widest shadow-xl">Criar Conta</Button>
+            <Button className="bg-[#2563EB] hover:bg-blue-700 rounded-full px-8 font-black uppercase text-[10px] tracking-widest shadow-xl border-none">Criar Conta</Button>
           </Link>
         </div>
 
@@ -58,9 +61,18 @@ export default function Home() {
           <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="/partners">Parceiros</Link>
           <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="/contact">Contacto</Link>
           <Link onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase tracking-[0.4em] hover:text-[#2563EB] transition-all" href="#pricing">Preços</Link>
-          <Link onClick={() => setIsMenuOpen(false)} href="/register">
-            <Button className="bg-[#2563EB] hover:bg-blue-700 text-white font-black text-xs uppercase tracking-widest px-12 h-16 rounded-2xl mt-6">Criar Conta</Button>
-          </Link>
+          <div className="flex flex-col w-full px-12 gap-4 mt-6">
+            <Link onClick={() => setIsMenuOpen(false)} href="/login" className="w-full">
+              <Button variant="outline" className="w-full h-16 rounded-2xl border-white/10 bg-white/5 text-white font-black text-xs uppercase tracking-widest hover:bg-white/10 transition-all">
+                Entrar na Conta
+              </Button>
+            </Link>
+            <Link onClick={() => setIsMenuOpen(false)} href="/register" className="w-full">
+              <Button className="w-full h-16 rounded-2xl bg-[#2563EB] hover:bg-blue-700 text-white font-black text-xs uppercase tracking-widest transition-all">
+                Criar Conta Grátis
+              </Button>
+            </Link>
+          </div>
         </div>
       )}
 
