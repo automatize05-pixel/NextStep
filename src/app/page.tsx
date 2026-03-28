@@ -77,14 +77,15 @@ export default function Home() {
                 </div>
                 
                 <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black tracking-tighter leading-[0.9] text-white animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-100">
-                  Sua Carreira, <br />
-                  <span className="text-blue-500">Elevada</span> <br />
-                  Pela IA.
+                  O Seu <br />
+                  <span className="text-blue-500">Treinador</span> <br />
+                  de Carreira.
                 </h1>
                 
                 <p className="max-w-xl text-slate-300 text-lg sm:text-xl font-bold leading-relaxed opacity-90 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-300">
-                  A ferramenta definitiva para profissionais angolanos. 
-                  Crie currículos de elite, treine entrevistas e encontre vagas reais em tempo real.
+                  Não procures apenas um emprego. <br />
+                  <span className="text-white">Treina até seres o candidato que nenhuma empresa pode recusar.</span> 
+                  A nossa IA prepara-te para o sucesso real no mercado de Angola.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-6 pt-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
@@ -265,10 +266,11 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { id: 'free', name: 'Gratuito', price: 'Grátis', color: 'border-slate-700', btn: 'border-white/10 hover:bg-white/5 text-white', features: ['3 entrevistas IA/dia', '3 pesquisas de vagas/dia', '1 carta de apresentação/dia', 'CRM de candidaturas', 'CV Builder básico'] },
-                { id: 'essential', name: 'Essencial', price: '3.500 Kz', color: 'border-blue-500', btn: 'bg-[#2563EB] hover:bg-blue-700 text-white', features: ['20 entrevistas IA/dia', '15 pesquisas de vagas/dia', '5 cartas de apresentação/dia', 'LinkedIn Optimizer IA', 'Análise de Soft Skills'] },
-                { id: 'premium', name: 'Premium', price: '15.000 Kz', color: 'border-purple-500', badge: 'MAIS POPULAR', btn: 'bg-purple-600 hover:bg-purple-700 text-white', features: ['100 entrevistas IA/dia', '50 pesquisas de vagas/dia', 'Análise salarial avançada', 'Portfólio público', 'Alertas de vagas por email'] },
-                { id: 'elite', name: 'Elite', price: '25.000 Kz', color: 'border-yellow-400', btn: 'bg-yellow-500 hover:bg-yellow-600 text-black', features: ['IA ILIMITADA em tudo', 'Badge Elite no portfólio', 'CV em 3 idiomas (PT/EN/FR)', 'Suporte prioritário', 'Acesso antecipado beta'] },
+                { id: 'free', name: 'Explora', price: 'Grátis', color: 'border-slate-700', btn: 'border-white/10 hover:bg-white/5 text-white', features: ['Teste inicial de IA (3/dia)', 'Busca básica de vagas', 'Criador de CV básico', 'Gestor de Candidaturas'] },
+                { id: 'starter', name: 'Primeiro Passo', price: '1.500 Kz', color: 'border-green-500/50', badge: 'ENTRADA', btn: 'bg-green-600 hover:bg-green-700 text-white', features: ['Treino p/ 1ª Entrevista', 'Carta de apresentação', 'Otimização de Perfil', 'Análise de Soft Skills'] },
+                { id: 'essential', name: 'Preparação Pro', price: '3.500 Kz', color: 'border-blue-500', badge: 'RECOMENDADO', btn: 'bg-[#2563EB] hover:bg-blue-700 text-white', features: ['Treina até estares pronto', 'CV Profissional ATS', 'LinkedIn Optimizer Pro', 'Busca Job Hunter PRO'] },
+                { id: 'premium', name: 'Aceleração', price: '8.500 Kz', color: 'border-purple-500', badge: 'MAIS RESULTADO', btn: 'bg-purple-600 hover:bg-purple-700 text-white', features: ['Treino ILIMITADO', 'Vagas em Tempo Real', 'Estratégia VIP LinkedIn', 'Portfólio Premium'] },
+                { id: 'elite', name: 'Elite VIP', price: '15.000 Kz', color: 'border-yellow-400', btn: 'bg-yellow-500 hover:bg-yellow-600 text-black', features: ['Acesso VIP Mentores', 'Alertas WhatsApp', 'Tudo Ilimitado', 'Suporte 24/7'] },
               ].map(plan => (
                 <div key={plan.id} className={`relative p-6 bg-slate-900/60 border-2 ${plan.color} rounded-2xl flex flex-col hover:scale-[1.02] transition-transform`}>
                   {(plan as any).badge && (

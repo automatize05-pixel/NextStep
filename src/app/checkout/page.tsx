@@ -9,9 +9,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Upload, Loader2, CheckCircle2, Crown, ArrowLeft } from "lucide-react"
 
 const PLAN_INFO: Record<string, { name: string; price: number; color: string }> = {
-  essential: { name: 'Essencial', price: 3500, color: 'border-blue-400' },
-  premium: { name: 'Premium', price: 15000, color: 'border-purple-400' },
-  elite: { name: 'Elite', price: 25000, color: 'border-yellow-400' },
+  starter: { name: 'Primeiro Passo', price: 1500, color: 'border-green-400' },
+  essential: { name: 'Preparação Pro', price: 3500, color: 'border-blue-400' },
+  premium: { name: 'Aceleração Total', price: 8500, color: 'border-purple-400' },
+  elite: { name: 'Elite VIP', price: 15000, color: 'border-yellow-400' },
 }
 
 const IBAN_INFO = {

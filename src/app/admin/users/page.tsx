@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
-import { Search, Filter, UserCog, MoreVertical, MapPin, Target, Users, ChevronRight } from "lucide-react"
+import { Search, MapPin, Users, ChevronRight } from "lucide-react"
 import Link from "next/link"
 
 interface Profile {
@@ -8,6 +8,7 @@ interface Profile {
   location: string | null;
   field_of_interest: string | null;
   created_at: string;
+  plan: string | null;
 }
 
 export default async function AdminUsersPage() {
@@ -15,10 +16,21 @@ export default async function AdminUsersPage() {
 
   const { data: usersRaw } = await supabase
     .from('profiles')
-    .select('id, full_name, location, field_of_interest, created_at')
+    .select('id, full_name, location, field_of_interest, created_at, plan')
     .order('created_at', { ascending: false })
 
   const users = (usersRaw as unknown as Profile[]) || []
+
+  // Helper for plan badges
+  const getPlanBadge = (plan: string | null) => {
+    switch(plan) {
+      case 'starter': return 'bg-green-100 text-green-700 border-green-200';
+      case 'essential': return 'bg-blue-100 text-blue-700 border-blue-200';
+      case 'premium': return 'bg-purple-100 text-purple-700 border-purple-200';
+      case 'elite': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+      default: return 'bg-slate-100 text-slate-500 border-slate-200';
+    }
+  }
 
   return (
     <div className="space-y-10 animate-in slide-in-from-bottom duration-500">
@@ -43,9 +55,10 @@ export default async function AdminUsersPage() {
             <thead>
               <tr className="bg-slate-50/50 border-b border-slate-100">
                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Usuário</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Plano</th>
                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Localização</th>
-                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Interesse</th>
-                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 text-center">Ações</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 text-center">Inscrito</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 text-right">Ações</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
@@ -60,18 +73,17 @@ export default async function AdminUsersPage() {
                     </div>
                   </td>
                   <td className="px-8 py-6">
+                    <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase border-2 ${getPlanBadge(profile.plan)}`}>
+                      {profile.plan || 'Gratuito'}
+                    </span>
+                  </td>
+                  <td className="px-8 py-6">
                     <div className="flex items-center gap-2 text-slate-500 font-bold text-sm">
                        <MapPin className="h-4 w-4 text-primary" />
                        {profile.location || 'Não informado'}
                     </div>
                   </td>
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-2 text-slate-500 font-bold text-sm">
-                       <Target className="h-4 w-4 text-orange-500" />
-                       {profile.field_of_interest || 'Geral'}
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
+                  <td className="px-8 py-6 text-center">
                     <span className="bg-slate-100 px-3 py-1 rounded-full text-[10px] font-black text-slate-500 uppercase">
                       {new Date(profile.created_at).toLocaleDateString('pt-AO')}
                     </span>

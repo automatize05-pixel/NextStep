@@ -14,6 +14,16 @@ export const PLAN_LIMITS: Record<string, Record<string, number>> = {
     ai_jobs_search:   3,   // 3 buscas web de vagas/dia
     ai_softskills:    0,   // Bloqueado no plano free
   },
+  starter: {
+    ai_interview:     7,   
+    ai_search:        8,   
+    ai_cover_letter:  2,   
+    ai_salary:        5,   
+    ai_linkedin:      2,   
+    ai_pitch:         2,   
+    ai_jobs_search:   7,   
+    ai_softskills:    1,   
+  },
   essential: {
     ai_interview:     20,
     ai_search:        20,
