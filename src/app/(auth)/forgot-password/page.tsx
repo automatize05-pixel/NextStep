@@ -37,45 +37,48 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 bg-slate-50/50">
-      <Card className="w-full max-w-md shadow-2xl border-slate-100 animate-in fade-in zoom-in duration-300">
-        <CardHeader className="space-y-4 text-center">
+    <div className="flex min-h-screen items-center justify-center p-6 bg-slate-50/40">
+      <Card className="w-full max-w-md shadow-xl border-slate-200/60 bg-white/80 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <CardHeader className="space-y-6 pt-8 pb-4 text-center">
           <Link 
             href="/login" 
-            className="inline-flex items-center text-sm font-bold text-slate-500 hover:text-primary transition-colors gap-2 mb-2"
+            className="inline-flex items-center text-sm font-semibold text-slate-400 hover:text-primary transition-all gap-1.5 self-center group"
           >
-            <ChevronLeft className="h-4 w-4" /> Voltar ao Login
+            <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" /> 
+            Voltar ao Login
           </Link>
           <div className="flex justify-center">
-            <div className="h-16 w-16 bg-primary/10 rounded-full flex items-center justify-center text-primary shadow-inner">
-               {sent ? <CheckCircle2 className="h-8 w-8" /> : <Mail className="h-8 w-8" />}
+            <div className={`h-14 w-14 ${sent ? 'bg-green-50 text-green-500' : 'bg-blue-50 text-blue-500'} rounded-2xl flex items-center justify-center shadow-sm border border-current/10`}>
+               {sent ? <CheckCircle2 className="h-7 w-7" /> : <Mail className="h-7 w-7" />}
             </div>
           </div>
-          <CardTitle className="text-3xl font-black tracking-tight text-slate-900">
-            {sent ? "Email Enviado!" : "Recuperar Senha"}
-          </CardTitle>
-          <CardDescription className="text-slate-500 font-bold text-base px-2">
-            {sent 
-              ? "Siga as instruções no seu email para redefinir o seu acesso." 
-              : "Insira o seu email abaixo e enviaremos um link para criar uma nova senha."}
-          </CardDescription>
+          <div className="space-y-2 px-4">
+            <CardTitle className="text-2xl font-bold tracking-tight text-slate-900">
+              {sent ? "Link enviado" : "Recuperar acesso"}
+            </CardTitle>
+            <CardDescription className="text-slate-500 font-medium text-sm leading-relaxed">
+              {sent 
+                ? "Verifique o seu email para redefinir a sua senha." 
+                : "Introduza o seu email para receber um link de redefinição."}
+            </CardDescription>
+          </div>
         </CardHeader>
         <form onSubmit={handleReset}>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6 px-8">
             {error && (
-              <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-bold animate-in shake-in">
+              <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-xs font-bold animate-in shake-in">
                 {error}
               </div>
             )}
             {message && (
-              <div className="p-4 rounded-xl bg-green-50 border border-green-100 text-green-700 text-sm font-bold flex gap-3 items-start">
+              <div className="p-4 rounded-xl bg-green-50 border border-green-100 text-green-700 text-xs font-bold flex gap-3 items-center">
                  <CheckCircle2 className="h-5 w-5 shrink-0" />
                  <span>{message}</span>
               </div>
             )}
             {!sent && (
-              <div className="space-y-3">
-                <label className="text-xs font-black uppercase text-slate-500 tracking-[0.2em]" htmlFor="email">Seu Email Profissional</label>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] ml-1" htmlFor="email">Email de acesso</label>
                 <Input 
                   id="email" 
                   type="email" 
@@ -83,20 +86,20 @@ export default function ForgotPasswordPage() {
                   required 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-white border-slate-200 h-12 font-black shadow-sm"
+                  className="bg-slate-50/50 border-slate-200 h-11 text-sm font-semibold rounded-xl focus:bg-white transition-all"
                 />
               </div>
             )}
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4 pt-2">
+          <CardFooter className="flex flex-col gap-4 px-8 pt-2 pb-10">
             {!sent ? (
-              <Button type="submit" className="w-full h-12 font-black text-sm uppercase tracking-widest bg-primary hover:bg-blue-600 shadow-lg shadow-primary/20" disabled={loading}>
-                {loading ? "Enviando..." : "Enviar Link de Recuperação"}
+              <Button type="submit" className="w-full h-11 font-bold text-sm bg-primary hover:bg-blue-600 transition-all rounded-xl shadow-md shadow-primary/10" disabled={loading}>
+                {loading ? "A processar..." : "Enviar link de recuperação"}
               </Button>
             ) : (
               <Link href="/login" className="w-full">
-                <Button variant="outline" className="w-full h-12 font-black text-sm uppercase tracking-widest border-2 border-slate-200 hover:bg-slate-50 shadow-sm">
-                  Retornar ao Login
+                <Button variant="outline" className="w-full h-11 font-bold text-sm border-slate-200 text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+                  Voltar ao Login
                 </Button>
               </Link>
             )}

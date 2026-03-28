@@ -48,34 +48,36 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 bg-slate-50/50">
-      <Card className="w-full max-w-md shadow-2xl border-slate-100 animate-in fade-in zoom-in duration-300">
-        <CardHeader className="space-y-4 text-center">
+    <div className="flex min-h-screen items-center justify-center p-6 bg-slate-50/40">
+      <Card className="w-full max-w-md shadow-xl border-slate-200/60 bg-white/80 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <CardHeader className="space-y-6 pt-8 pb-4 text-center">
           <div className="flex justify-center">
-            <div className={`h-16 w-16 ${success ? 'bg-green-100 text-green-600' : 'bg-primary/10 text-primary'} rounded-full flex items-center justify-center shadow-inner`}>
-               {success ? <CheckCircle2 className="h-8 w-8 text-green-600" /> : <ShieldCheck className="h-8 w-8 text-primary" />}
+            <div className={`h-14 w-14 ${success ? 'bg-green-50 text-green-500' : 'bg-blue-50 text-blue-500'} rounded-2xl flex items-center justify-center shadow-sm border border-current/10`}>
+               {success ? <CheckCircle2 className="h-7 w-7" /> : <ShieldCheck className="h-7 w-7" />}
             </div>
           </div>
-          <CardTitle className="text-3xl font-black tracking-tight text-slate-900">
-            {success ? "Senha Redefinida!" : "Nova Senha"}
-          </CardTitle>
-          <CardDescription className="text-slate-500 font-bold text-base">
-            {success 
-              ? "Sua conta foi atualizada com sucesso. A redirecionar para o login..." 
-              : "Defina uma senha forte para proteger o seu acesso à NextStep."}
-          </CardDescription>
+          <div className="space-y-2 px-4">
+            <CardTitle className="text-2xl font-bold tracking-tight text-slate-900">
+              {success ? "Senha redefinida" : "Nova senha"}
+            </CardTitle>
+            <CardDescription className="text-slate-500 font-medium text-sm leading-relaxed">
+              {success 
+                ? "Sua conta foi atualizada. A redirecionar para o login..." 
+                : "Defina uma combinação forte para o seu novo acesso."}
+            </CardDescription>
+          </div>
         </CardHeader>
         {!success && (
           <form onSubmit={handleUpdate}>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6 px-8">
               {error && (
-                <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-bold animate-in shake-in">
+                <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-xs font-bold animate-in shake-in">
                   {error}
                 </div>
               )}
               
-              <div className="space-y-3">
-                <label className="text-xs font-black uppercase text-slate-500 tracking-[0.2em]" htmlFor="password">Nova Senha</label>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] ml-1" htmlFor="password">Nova senha</label>
                 <div className="relative">
                   <Input 
                     id="password" 
@@ -85,7 +87,7 @@ export default function ResetPasswordPage() {
                     minLength={6}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="bg-white border-slate-200 h-12 font-black shadow-sm pr-10"
+                    className="bg-slate-50/50 border-slate-200 h-11 text-sm font-semibold rounded-xl focus:bg-white transition-all pr-10"
                   />
                   <button
                     type="button"
@@ -97,8 +99,8 @@ export default function ResetPasswordPage() {
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <label className="text-xs font-black uppercase text-slate-500 tracking-[0.2em]" htmlFor="confirm">Confirmar Nova Senha</label>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] ml-1" htmlFor="confirm">Verificar senha</label>
                 <Input 
                   id="confirm" 
                   type={showPassword ? "text" : "password"} 
@@ -106,13 +108,13 @@ export default function ResetPasswordPage() {
                   required 
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="bg-white border-slate-200 h-12 font-black shadow-sm"
+                  className="bg-slate-50/50 border-slate-200 h-11 text-sm font-semibold rounded-xl focus:bg-white transition-all"
                 />
               </div>
             </CardContent>
-            <CardFooter className="pt-2">
-              <Button type="submit" className="w-full h-12 font-black text-sm uppercase tracking-widest bg-primary hover:bg-blue-600 shadow-lg shadow-primary/20" disabled={loading}>
-                {loading ? "Atualizando..." : "Atualizar Senha"}
+            <CardFooter className="px-8 pt-2 pb-10">
+              <Button type="submit" className="w-full h-11 font-bold text-sm bg-primary hover:bg-blue-600 transition-all rounded-xl shadow-md shadow-primary/10" disabled={loading}>
+                {loading ? "A atualizar..." : "Redefinir Senha"}
               </Button>
             </CardFooter>
           </form>
