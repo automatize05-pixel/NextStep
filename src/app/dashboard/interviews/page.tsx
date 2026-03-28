@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { MessageSquare, Send, Play, RotateCcw, User, Bot, Loader2 } from "lucide-react"
+import { UpgradeModal } from "@/components/shared/upgrade-modal"
 
 interface Message {
   role: 'user' | 'ai'
@@ -19,6 +20,8 @@ export default function InterviewSimulatorPage() {
   const [topic, setTopic] = useState("")
   const [history, setHistory] = useState<Message[]>([])
   const [userInput, setUserInput] = useState("")
+  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false)
+  const [quotaMessage, setQuotaMessage] = useState("")
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -47,6 +50,14 @@ export default function InterviewSimulatorPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'start', topic })
       })
+
+      if (res.status === 429) {
+        const data = await res.json()
+        setQuotaMessage(data.message || "Você atingiu seu limite diário.")
+        setUpgradeModalOpen(true)
+        return
+      }
+
       const data = await res.json()
       if (data.question) {
         setHistory([{ role: 'ai', content: data.question }])
@@ -54,7 +65,6 @@ export default function InterviewSimulatorPage() {
       }
     } catch (error) {
       console.error(error)
-      // Fallback message
       setHistory([{ role: 'ai', content: "Olá! Vamos simular sua entrevista. Fale um pouco sobre você e por que escolheu esta área." }])
       setStarted(true)
     } finally {
@@ -97,7 +107,6 @@ export default function InterviewSimulatorPage() {
 
   return (
     <div className="space-y-10 animate-in fade-in duration-1000 max-w-5xl mx-auto pb-20">
-      {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-900 p-8 rounded-3xl border border-slate-700 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -mr-32 -mt-32 rounded-full" />
         <div className="relative z-10 space-y-3">
@@ -206,6 +215,12 @@ export default function InterviewSimulatorPage() {
           </CardFooter>
         </Card>
       )}
+
+      <UpgradeModal 
+        isOpen={upgradeModalOpen}
+        onClose={() => setUpgradeModalOpen(false)}
+        description={quotaMessage}
+      />
     </div>
   )
 }

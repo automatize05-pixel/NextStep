@@ -15,7 +15,7 @@ export async function POST(req: Request) {
 
     // Check quota (allow unlimited for user.email === 'automatize05@gmail.com')
     if (user.email !== 'automatize05@gmail.com') {
-      const quota = await checkUserQuota(user.id, 'ai_cv_generate')
+      const quota = await checkUserQuota(user.id, 'cv_ats_total')
       if (!quota.allowed) {
         return NextResponse.json({
           error: "Quota Exceeded",
@@ -82,8 +82,8 @@ ${skills.map((s: any) => s.name).join(', ')}`
 
     const result = JSON.parse(completion.choices[0].message.content || '{}')
 
-    // Log the action
-    await logUserAction(user.id, 'ai_cv_generate')
+    // Log the action using the correct key
+    await logUserAction(user.id, 'cv_ats_total')
 
     return NextResponse.json(result)
   } catch (error) {
