@@ -49,7 +49,7 @@ export async function middleware(request: NextRequest) {
     .single()
 
   const isMaintenanceActive = settings?.maintenance_mode || false
-  const isAdmin = user?.email === 'automatize06@gmail.com'
+  const isAdmin = user?.email === 'automatize05@gmail.com'
   const isMaintenancePath = request.nextUrl.pathname === '/maintenance'
   const isPublicAsset = request.nextUrl.pathname.match(/\.(svg|png|jpg|jpeg|gif|webp)$/)
 
