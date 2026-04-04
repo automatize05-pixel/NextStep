@@ -85,11 +85,11 @@ export default function DashboardLayout({
           </button>
         </div>
         <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
-          {navItems.map((item: any) => {
+          {navItems.map((item: any, index: number) => {
             const isActive = pathname === item.href
             return (
               <Link 
-                key={item.href} 
+                key={`nav-${index}-${item.name}`} 
                 href={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group ${
