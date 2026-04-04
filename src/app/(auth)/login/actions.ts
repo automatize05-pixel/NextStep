@@ -22,6 +22,6 @@ export async function loginAction(formData: FormData) {
     return { error: error.message }
   }
 
-  // Use redirect for the most reliable cross-platform navigation
-  redirect("/dashboard")
+  // Return success instead of server redirect, letting the client handle it for better mobile cookie reliability
+  return { success: true }
 }

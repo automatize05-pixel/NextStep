@@ -32,6 +32,10 @@ export default function LoginPage() {
     if (result?.error) {
       setError(result.error)
       setLoading(false)
+    } else if (result?.success) {
+      // Force router refresh to load session state, then redirect
+      router.refresh()
+      router.push("/dashboard")
     }
   }
 
