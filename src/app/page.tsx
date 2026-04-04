@@ -32,6 +32,7 @@ export default function Home() {
         <nav className="hidden md:flex gap-10 items-center">
           <Link className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-all" href="/">Início</Link>
           <Link className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-all" href="/about">Sobre</Link>
+          <Link className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-all" href="/collaborators">Colaboradores</Link>
           <Link className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-all" href="/contact">Contacto</Link>
           <Link className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-all" href="#pricing">Planos</Link>
         </nav>
@@ -61,6 +62,7 @@ export default function Home() {
         <div className="fixed inset-0 bg-[#050A15] z-[200] flex flex-col items-center justify-center gap-8 animate-in fade-in zoom-in duration-300 md:hidden">
           <Link onClick={() => setIsMenuOpen(false)} className="text-xl font-black uppercase tracking-[0.3em] text-slate-300" href="/">Início</Link>
           <Link onClick={() => setIsMenuOpen(false)} className="text-xl font-black uppercase tracking-[0.3em] text-slate-300" href="/about">Sobre</Link>
+          <Link onClick={() => setIsMenuOpen(false)} className="text-xl font-black uppercase tracking-[0.3em] text-slate-300" href="/collaborators">Colaboradores</Link>
           <Link onClick={() => setIsMenuOpen(false)} className="text-xl font-black uppercase tracking-[0.3em] text-slate-300" href="#pricing">Planos</Link>
           <div className="flex flex-col w-full px-12 gap-4 mt-8">
             <Link onClick={() => setIsMenuOpen(false)} href="/login">
@@ -229,10 +231,11 @@ export default function Home() {
                  <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase leading-none mb-4">Teu arsenal de <span className="text-primary italic">carreira</span></h2>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
                  {[
                    { name: 'CV IA', icon: <FileText /> },
                    { name: 'Job Hunter', icon: <Search /> },
+                   { name: 'Bolsas IA', icon: <Globe /> },
                    { name: 'Entrevistas IA', icon: <MessageSquare /> },
                    { name: 'Cartas IA', icon: <ClipboardCheck /> },
                    { name: 'Perfil Profissional', icon: <UserCircle /> }
@@ -330,7 +333,7 @@ export default function Home() {
                           <p className="text-sm font-bold text-slate-500 leading-relaxed uppercase tracking-widest">Para quem quer o Topo</p>
                        </div>
                        <div>
-                          <span className="text-4xl font-black text-white">15.000</span>
+                          <span className="text-4xl font-black text-white">8.500</span>
                           <span className="text-slate-500 text-xs font-black uppercase tracking-widest ml-2">Kz/mês</span>
                        </div>
                        <ul className="space-y-4">

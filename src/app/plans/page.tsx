@@ -86,7 +86,7 @@ const PLANS = [
   {
     id: 'elite',
     name: 'Elite VIP',
-    price: 15000,
+    price: 8500,
     icon: <Crown className="h-6 w-6 text-yellow-500" />,
     color: 'border-yellow-400',
     badge: 'LUXO & CARREIRA',
