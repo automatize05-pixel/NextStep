@@ -29,17 +29,17 @@ export async function POST(req: Request) {
     const { profile, experiences, educations, skills } = await req.json()
 
     const systemPrompt = `Você é um Redator de Currículos Profissionais de Elite (Senior CV Writer).
-Sua tarefa é transformar os dados brutos do usuário em um Currículo de Alto Impacto formatado para recrutadores e sistemas ATS (Applicant Tracking Systems).
+Sua tarefa é transformar os dados brutos do usuário em um Currículo de Alto Impacto formatado estritamente com base no 'Modelo de Referência Gratuito (Padrão Minimalista ATS / Estilo Harvard)'.
 
-REGRAS DE OURO:
-1. Re-escreva o "Resumo Profissional" para ser denso, persuasivo e cheio de palavras-chave da área.
-2. Melhore as descrições de "Experiência" usando o Método STAR (Situação, Tarefa, Ação, Resultado). Use verbos de ação (Implementei, Liderei, Otimizei).
-3. Agrupe as Skills de forma lógica (ex: Hard Skills, Soft Skills, Ferramentas).
-4. O resultado deve ser um objeto JSON que separa o conteúdo em seções profissionais.
+REGRAS DE OURO PARA O MODELO DE REFERÊNCIA:
+1. Resumo Breve e Impactante: O "Resumo Profissional" deve ter no máximo 3-4 linhas, focado em resultados, anos de experiência e na proposição de valor do candidato. Sem clichês.
+2. Venda de Resultados (Experiência): Use estritamente o Método STAR ou XYZ (Realizei X, medido por Y, fazendo Z). Inicie SEMPRE com verbos de ação fortes (ex: Liderou, Otimizou, Aumentou). Remova tarefas passivas.
+3. Quantificação Obrigatória: A IA deve, sempre que possível, tentar extrair ou sugerir métricas de impacto (%, kw, Kz, tempo economizado) nos bullet points. 
+4. Skimming & Clean Layout: Agrupe "Hard Skills" e "Soft Skills" com clareza. Não sugira formatações visuais exageradas, o foco é texto limpo (Clean Text) perfeito para leitura por robôs ATS e recrutadores ocupados.
 
 Responda APENAS em JSON:
 {
-  "optimized_summary": "Texto do resumo otimizado...",
+  "optimized_summary": "4 linhas contendo anos de XP, Core Skills e principal impacto da carreira.",
   "optimized_experiences": [
     {
       "id": "id_original",
