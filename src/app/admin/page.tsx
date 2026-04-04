@@ -51,7 +51,7 @@ export default function AdminAnalyticsPage() {
 
       if (profiles) {
         uCount = profiles.length
-        profiles.forEach(p => {
+        profiles.forEach((p: { plan: string | null }) => {
            let planId = p.plan || 'free'
            // Some legacy users might have different string formats, safeguard it
            if (!planCounts[planId] && planCounts[planId] !== 0) planId = 'free'
@@ -80,7 +80,7 @@ export default function AdminAnalyticsPage() {
       
       if (actions) {
          searches = actions.length
-         actions.forEach(a => {
+         actions.forEach((a: { action_type: string | null }) => {
             const t = a.action_type || 'unknown'
             actionCounts[t] = (actionCounts[t] || 0) + 1
          })
