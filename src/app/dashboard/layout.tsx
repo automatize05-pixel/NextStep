@@ -51,7 +51,7 @@ export default function DashboardLayout({
     { name: "Mentores de Elite", href: "/dashboard/mentorship", icon: GraduationCap },
     { name: "Entrevistas IA", href: "/dashboard/interviews", icon: MessageSquare },
     { name: "Oportunidades", href: "/dashboard/career", icon: Briefcase },
-    { name: "Candidaturas", href: "/dashboard/career", icon: Clipboard },
+    { name: "Candidaturas", href: "/dashboard/applications", icon: Clipboard },
     { name: "Carta de Apresentação", href: "/dashboard/cover-letter", icon: FileEdit },
     { name: "Análise Salarial", href: "/dashboard/salary", icon: DollarSign },
     { name: "LinkedIn IA", href: "/dashboard/linkedin", icon: Linkedin },
