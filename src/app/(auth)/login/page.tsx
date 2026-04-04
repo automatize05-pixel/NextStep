@@ -32,13 +32,9 @@ export default function LoginPage() {
       setError(error.message)
       setLoading(false)
     } else {
-      // Force router refresh to load session state, then redirect
-      router.refresh()
-      
-      // Pequeno delay para garantir que os cookies foram salvos no Safari (iOS) antes de mover de rota
-      setTimeout(() => {
-         router.push("/dashboard")
-      }, 300)
+      // Usar window.location nativo em vez do router Next.js resolve definitivamente o problema 
+      // agressivo de cache do iOS/Safari que causa o "login loop".
+      window.location.href = "/dashboard"
     }
   }
 

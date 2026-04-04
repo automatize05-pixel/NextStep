@@ -40,11 +40,8 @@ export default function RegisterPage() {
       return
     }
 
-    // Redirect to onboarding after successful registration
-    router.refresh()
-    setTimeout(() => {
-      router.push("/onboarding")
-    }, 300)
+    // Usar window.location nativo para furar o cache do Next.js e resolver o bug do iOS
+    window.location.href = "/onboarding"
   }
 
   return (
