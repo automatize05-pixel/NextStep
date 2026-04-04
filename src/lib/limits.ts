@@ -6,6 +6,7 @@ interface PlanLimits {
   cv_builder_type: 'basic' | 'pro_ats';
   whatsapp_alerts: boolean;
   job_matching_daily: number;
+  scholarships_search: number;
 }
 
 export const NEXTSTEP_PLANS: Record<PlanType, PlanLimits> = {
@@ -15,6 +16,7 @@ export const NEXTSTEP_PLANS: Record<PlanType, PlanLimits> = {
     cv_builder_type: 'basic',
     whatsapp_alerts: false,
     job_matching_daily: 2,
+    scholarships_search: 3,
   },
   primeiro_passo: {
     ai_test_daily: 10,
@@ -22,6 +24,7 @@ export const NEXTSTEP_PLANS: Record<PlanType, PlanLimits> = {
     cv_builder_type: 'basic',
     whatsapp_alerts: false,
     job_matching_daily: 5,
+    scholarships_search: 5,
   },
   preparacao_pro: {
     ai_test_daily: 30,
@@ -29,6 +32,7 @@ export const NEXTSTEP_PLANS: Record<PlanType, PlanLimits> = {
     cv_builder_type: 'pro_ats',
     whatsapp_alerts: false,
     job_matching_daily: 20,
+    scholarships_search: 20,
   },
   aceleracao: {
     ai_test_daily: 999, // Ilimitado
@@ -36,6 +40,7 @@ export const NEXTSTEP_PLANS: Record<PlanType, PlanLimits> = {
     cv_builder_type: 'pro_ats',
     whatsapp_alerts: false,
     job_matching_daily: 999,
+    scholarships_search: 999,
   },
   elite_vip: {
     ai_test_daily: 999,
@@ -43,5 +48,6 @@ export const NEXTSTEP_PLANS: Record<PlanType, PlanLimits> = {
     cv_builder_type: 'pro_ats',
     whatsapp_alerts: true,
     job_matching_daily: 999,
+    scholarships_search: 999,
   }
 };

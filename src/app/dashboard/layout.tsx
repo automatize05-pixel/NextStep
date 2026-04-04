@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LayoutDashboard, User, FileText, Map, MessageSquare, Briefcase, LogOut, Clipboard, DollarSign, Linkedin, FileEdit, Search, Crown, Users, GraduationCap } from "lucide-react"
+import { LayoutDashboard, User, FileText, Map, MessageSquare, Briefcase, LogOut, Clipboard, DollarSign, Linkedin, FileEdit, Search, Crown, Users, GraduationCap, Globe } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { createClient } from "@/lib/supabase/client"
@@ -46,6 +46,7 @@ export default function DashboardLayout({
     { name: "Meu Perfil", href: "/dashboard/profile", icon: User },
     { name: "Meu Currículo", href: "/dashboard/cv", icon: FileText },
     { name: "Trilhas", href: "/dashboard/tracks", icon: Map },
+    { name: "Bolsas IA", href: "/dashboard/scholarships", icon: Globe, highlight: true },
     { name: "Fórum NextStep", href: "/dashboard/community", icon: Users },
     { name: "Mentores de Elite", href: "/dashboard/mentorship", icon: GraduationCap },
     { name: "Entrevistas IA", href: "/dashboard/interviews", icon: MessageSquare },
