@@ -49,6 +49,7 @@ Responda APENAS num formato JSON estruturado assim:
       "country": "País de origem da bolsa",
       "match_score": 85,
       "description": "Breve resumo sobre a bolsa...",
+      "application_link": "URL ou Link de candidatura oficial",
       "requirements": ["Requisito 1", "Requisito 2"],
       "gap_analysis": "O candidato tem X, mas precisa de Y para se destacar.",
       "action_plan": "Passo a passo rápido para preparar a candidatura."

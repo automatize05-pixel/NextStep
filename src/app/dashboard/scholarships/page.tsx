@@ -14,6 +14,7 @@ interface ScholarshipRecommendation {
   country: string
   match_score: number
   description: string
+  application_link?: string
   requirements: string[]
   gap_analysis: string
   action_plan: string
@@ -236,6 +237,15 @@ export default function ScholarshipsPage() {
                           </p>
                        </div>
                     </div>
+                 <div className="flex flex-col sm:flex-row gap-4 mt-6">
+                    {rec.application_link && (
+                      <Button asChild className="flex-1 h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-emerald-600/20">
+                         <a href={rec.application_link} target="_blank" rel="noopener noreferrer">
+                           Candidatar à Bolsa Principal
+                         </a>
+                      </Button>
+                    )}
+                 </div>
                   </CardContent>
                 </Card>
               ))}

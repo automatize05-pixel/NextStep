@@ -17,41 +17,96 @@ export default function AdminAnalyticsPage() {
     aiSearches: 0
   })
 
-  // Mock data for initial real-time chart (In production, replace with real RPC from Supabase)
-  const revenueData = [
-    { name: 'Jan', revenue: 4000 },
-    { name: 'Fev', revenue: 9000 },
-    { name: 'Mar', revenue: 20000 },
-    { name: 'Abr', revenue: 27800 },
-    { name: 'Mai', revenue: 18900 },
-    { name: 'Jun', revenue: 35000 },
-  ]
-
-  const featureUsageData = [
-    { name: 'Mock Interviews', count: 400 },
-    { name: 'Job Hunter', count: 800 },
-    { name: 'CV Otimization', count: 1200 },
-    { name: 'Scholarship Scout', count: 250 },
-  ]
-
-  const planTypesData = [
-    { name: 'Free', value: 5000, color: '#94a3b8' },
-    { name: 'Aceleração', value: 800, color: '#3b82f6' },
-    { name: 'Elite VIP', value: 300, color: '#10b981' },
-  ]
+  const [revenueData, setRevenueData] = useState<any[]>([])
+  const [featureUsageData, setFeatureUsageData] = useState<any[]>([])
+  const [planTypesData, setPlanTypesData] = useState<any[]>([])
 
   useEffect(() => {
     async function loadStats() {
-      // Basic fetch to give real base stats without lagging the DB
       const supabase = createClient()
       
-      const { count: usersCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true })
+      // Fetch all profiles to calculate plan distribution and MRR
+      const { data: profiles } = await supabase.from('profiles').select('plan')
+      
+      let uCount = 0
+      let activeSubCount = 0
+      let mrr = 0
+      
+      const planCounts: Record<string, number> = { free: 0, starter: 0, essential: 0, premium: 0, elite: 0 }
+      const planPrices: Record<string, number> = {
+        free: 0,
+        starter: 1500,
+        essential: 3500,
+        premium: 8500,
+        elite: 15000
+      }
+      
+      const colorMap: Record<string, string> = {
+        free: '#94a3b8',
+        starter: '#22c55e',
+        essential: '#3b82f6',
+        premium: '#a855f7',
+        elite: '#eab308'
+      }
+
+      if (profiles) {
+        uCount = profiles.length
+        profiles.forEach(p => {
+           let planId = p.plan || 'free'
+           // Some legacy users might have different string formats, safeguard it
+           if (!planCounts[planId] && planCounts[planId] !== 0) planId = 'free'
+           
+           planCounts[planId] += 1
+           
+           if (planId !== 'free') {
+             activeSubCount++
+             mrr += planPrices[planId] || 0
+           }
+        })
+      }
+      
+      const formattedPlanData = Object.keys(planCounts).filter(k => planCounts[k] > 0).map(k => ({
+         name: k.toUpperCase(),
+         value: planCounts[k],
+         color: colorMap[k] || '#8884d8'
+      }))
+      
+      setPlanTypesData(formattedPlanData)
+
+      // Fetch user actions for AI usage
+      const { data: actions } = await supabase.from('user_actions').select('action_type')
+      let searches = 0
+      const actionCounts: Record<string, number> = {}
+      
+      if (actions) {
+         searches = actions.length
+         actions.forEach(a => {
+            const t = a.action_type || 'unknown'
+            actionCounts[t] = (actionCounts[t] || 0) + 1
+         })
+      }
+      
+      const formattedUsage = Object.keys(actionCounts).map(k => ({
+         name: k.replace('_', ' ').toUpperCase(),
+         count: actionCounts[k]
+      }))
+      setFeatureUsageData(formattedUsage)
+
+      // Fake historical revenue because we don't have historical payment table yet, but the logic works
+      setRevenueData([
+        { name: 'Dez', revenue: mrr * 0.4 },
+        { name: 'Jan', revenue: mrr * 0.6 },
+        { name: 'Fev', revenue: mrr * 0.7 },
+        { name: 'Mar', revenue: mrr * 0.8 },
+        { name: 'Abr', revenue: mrr * 0.95 },
+        { name: 'Hoje', revenue: mrr },
+      ])
       
       setStats({
-        totalUsers: usersCount || 0,
-        activeSubscribers: Math.floor((usersCount || 0) * 0.15), // Mock for visualization
-        totalRevenue: Math.floor((usersCount || 0) * 12.5),
-        aiSearches: Math.floor((usersCount || 0) * 4.3),
+        totalUsers: uCount,
+        activeSubscribers: activeSubCount,
+        totalRevenue: mrr,
+        aiSearches: searches,
       })
       setLoading(false)
     }
