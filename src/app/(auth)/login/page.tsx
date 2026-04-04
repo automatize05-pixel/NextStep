@@ -24,7 +24,7 @@ export default function LoginPage() {
     // Listen for SIGNED_IN event BEFORE calling signInWithPassword.
     // This is the iOS-safe approach: we only redirect AFTER Supabase confirms
     // the session cookie is 100% written in the browser (critical for Safari ITP).
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event: string) => {
       if (event === 'SIGNED_IN') {
         subscription.unsubscribe()
         // Use replace() to avoid /login appearing in browser history
