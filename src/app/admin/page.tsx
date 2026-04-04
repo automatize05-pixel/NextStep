@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { format } from "date-fns"
-import { ptBR } from "date-fns/locale"
 import { Activity, Users, CreditCard, BrainCircuit, RefreshCw, Smartphone } from "lucide-react"
 
 // Recharts components will fail if not rendered defensively in Next.js Server Side, but since this is use client, we are good.
