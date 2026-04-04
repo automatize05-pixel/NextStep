@@ -41,8 +41,10 @@ export default function RegisterPage() {
     }
 
     // Redirect to onboarding after successful registration
-    router.push("/onboarding")
     router.refresh()
+    setTimeout(() => {
+      router.push("/onboarding")
+    }, 300)
   }
 
   return (

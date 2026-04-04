@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Eye, EyeOff } from "lucide-react"
-import { loginAction } from "./actions"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -17,25 +16,29 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
+  const supabase = createClient()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
-    const formData = new FormData()
-    formData.append("email", email)
-    formData.append("password", password)
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
 
-    const result = await loginAction(formData)
-
-    if (result?.error) {
-      setError(result.error)
+    if (error) {
+      setError(error.message)
       setLoading(false)
-    } else if (result?.success) {
+    } else {
       // Force router refresh to load session state, then redirect
       router.refresh()
-      router.push("/dashboard")
+      
+      // Pequeno delay para garantir que os cookies foram salvos no Safari (iOS) antes de mover de rota
+      setTimeout(() => {
+         router.push("/dashboard")
+      }, 300)
     }
   }
 
