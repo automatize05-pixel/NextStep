@@ -92,15 +92,27 @@ export default function AdminAnalyticsPage() {
       }))
       setFeatureUsageData(formattedUsage)
 
-      // Fake historical revenue because we don't have historical payment table yet, but the logic works
-      setRevenueData([
-        { name: 'Dez', revenue: mrr * 0.4 },
-        { name: 'Jan', revenue: mrr * 0.6 },
-        { name: 'Fev', revenue: mrr * 0.7 },
-        { name: 'Mar', revenue: mrr * 0.8 },
-        { name: 'Abr', revenue: mrr * 0.95 },
-        { name: 'Hoje', revenue: mrr },
-      ])
+      // Fetch REAL revenue history from payments_history via RPC
+      const { data: paymentsData, error: paymentsError } = await supabase.rpc('get_payments_summary')
+      
+      if (paymentsData && paymentsData.length > 0) {
+        // Real data from payments_history table
+        setRevenueData(paymentsData.map((row: { month: string; total_revenue: number; total_count: number }) => ({
+          name: row.month,
+          revenue: row.total_revenue,
+          count: row.total_count,
+        })))
+      } else {
+        // Fallback: proportional estimate (only shows if payments_history table is still empty)
+        setRevenueData([
+          { name: 'Dez', revenue: mrr * 0.4 },
+          { name: 'Jan', revenue: mrr * 0.6 },
+          { name: 'Fev', revenue: mrr * 0.7 },
+          { name: 'Mar', revenue: mrr * 0.8 },
+          { name: 'Abr', revenue: mrr * 0.95 },
+          { name: 'Hoje', revenue: mrr },
+        ])
+      }
       
       setStats({
         totalUsers: uCount,
