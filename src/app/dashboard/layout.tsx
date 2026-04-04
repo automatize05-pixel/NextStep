@@ -59,14 +59,15 @@ export default function DashboardLayout({
   ]
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden text-foreground selection:bg-primary/20 transition-colors">
-      {/* Mobile Sidebar Overlay */}
-      {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/60 z-40 md:hidden animate-in fade-in duration-300 backdrop-blur-sm" 
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-      )}
+    <div className="flex bg-background text-foreground selection:bg-primary/20 transition-colors" style={{ minHeight: '100dvh', maxHeight: '100dvh', overflow: 'hidden' }}>
+      {/* Mobile Sidebar Overlay — always rendered for iOS touch reliability */}
+      <div 
+        className={`fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity duration-300 ${
+          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setIsMobileMenuOpen(false)}
+        onTouchEnd={() => setIsMobileMenuOpen(false)}
+      />
 
       {/* Sidebar (Desktop & Mobile Drawer) */}
       <aside className={`

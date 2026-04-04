@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,7 +14,6 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const router = useRouter()
   const supabase = createClient()
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -23,19 +21,25 @@ export default function LoginPage() {
     setLoading(true)
     setError(null)
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+    // Listen for SIGNED_IN event BEFORE calling signInWithPassword.
+    // This is the iOS-safe approach: we only redirect AFTER Supabase confirms
+    // the session cookie is 100% written in the browser (critical for Safari ITP).
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN') {
+        subscription.unsubscribe()
+        // Use replace() to avoid /login appearing in browser history
+        window.location.replace('/dashboard')
+      }
     })
 
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+
     if (error) {
+      subscription.unsubscribe() // Cancel listener on failure
       setError(error.message)
       setLoading(false)
-    } else {
-      // Usar window.location nativo em vez do router Next.js resolve definitivamente o problema 
-      // agressivo de cache do iOS/Safari que causa o "login loop".
-      window.location.href = "/dashboard"
     }
+    // On success: the onAuthStateChange fires SIGNED_IN and handles the redirect
   }
 
   return (
@@ -92,7 +96,7 @@ export default function LoginPage() {
         </CardContent>
         <CardFooter className="flex flex-col space-y-6 px-8 pb-10 pt-6">
           <Button type="submit" className="w-full h-14 bg-primary hover:bg-blue-600 text-primary-foreground font-black uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-95" disabled={loading}>
-            {loading ? "Entrando..." : "Entrar na Conta"}
+            {loading ? "A verificar sessão..." : "Entrar na Conta"}
           </Button>
           <div className="text-center text-xs font-bold text-muted-foreground">
             Não tem uma conta?{" "}
