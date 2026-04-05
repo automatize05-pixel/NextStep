@@ -33,8 +33,13 @@ export default async function AdminPaymentsPage() {
           <p className="text-slate-500 font-medium">Verificação inteligente de comprovativos e dados de clientes.</p>
         </div>
         <div className="flex gap-3">
-            <div className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-black uppercase text-slate-400">
-               Total Pendentes: <span className="text-yellow-600">{pending?.length || 0}</span>
+            <a href="/admin/mfa">
+              <Button variant="outline" className="h-10 px-4 rounded-xl border-blue-100 text-blue-600 font-black text-[10px] uppercase tracking-widest hover:bg-blue-50 transition-all flex items-center gap-2">
+                 <ShieldCheck className="h-4 w-4" /> Ativar Proteção MFA
+              </Button>
+            </a>
+            <div className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-black uppercase text-slate-400 flex items-center">
+               Total Pendentes: <span className="ml-1 text-yellow-600">{pending?.length || 0}</span>
             </div>
         </div>
       </div>

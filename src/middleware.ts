@@ -66,18 +66,34 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(homeUrl)
   }
 
-  // We will handle redirects in the client/layouts for better mobile resilience
-  /*
-  const publicRoutes = ['/', '/login', '/register']
-  const isPublicRoute = publicRoutes.includes(request.nextUrl.pathname)
+  // --- ROUTE PROTECTION LOGIC ---
+  const publicRoutes = ['/', '/login', '/register', '/maintenance', '/plans']
+  const isPublicRoute = publicRoutes.includes(request.nextUrl.pathname) || isPublicAsset
+  const isNextInternal = request.nextUrl.pathname.startsWith('/_next') || request.nextUrl.pathname.startsWith('/api')
 
-  // Protected routes logic
-  if (!user && !isPublicRoute && !request.nextUrl.pathname.startsWith('/api') && !request.nextUrl.pathname.startsWith('/_next')) {
+  // 1. Strict Admin Protection
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    if (!user || user.email !== 'automatize05@gmail.com') {
+      const loginUrl = request.nextUrl.clone()
+      loginUrl.pathname = '/login'
+      return NextResponse.redirect(loginUrl)
+    }
+    
+    // Future: Check auth level for MFA if needed
+    // const { data: { authenticatorAssuranceLevel } } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+    // if (authenticatorAssuranceLevel !== 'aal2') { ... redirect to mfa enrollment ... }
+  }
+
+  // 2. Dashboard/Checkout Protection
+  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') || 
+                         request.nextUrl.pathname.startsWith('/checkout') ||
+                         request.nextUrl.pathname.startsWith('/u/')
+
+  if (!user && !isPublicRoute && !isNextInternal && isProtectedRoute) {
     const loginUrl = request.nextUrl.clone()
     loginUrl.pathname = '/login'
     return NextResponse.redirect(loginUrl)
   }
-  */
 
   return supabaseResponse
 }
