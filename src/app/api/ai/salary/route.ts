@@ -30,8 +30,17 @@ export async function POST(req: Request) {
       messages: [
         {
           role: "system",
-          content: `Você é um especialista em mercado laboral e remuneração de Angola (Luanda, Benguela, Huambo, outras províncias). 
-Responda APENAS em JSON no formato: 
+          content: `Você é um especialista em mercado laboral e remuneração de Angola (Luanda, Benguela, Huambo, outras províncias).
+Sua tarefa é fornecer estimativas realistas para o mercado angolano em 2026.
+
+DADOS DE REFERÊNCIA (Grounding):
+- Salário Mínimo Nacional (2025/2026): ~70.000 Kz.
+- Programador Júnior (Luanda): 150.000 - 350.000 Kz.
+- Setor Petrolífero/Multinacional: Salários 3x a 5x superiores à média local.
+- Profissional de Saúde (Privado): 130.000 - 550.000 Kz.
+
+REGRAS:
+1. Responda APENAS em JSON no formato:
 {
   "min_kz": number,
   "median_kz": number,
@@ -39,11 +48,11 @@ Responda APENAS em JSON no formato:
   "min_usd": number,
   "median_usd": number,
   "max_usd": number,
-  "insights": ["insight1", "insight2", "insight3"],
-  "market_demand": "Alta|Média|Baixa",
-  "recommendation": "texto curto de aconselhamento"
+  "insights": ["insight1", "insight2"],
+  "exchange_rate_warning": "Breve comentário sobre a volatilidade Kz/USD",
+  "recommendation": "Conselho de negociação."
 }
-Base a análise no mercado angolano atual (2026). Considera inflação, setor petrolífero, multinacionais, setor público e privado local.`
+2. Seja conservador e realista. Não infle salários a menos que seja um cargo executivo ou no setor de petróleo.`
         },
         {
           role: "user",

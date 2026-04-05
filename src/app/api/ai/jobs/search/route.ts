@@ -63,28 +63,29 @@ export async function POST(req: Request) {
 
     const systemPrompt = `Você é um especialista em recrutamento atuando em Angola.
 Sua tarefa é cruzar o perfil do candidato com o mercado e sugerir oportunidades de carreira.
-IMPORTANTE: Se lhe forem fornecidos [RESULTADOS WEB REAIS], você deve EXATAMENTE extrair as vagas contidas nesses resultados. Não mude o nome da empresa, nem tente inventar. O "apply_link" deve ser exatamente o "Link Original" retornado da web.
-Se não houver resultados da web, você DEVE gerar pesquisas dinâmicas funcionais (ex: https://www.linkedin.com/jobs/search/?keywords=...).
+
+REGRA DE SEGURANÇA E FIDELIDADE:
+- Se lhe forem fornecidos [RESULTADOS WEB REAIS], utilize EXATAMENTE os dados lá contidos.
+- O campo "apply_link" deve conter o "Link Original" do resultado Web. 
+- PROIBIDO INVENTAR: Se não houver resultados web em tempo real, use APENAS links estruturados de pesquisa (ex: https://www.linkedin.com/jobs/search/?keywords=...).
+- NUNCA crie links falsos que pareçam páginas de vagas específicas (ex: linkedin.com/jobs/view/12345).
 
 Responda APENAS em JSON:
 {
   "jobs": [
     {
       "title": "Nome exato do cargo",
-      "company": "Empresa real em Angola (ex: BAI, Unitel, Africell, Sonangol) ou Global",
+      "company": "Empresa real em Angola ou Global",
       "location": "Luanda, Angola | Remoto",
       "type": "Presencial|Remoto|Híbrido",
-      "salary_range": "150.000 - 300.000 Kz/mês (Estimar se não estiver na web)",
+      "salary_range": "Estimativa realista p/ mercado Angolano em Kz",
       "match_score": 87,
-      "match_reasons": ["Motivo 1", "Motivo 2"],
-      "requirements": ["Req 1", "Req 2", "Req 3"],
-      "description": "Descrição curta da vaga.",
-      "apply_link": "https://www.linkedin.com/... (Link Exato da Web ou Link Dinâmico)",
-      "posted_days_ago": 3
+      "apply_link": "Link REAL da web ou link de pesquisa estruturada (LinkedIn/Jobartis/Angoemprego).",
+      "search_query": "Dê um termo exato para o usuário pesquisar no Google caso o link mude."
     }
   ],
   "search_context": "Breve análise de mercado baseada nos resultados",
-  "market_insight": "Um conselho prático"
+  "market_insight": "Conselho prático."
 }`
 
     const userMessage = `Pesquisa vagas para este candidato:

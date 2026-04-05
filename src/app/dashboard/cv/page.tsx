@@ -98,19 +98,44 @@ export default function CVBuilderPage() {
   const handleExportPDF = async () => {
     setExporting(true)
     try {
+      // Ensure the element is rendered and accessible
       const element = document.getElementById('cv-preview')
-      if (!element) return
-      const html2pdf = (await import('html2pdf.js')).default
-      const opt = {
-        margin: 0,
-        filename: `Curriculo_${profile?.full_name?.replace(/\s+/g, '_') || 'NextStep'}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 3, useCORS: true, letterRendering: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      if (!element) {
+        console.error("CV Preview element not found")
+        return
       }
+
+      // Dynamic import to keep bundle size small
+      const html2pdf = (await import('html2pdf.js')).default
+      
+      const fileName = `Curriculo_${profile?.full_name?.replace(/\s+/g, '_') || 'NextStep'}.pdf`
+      
+      const opt = {
+        margin: [0, 0, 0, 0],
+        filename: fileName,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 2, // 2x is plenty for a crisp PDF and more stable than 3x
+          useCORS: true, 
+          letterRendering: true,
+          logging: false
+        },
+        jsPDF: { 
+          unit: 'mm', 
+          format: 'a4', 
+          orientation: 'portrait',
+          compress: true
+        }
+      }
+
+      // Execute PDF generation and download
       await (html2pdf() as any).from(element).set(opt).save()
+      console.log("PDF Exported Successfully")
+      
     } catch (error) {
       console.error("PDF Export Error:", error)
+      // Fallback only if download fails
+      alert("Houve um pequeno erro ao gerar o download direto. Abrindo assistente de impressão...")
       window.print()
     } finally {
       setExporting(false)

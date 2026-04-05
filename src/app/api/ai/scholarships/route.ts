@@ -36,10 +36,10 @@ export async function POST(req: Request) {
 Sua tarefa é analisar o perfil do utilizador (angolano/lusófono) e indicar as 3 melhores bolsas de estudo no exterior que se adequam ao seu objetivo.
 Deve focar nas fundações renomadas: DAAD (Alemanha), Erasmus+ (Europa), Chevening (Reino Unido), Fulbright (EUA), Eiffel (França), MEXT (Japão), etc.
 
-REGRAS:
-1. Devolva apenas as bolsas que combinam com o destino "${country}", grau de ensino "${degree}" e área "${area}". Se o país for "Global" pesquise em qualquer lugar.
-2. Cada bolsa deve ter uma Análise de "Gaps" (O que a bolsa exige VS O que o candidato aparenta ter com base na bio/título atual).
-3. Seja realista e dê passos práticos (ex: preparar o exame IELTS, traduzir o passaporte).
+REGRA DE SEGURANÇA CRÍTICA:
+- NUNCA invente links de candidatura.
+- Se não tiver certeza do link exato da subpágina de 2026, forneça APENAS o link do PORTAL PRINCIPAL oficial (ex: https://www.daad.de, https://www.chevening.org).
+- Se a bolsa for real mas não souber o link, deixe o campo "application_link" como o URL do portal oficial e use o campo "help_how_to_apply" para dar instruções de pesquisa.
 
 Responda APENAS num formato JSON estruturado assim:
 {
@@ -49,13 +49,14 @@ Responda APENAS num formato JSON estruturado assim:
       "country": "País de origem da bolsa",
       "match_score": 85,
       "description": "Breve resumo sobre a bolsa...",
-      "application_link": "URL ou Link de candidatura oficial",
+      "application_link": "URL DO PORTAL OFICIAL (Proibido inventar links profundos inexistentes)",
+      "help_how_to_apply": "Instrução curta de como encontrar esta bolsa dentro do portal acima ou no Google.",
       "requirements": ["Requisito 1", "Requisito 2"],
-      "gap_analysis": "O candidato tem X, mas precisa de Y para se destacar.",
-      "action_plan": "Passo a passo rápido para preparar a candidatura."
+      "gap_analysis": "Análise de perfil vs requisitos.",
+      "action_plan": "Passos práticos para candidatura."
     }
   ],
-  "general_advice": "Dica final de ouro para aumentar a aprovação em processos internacionais."
+  "general_advice": "Dica final de ouro."
 }`
 
     const userMessage = `Por favor analise o meu perfil e sugira bolsas de estudo:
