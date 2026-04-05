@@ -1,189 +1,149 @@
 export default function TermsPage() {
   return (
-    <div className="animate-in fade-in duration-500 text-[#171717]">
-      <div className="mb-10">
-        <p className="text-primary text-xs font-bold uppercase tracking-widest mb-2">Central Jurídica</p>
-        <h1 className="text-5xl font-black text-[#1a1a1a] tracking-tight mb-2">Termos de Uso</h1>
-        <p className="text-[#64748b] text-sm italic font-bold">Contrato de Utilização - Versão 2.4 (Março 2026)</p>
-      </div>
+    <div className="animate-in fade-in duration-500 text-slate-100 bg-[#0B1120] min-h-screen p-8 md:p-24">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-16">
+          <p className="text-primary text-xs font-black uppercase tracking-[0.3em] mb-4">Central de Governança</p>
+          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight mb-4">Termos de Uso</h1>
+          <p className="text-slate-500 text-sm italic font-bold">Contrato de Utilização - Versão 3.0 (Abril 2026)</p>
+        </div>
 
-      <div className="max-none space-y-16 text-[#171717]">
-        <section>
-          <div className="p-8 bg-blue-50 border border-blue-100 rounded-3xl shadow-sm">
-            <p className="text-2xl font-black text-[#0f172a] leading-tight mb-4 tracking-tight">
-              Boas-vindas ao NextStep! Este é um contrato vinculativo.
-            </p>
-            <p className="text-slate-700 text-lg font-medium leading-relaxed">
-              Ao utilizar nossa plataforma, você concorda com 100% das cláusulas aqui descritas. O NextStep opera sob as leis da República de Angola e padrões globais de SaaS.
-            </p>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">1. Natureza do Serviço e IA</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h3 className="font-bold text-lg text-primary">Inteligência de Apoio</h3>
-              <p className="text-slate-700 leading-relaxed font-medium">A IA do NextStep é um assistente qualitativo. Não garantimos contratações imediatas, mas fornecemos ferramentas de elite para aumentar suas chances exponenciamente.</p>
+        <div className="space-y-20">
+          <section>
+            <div className="p-10 bg-slate-900/40 border border-slate-800 rounded-[2.5rem] backdrop-blur-xl shadow-2xl">
+              <p className="text-2xl font-black text-white leading-tight mb-6 tracking-tight">
+                Boas-vindas ao NextStep! Este é um contrato vinculativo.
+              </p>
+              <p className="text-slate-400 text-lg font-medium leading-relaxed">
+                Ao utilizar nossa plataforma, você concorda com 100% das cláusulas aqui descritas. O NextStep opera sob as leis da República de Angola e padrões globais de SaaS para aceleração de carreira.
+              </p>
             </div>
-            <div className="space-y-4">
-              <h3 className="font-bold text-lg text-primary">Web-Opportunity Search</h3>
-              <p className="text-slate-700 leading-relaxed font-medium">Nossa busca web é informativa. Verificamos a procedência, mas a candidatura final é de responsabilidade integral do usuário junto à empresa terceira.</p>
-            </div>
-          </div>
-        </section>
+          </section>
 
-        <section>
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">2. Governança de Contas e Planos (100+ Regras de Uso)</h2>
-          <div className="space-y-8">
-            <div className="border border-slate-100 p-6 rounded-2xl bg-white shadow-sm">
-              <h3 className="text-xl font-black mb-4 text-slate-800">A. Níveis de Assinatura</h3>
-              <div className="space-y-6">
-                <div className="flex border-b pb-4 border-slate-50 items-start gap-4">
-                  <span className="px-2 py-1 bg-slate-100 rounded text-[10px] font-bold text-slate-500 mt-1">FREE</span>
-                  <div>
-                    <p className="font-bold">Uso Limitado</p>
-                    <p className="text-sm text-slate-500">4 buscas/dia, 5 simulações/dia, 2 alertas WhatsApp.</p>
-                  </div>
+          <section id="payments">
+            <h2 className="text-3xl font-black text-white mb-8 pb-4 border-b border-slate-800 flex items-center gap-4">
+              <span className="p-3 bg-primary/10 rounded-2xl text-primary text-sm">16</span> Política de Pagamentos e Ativação
+            </h2>
+            <div className="space-y-8 bg-slate-900/20 p-8 rounded-[2rem] border border-slate-800/50">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <h3 className="font-black text-white uppercase text-xs tracking-widest text-primary">A. Métodos e Referência</h3>
+                  <p className="text-slate-400 leading-relaxed text-sm">
+                    Os pagamentos são processados via **Referência Multicaixa** (Entidade 10166) ou **Multicaixa Express**. É responsabilidade do utilizador garantir que o valor transferido corresponde exactamente ao plano seleccionado.
+                  </p>
                 </div>
-                <div className="flex border-b pb-4 border-slate-50 items-start gap-4">
-                  <span className="px-2 py-1 bg-blue-100 rounded text-[10px] font-bold text-blue-600 mt-1">PRO</span>
-                  <div>
-                    <p className="font-bold">Essencial e Premium (5.000 Kz - 15.000 Kz)</p>
-                    <p className="text-sm text-slate-500">Acesso ampliado, suporte prioritário e exportação de CV ilimitada.</p>
-                  </div>
+                <div className="space-y-4">
+                  <h3 className="font-black text-white uppercase text-xs tracking-widest text-primary">B. Comprovativo Obrigatório</h3>
+                  <p className="text-slate-400 leading-relaxed text-sm">
+                    A ativação do plano depende estritamente da submissão de um comprovativo legível em formato digital (JPG, PNG ou PDF) através da nossa zona de checkout segura.
+                  </p>
                 </div>
-                <div className="flex items-start gap-4">
-                  <span className="px-2 py-1 bg-purple-100 rounded text-[10px] font-bold text-purple-600 mt-1">ELITE</span>
-                  <div>
-                    <p className="font-bold">Nível Corporativo (25.000 Kz)</p>
-                    <p className="text-sm text-slate-500">IA de Video-Pitch, Mentoria direta e Alertas em Tempo Real Ilimitados.</p>
+              </div>
+              <div className="pt-8 border-t border-slate-800/50 space-y-6">
+                <h3 className="font-black text-white uppercase text-xs tracking-widest text-primary text-center">Protocolo de Ativação</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                   <div className="p-6 bg-slate-950/50 rounded-2xl border border-slate-800 text-center">
+                      <p className="text-xl font-black text-white mb-1">24h</p>
+                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Prazo de Verificação</p>
+                   </div>
+                   <div className="p-6 bg-slate-950/50 rounded-2xl border border-slate-800 text-center">
+                      <p className="text-xl font-black text-white mb-1">Digital</p>
+                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Entrega Imediata</p>
+                   </div>
+                   <div className="p-6 bg-slate-950/50 rounded-2xl border border-slate-800 text-center">
+                      <p className="text-xl font-black text-white mb-1">Final</p>
+                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Sem Reembolsos IA</p>
+                   </div>
+                </div>
+                <p className="text-xs text-slate-500 leading-relaxed text-center font-medium px-10 italic">
+                  Dado que os créditos de IA e acesso a conteúdos exclusivos são processados e consumidos imediatamente após a ativação, o NextStep não oferece reembolsos após a verificação do pagamento.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-3xl font-black text-white mb-6 pb-2 border-b border-slate-800">1. Natureza do Serviço e IA</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <h3 className="font-bold text-lg text-primary uppercase text-xs tracking-widest">Inteligência de Apoio</h3>
+                <p className="text-slate-400 leading-relaxed font-medium">A IA do NextStep é um assistente qualitativo. Não garantimos contratações imediatas, mas fornecemos ferramentas de elite para aumentar suas chances exponencialmente.</p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="font-bold text-lg text-primary uppercase text-xs tracking-widest">Web-Opportunity Search</h3>
+                <p className="text-slate-400 leading-relaxed font-medium">Nossa busca web é informativa. Verificamos a procedência, mas a candidatura final é de responsabilidade integral do usuário junto à empresa terceira.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-3xl font-black text-white mb-6 pb-2 border-b border-slate-800">2. Governança de Contas e Planos</h2>
+            <div className="space-y-8">
+              <div className="border border-slate-800 p-8 rounded-3xl bg-slate-900/20 shadow-sm">
+                <h3 className="text-xl font-black mb-6 text-white">Níveis de Assinatura</h3>
+                <div className="space-y-6">
+                  <div className="flex border-b pb-4 border-slate-800/50 items-start gap-4">
+                    <span className="px-2 py-1 bg-slate-800 rounded text-[10px] font-bold text-slate-500 mt-1">FREE</span>
+                    <div>
+                      <p className="font-bold text-white">Uso Exploratório</p>
+                      <p className="text-sm text-slate-500">Limites diários para descoberta de ferramentas.</p>
+                    </div>
+                  </div>
+                  <div className="flex border-b pb-4 border-slate-800/50 items-start gap-4">
+                    <span className="px-2 py-1 bg-blue-900/30 rounded text-[10px] font-bold text-blue-400 mt-1 border border-blue-900/50">PRO</span>
+                    <div>
+                      <p className="font-bold text-white">Foco na Contratação</p>
+                      <p className="text-sm text-slate-500">Acesso ampliado, suporte prioritário e exportação de CV.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <span className="px-2 py-1 bg-yellow-900/30 rounded text-[10px] font-bold text-yellow-500 mt-1 border border-yellow-900/50">ELITE</span>
+                    <div>
+                      <p className="font-bold text-white">Nível VIP</p>
+                      <p className="text-sm text-slate-500">IA Gerencial, Mentoria e Alertas Ilimitados.</p>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              <div className="space-y-4">
+                <h3 className="text-xl font-black text-white">B. Obrigações do Usuário</h3>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 list-none p-0">
+                  <li className="flex gap-2 text-sm font-bold items-start text-slate-400">
+                    <span className="text-rose-500">⚠</span> Proibido o uso de dados falsos no perfil.
+                  </li>
+                  <li className="flex gap-2 text-sm font-bold items-start text-slate-400">
+                    <span className="text-rose-500">⚠</span> Proibido o login simultâneo abusivo.
+                  </li>
+                  <li className="flex gap-2 text-sm font-bold items-start text-slate-400">
+                    <span className="text-rose-500">⚠</span> Proibida a extração automatizada de dados.
+                  </li>
+                  <li className="flex gap-2 text-sm font-bold items-start text-slate-400">
+                    <span className="text-rose-500">⚠</span> Uso individual e intransmissível.
+                  </li>
+                </ul>
+              </div>
             </div>
+          </section>
 
-            <div className="space-y-4">
-              <h3 className="text-xl font-black text-slate-800">B. Obrigações do Usuário</h3>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 list-none p-0">
-                <li className="flex gap-2 text-sm font-bold items-start text-slate-700">
-                  <span className="text-red-500">⚠</span> Proibido o uso de dados falsos ou enganosos no perfil.
-                </li>
-                <li className="flex gap-2 text-sm font-bold items-start text-slate-700">
-                  <span className="text-red-500">⚠</span> Proibido o login simultâneo em mais de 3 dispositivos.
-                </li>
-                <li className="flex gap-2 text-sm font-bold items-start text-slate-700">
-                  <span className="text-red-500">⚠</span> Proibida a extração automatizada (scraping) de nossa plataforma.
-                </li>
-                <li className="flex gap-2 text-sm font-bold items-start text-slate-700">
-                  <span className="text-red-500">⚠</span> Proibido o compartilhamento de conta com terceiros (uso individual).
-                </li>
-              </ul>
+          <section>
+            <h2 className="text-3xl font-black text-white mb-6 pb-2 border-b border-slate-800">3. Propriedade Intelectual</h2>
+            <div className="bg-slate-900/40 p-10 rounded-[2.5rem] border border-slate-800 shadow-xl">
+              <p className="text-slate-400 text-lg leading-relaxed font-medium mb-8">
+                Todos os algoritmos, design, marca e conteúdos do NextStep são propriedade intelectual exclusiva da <strong>Automatize Pixel / NextStep</strong>.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                 <span className="px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-[10px] font-black text-slate-500 uppercase tracking-widest">© 2026 NEXTSTEP</span>
+                 <span className="px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-[10px] font-black text-slate-500 uppercase tracking-widest">MARCA REGISTRADA</span>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section>
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">3. Propriedade Intelectual</h2>
-          <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
-            <p className="text-slate-800 text-lg leading-relaxed font-medium mb-6">
-              Todos os algoritmos, design, marca e conteúdos educativos do NextStep são propriedade da <strong>Automatize Pixel / NextStep</strong>.
-            </p>
-            <div className="flex flex-wrap gap-2">
-               <span className="px-3 py-1 bg-white border border-slate-200 rounded-full text-[10px] font-bold text-slate-500 leading-none flex items-center">© 2026 NEXTSTEP</span>
-               <span className="px-3 py-1 bg-white border border-slate-200 rounded-full text-[10px] font-bold text-slate-500 leading-none flex items-center">MARCA REGISTRADA</span>
-               <span className="px-3 py-1 bg-white border border-slate-200 rounded-full text-[10px] font-bold text-slate-500 leading-none flex items-center">PATENTE PENDENTE</span>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">4. Pagamentos e Reembolsos</h2>
-          <p className="text-slate-800 text-lg leading-relaxed font-bold mb-4">
-            Em Angola, os pagamentos seguem as normas do BNA e SIBS.
-          </p>
-          <ul className="space-y-4 text-[#475569] font-medium leading-relaxed">
-            <li><strong>Cancelamentos:</strong> Podem ser feitos a qualquer momento. O serviço continua ativo até o final do período faturado.</li>
-            <li><strong>Reembolsos:</strong> Avaliados caso a caso, em conformidade com a Lei de Defesa do Consumidor angolana.</li>
-            <li><strong>Moeda:</strong> A moeda base é o Kwanza (Kz).</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">6. Rescisão e Suspensão</h2>
-          <p className="text-slate-700 leading-relaxed font-medium">
-            Reservamo-nos o direito de suspender ou encerrar seu acesso ao NextStep se detectarmos violações graves destes termos, comportamento abusivo com a IA ou fraude em pagamentos. O encerramento por justa causa não confere direito a reembolso.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">7. Exclusão de Garantias</h2>
-          <p className="text-slate-700 leading-relaxed font-medium">
-            O serviço é fornecido "como está". Embora busquemos a perfeição, não garantimos que a plataforma seja ininterrupta ou livre de erros. O matching de IA é uma ferramenta de suporte, não uma garantia de sucesso contratual.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">8. Limitação de Responsabilidade</h2>
-          <p className="text-slate-700 leading-relaxed">
-            O NextStep não será responsável por quaisquer danos indiretos, lucros cessantes ou perda de dados decorrentes do uso da plataforma. Nossa responsabilidade total em qualquer reclamação não excederá o valor pago pelo usuário nos últimos 12 meses.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">9. Indemnização</h2>
-          <p className="text-slate-700 leading-relaxed">
-            Você concorda em indemnizar e isentar o NextStep e seus parceiros de quaisquer reclamações decorrentes do seu uso indevido da plataforma ou da violação de direitos de terceiros (incluindo Propriedade Intelectual).
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">10. Política de Uso Aceitável</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-bold text-slate-600">
-             <li className="list-none">✓ Uso pessoal e intransmissível.</li>
-             <li className="list-none">✓ Respeito aos limites de cota diária.</li>
-             <li className="list-none">✗ Proibido engenharia reversa.</li>
-             <li className="list-none">✗ Proibido uso para fins ilícitos.</li>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">11. Termos de API e Desenvolvedores</h2>
-          <p className="text-slate-700 leading-relaxed">
-            Futuras integrações de API seguirão documentação específica. O uso não autorizado de nossos endpoints resultará em bloqueio imediato de IP e ações legais.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">12. Modificações no Serviço</h2>
-          <p className="text-slate-700 leading-relaxed">
-            Podemos atualizar funcionalidades ou alterar o design da plataforma a qualquer momento para melhorar a experiência do usuário, sem aviso prévio obrigatório.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">13. Licença de Conteúdo do Usuário</h2>
-          <p className="text-slate-700 leading-relaxed">
-            Ao carregar dados em seu perfil, você concede ao NextStep uma licença mundial e gratuita para processar esses dados a fim de fornecer os serviços de IA e matching contratados.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">14. Resolução de Disputas</h2>
-          <p className="text-slate-700 leading-relaxed">
-            Incentivamos a resolução amigável de conflitos. Caso não seja possível, as partes concordam em submeter a disputa ao Centro de Arbitragem de Luanda antes de qualquer acção judicial.
-          </p>
-        </section>
-
-        <section className="pt-8 border-t">
-          <h2 className="text-3xl font-black text-[#111827] mb-6 pb-2 border-b-2 border-slate-100">15. Disposições Gerais</h2>
-          <p className="text-slate-900 text-lg leading-relaxed font-black mb-10">
-            Se qualquer parte deste contrato for considerada inválida, as restantes permanecerão em pleno vigor. Estes termos constituem o acordo integral entre você e o NextStep.
-          </p>
-          <div className="p-10 border-4 border-slate-900 rounded-none bg-slate-50 flex items-center justify-center">
-             <p className="text-center font-black text-xs uppercase tracking-[0.2em] text-slate-400">NextStep Strategic Platform Evolution 2026</p>
-          </div>
-        </section>
+          <footer className="pt-20 pb-10 border-t border-slate-800 text-center">
+             <div className="w-16 h-[2px] bg-primary mx-auto mb-8 rounded-full" />
+             <p className="font-black text-[10px] uppercase tracking-[0.4em] text-slate-600">NextStep Platform Governance Module</p>
+          </footer>
+        </div>
       </div>
     </div>
   )

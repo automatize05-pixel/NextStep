@@ -65,25 +65,6 @@ const PLANS = [
     ]
   },
   {
-    id: 'premium',
-    name: 'Aceleração Total',
-    price: 8500,
-    icon: <Crown className="h-6 w-6 text-purple-600" />,
-    color: 'border-purple-400',
-    badge: 'MAIS RESULTADO',
-    badgeColor: 'bg-purple-600',
-    description: 'Acelera 3x o tempo de contratação',
-    features: [
-      { text: 'Treino ilimitado para entrevistas', included: true },
-      { text: 'Pesquisas de vagas ilimitadas', included: true },
-      { text: 'Job Hunter em 50 fontes/dia', included: true },
-      { text: 'Cartas de impacto ilimitadas', included: true },
-      { text: 'Portfólio Público Premium', included: true },
-      { text: 'Alertas de vagas em tempo real', included: true },
-      { text: 'Estratégia VIP de LinkedIn', included: true },
-    ]
-  },
-  {
     id: 'elite',
     name: 'Elite VIP',
     price: 8500,
