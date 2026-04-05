@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { CheckCircle2, XCircle, Clock, Crown, ExternalLink, User, Mail, Phone, Calendar, ArrowRight } from "lucide-react"
+import { CheckCircle2, XCircle, Clock, Crown, ExternalLink, User, Mail, Phone, Calendar, ArrowRight, ShieldCheck } from "lucide-react"
 import { approvePayment, rejectPayment } from "./actions"
 
 export const dynamic = 'force-dynamic'
