@@ -93,7 +93,7 @@ function CheckoutContent() {
       // 1. Upload receipt to storage
       const fileExt = receiptFile.name.split('.').pop()
       const fileName = `${Date.now()}-${name.replace(/\s+/g, '_')}.${fileExt}`
-      const filePath = `receipts/${fileName}`
+      const filePath = fileName
 
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('receipts')
