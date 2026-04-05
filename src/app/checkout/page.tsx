@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { 
   Loader2, CheckCircle2, Crown, ArrowLeft, 
-  Copy, Smartphone, CreditCard, Clock, Check
+  Copy, Smartphone, CreditCard, Clock, Check, RotateCcw,
+  FileText, X, PlusCircle
 } from "lucide-react"
 
 const PLAN_INFO: Record<string, { name: string; price: number; color: string; badge: string }> = {
@@ -19,7 +20,7 @@ const PLAN_INFO: Record<string, { name: string; price: number; color: string; ba
 }
 
 const PAYMENT_INFO = {
-  entity: "10116",
+  entity: "10166",
   reference: "947005277",
 }
 
@@ -40,6 +41,8 @@ function CheckoutContent() {
   const [phone, setPhone] = useState("")
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState<string | null>(null)
+  const [receiptFile, setReceiptFile] = useState<File | null>(null)
+  const [uploadProgress, setUploadProgress] = useState(0)
   
   const [timeLeft, setTimeLeft] = useState(7199) // 2 hours in seconds
 
@@ -74,6 +77,56 @@ function CheckoutContent() {
   const selectMethod = (m: 'referencia' | 'express') => {
     setMethod(m)
     setStep('details')
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setReceiptFile(e.target.files[0])
+    }
+  }
+
+  const handleSubmitPayment = async () => {
+    if (!receiptFile) return
+    setLoading(true)
+    
+    try {
+      // 1. Upload receipt to storage
+      const fileExt = receiptFile.name.split('.').pop()
+      const fileName = `${Date.now()}-${name.replace(/\s+/g, '_')}.${fileExt}`
+      const filePath = `receipts/${fileName}`
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('receipts')
+        .upload(filePath, receiptFile)
+
+      if (uploadError) throw uploadError
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('receipts')
+        .getPublicUrl(filePath)
+
+      // 2. Create subscription record
+      const { error: subError } = await supabase.from('subscriptions').insert({
+        user_id: (await supabase.auth.getUser()).data.user?.id,
+        plan_type: plan,
+        amount_kz: planInfo.price,
+        receipt_url: publicUrl,
+        status: 'pending',
+        user_name: name,
+        user_email: email,
+        user_phone: phone,
+        notes: `Pagamento via ${method === 'referencia' ? 'Referência Multicaixa' : 'Multicaixa Express'}`
+      })
+
+      if (subError) throw subError
+
+      router.push('/dashboard?status=pending_payment')
+    } catch (error) {
+      console.error('Error submitting payment:', error)
+      alert('Erro ao enviar comprovativo. Tente novamente.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const renderInfoForm = () => (
@@ -140,24 +193,34 @@ function CheckoutContent() {
       <CardContent className="p-10 space-y-10">
         <h2 className="text-[10px] font-black uppercase text-slate-400 tracking-widest text-center mt-2">Escolha o Método de Pagamento</h2>
         
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
            <button 
              onClick={() => selectMethod('referencia')}
-             className="h-44 rounded-3xl border-2 border-slate-100 hover:border-[#00875A] bg-white transition-all flex flex-col items-center justify-center gap-4 group hover:shadow-lg"
+             className={`h-48 rounded-3xl border-2 transition-all flex flex-col items-center justify-center gap-4 group hover:shadow-2xl ${
+               method === 'referencia' ? 'border-[#002D5B] bg-[#002D5B]/5 shadow-xl' : 'border-slate-100 bg-white hover:border-slate-200'
+             }`}
            >
-              <div className="p-4 bg-slate-50 rounded-2xl group-hover:bg-[#00875A]/10 transition-colors">
-                 <CreditCard className="h-10 w-10 text-slate-400 group-hover:text-[#00875A]" />
+              <div className="w-20 h-20 rounded-2xl bg-[#002D5B] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                 <CreditCard className="h-10 w-10 text-white" />
               </div>
-              <span className="text-slate-900 font-black text-sm">Referência</span>
+              <div className="text-center px-4">
+                <span className="text-slate-900 font-black text-sm block">Referência Multicaixa</span>
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1 italic opacity-60">Pague no ATM ou Banco</span>
+              </div>
            </button>
            <button 
              onClick={() => selectMethod('express')}
-             className="h-44 rounded-3xl border-2 border-slate-100 hover:border-[#00875A] bg-white transition-all flex flex-col items-center justify-center gap-4 group hover:shadow-lg"
+             className={`h-48 rounded-3xl border-2 transition-all flex flex-col items-center justify-center gap-4 group hover:shadow-2xl ${
+               method === 'express' ? 'border-[#FF6B00] bg-[#FF6B00]/5 shadow-xl' : 'border-slate-100 bg-white hover:border-slate-200'
+             }`}
            >
-              <div className="p-4 bg-slate-50 rounded-2xl group-hover:bg-[#00875A]/10 transition-colors">
-                 <Smartphone className="h-10 w-10 text-slate-400 group-hover:text-[#00875A]" />
+              <div className="w-20 h-20 rounded-2xl bg-[#FF6B00] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                 <Smartphone className="h-10 w-10 text-white" />
               </div>
-              <span className="text-slate-900 font-black text-sm">Express</span>
+              <div className="text-center px-4">
+                <span className="text-slate-900 font-black text-sm block">Multicaixa Express</span>
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1 italic opacity-60">Confirme no seu Telemóvel</span>
+              </div>
            </button>
         </div>
 
@@ -284,19 +347,51 @@ function CheckoutContent() {
         )}
 
         <div className="pt-4 space-y-4">
+           {/* Receipt Upload Zone */}
+           <div className="p-8 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2.5rem] hover:border-[#00875A] transition-all group">
+             <h4 className="text-[10px] font-black uppercase tracking-widest text-[#002B5B] mb-4 flex items-center gap-2">
+               <FileText className="h-4 w-4" /> Zona de Comprovativo
+             </h4>
+             
+             <div className="flex flex-col items-center justify-center gap-4 py-2">
+               {receiptFile ? (
+                 <div className="flex items-center gap-4 w-full p-4 bg-white rounded-2xl border border-[#00875A]/20 shadow-xl animate-in fade-in slide-in-from-bottom-2">
+                   <div className="w-12 h-12 bg-[#00875A]/10 rounded-xl flex items-center justify-center text-[#00875A]">
+                     <CheckCircle2 className="h-6 w-6" />
+                   </div>
+                   <div className="flex-1 min-w-0">
+                     <p className="text-sm font-black text-slate-900 truncate">{receiptFile.name}</p>
+                     <p className="text-[10px] font-bold text-slate-400">{(receiptFile.size / 1024 / 1024).toFixed(2)} MB • Pronto</p>
+                   </div>
+                   <button 
+                     onClick={() => setReceiptFile(null)} 
+                     className="p-2 hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors"
+                   >
+                     <X className="h-4 w-4" />
+                   </button>
+                 </div>
+               ) : (
+                 <label className="w-full cursor-pointer group">
+                   <div className="flex flex-col items-center justify-center gap-3 p-4 transition-all group-hover:scale-105">
+                     <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-slate-300 group-hover:text-[#002B5B] group-hover:shadow-2xl transition-all border border-slate-100">
+                       <PlusCircle className="h-8 w-8" />
+                     </div>
+                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-600 transition-colors text-center">Clique para carregar comprovativo</p>
+                   </div>
+                   <input type="file" className="hidden" accept="image/*,.pdf" onChange={handleFileChange} />
+                 </label>
+               )}
+             </div>
+           </div>
+
            <Button 
-             className="w-full h-16 rounded-2xl bg-[#00875A] hover:bg-[#00704A] text-white font-black text-[12px] tracking-widest transition-all shadow-xl shadow-[#00875A]/20 flex items-center justify-center gap-3"
-             onClick={() => {
-                setLoading(true)
-                setTimeout(() => {
-                  setLoading(false)
-                }, 2000)
-             }}
-             disabled={loading}
+             className="w-full h-16 rounded-[2rem] bg-[#002D5B] hover:bg-[#001D3D] text-white font-black text-[12px] tracking-[0.2em] transition-all shadow-xl shadow-[#002D5B]/20 flex items-center justify-center gap-3 uppercase"
+             onClick={handleSubmitPayment}
+             disabled={loading || !receiptFile}
            >
-             {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <><RotateCcw className="h-4 w-4" /> Verificar Pagamento</>}
+             {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <><CheckCircle2 className="h-5 w-5" /> Submeter Pagamento</>}
            </Button>
-           <p className="text-[10px] text-slate-400 text-center font-bold">Após efectuar o pagamento, clique no botão acima para confirmar.</p>
+           <p className="text-[10px] text-slate-400 text-center font-bold">Após carregar o comprovativo, clique em submeter para ativação imediata após conferência.</p>
         </div>
       </CardContent>
     </Card>
