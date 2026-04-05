@@ -67,7 +67,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // --- ROUTE PROTECTION LOGIC ---
-  const publicRoutes = ['/', '/login', '/register', '/maintenance', '/plans']
+  const publicRoutes = ['/', '/login', '/register', '/maintenance', '/plans', '/onboarding', '/auth/callback']
   const isPublicRoute = publicRoutes.includes(request.nextUrl.pathname) || isPublicAsset
   const isNextInternal = request.nextUrl.pathname.startsWith('/_next') || request.nextUrl.pathname.startsWith('/api')
 

@@ -23,6 +23,7 @@ import { Logo } from "@/components/shared/logo"
 export default function OnboardingPage() {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
+  const [authLoading, setAuthLoading] = useState(true)
   const router = useRouter()
   const supabase = createClient()
 
@@ -37,11 +38,30 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) router.push("/login")
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          router.push("/login")
+        } else {
+          setAuthLoading(false)
+        }
+      } catch (err) {
+        router.push("/login")
+      }
     }
     checkUser()
   }, [])
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-12 w-12 rounded-2xl border-4 border-primary border-t-transparent animate-spin" />
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground animate-pulse">Sincronizando Sessão...</p>
+        </div>
+      </div>
+    )
+  }
 
   const handleComplete = async () => {
     setLoading(true)
