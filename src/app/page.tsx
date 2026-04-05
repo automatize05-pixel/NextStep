@@ -10,47 +10,68 @@ import {
   AlertCircle, Crown
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Logo } from "@/components/shared/logo"
+import { BackgroundAnimation } from "@/components/shared/BackgroundAnimation"
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   
-  // Stats
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50)
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+  
   const displayUserCount = 1650
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#050A15] text-white font-sans selection:bg-primary/20 overflow-x-hidden">
+    <div className="flex flex-col min-h-screen bg-[#050A15] text-white font-sans selection:bg-primary/20 overflow-x-hidden relative">
+      
+      {/* Background Animation Managed via Canvas for performance */}
+      <BackgroundAnimation />
       
       {/* Navigation */}
-      <header className="px-6 md:px-12 h-20 flex items-center justify-between fixed top-0 w-full bg-[#050A15]/80 backdrop-blur-xl z-[100] border-b border-white/5">
+      <header className={`px-6 md:px-12 h-24 flex items-center justify-between fixed top-0 w-full z-[100] transition-all duration-500 ${
+        scrolled ? "bg-[#050A15]/80 backdrop-blur-xl border-b border-white/5 h-20" : "bg-transparent"
+      }`}>
         <Link href="/">
-          <Logo />
+          <Logo className="scale-110" />
         </Link>
         
         {/* Desktop Nav */}
-        <nav className="hidden md:flex gap-10 items-center">
-          <Link className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-all" href="/">Início</Link>
-          <Link className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-all" href="/about">Sobre</Link>
-          <Link className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-all" href="/collaborators">Colaboradores</Link>
-          <Link className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-all" href="/contact">Contacto</Link>
-          <Link className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-all" href="#pricing">Planos</Link>
+        <nav className="hidden lg:flex gap-12 items-center">
+          {["Início", "Sobre", "Colaboradores", "Contacto"].map((item) => (
+            <Link 
+              key={item}
+              className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-primary transition-all relative group" 
+              href={item === "Início" ? "/" : `/${item.toLowerCase()}`}
+            >
+              {item}
+              <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+            </Link>
+          ))}
+          <Link className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-primary transition-all relative group" href="#pricing">
+            Planos
+            <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+          </Link>
         </nav>
 
-        <div className="hidden md:flex items-center gap-6">
-          <Link href="/login" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-all">
-            Entrar
+        <div className="hidden lg:flex items-center gap-8">
+          <Link href="/login" className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-primary transition-all">
+            Login
           </Link>
           <Link href="/register">
-            <Button className="bg-primary hover:bg-blue-600 text-white rounded-xl px-8 h-12 font-black uppercase text-[10px] tracking-widest shadow-xl shadow-primary/20 border-none transition-all active:scale-95">
-              Começar Agora
+            <Button className="bg-primary hover:bg-blue-600 text-white rounded-2xl px-10 h-14 font-black uppercase text-[11px] tracking-widest shadow-2xl shadow-primary/20 border-none transition-all active:scale-95">
+              Criar Conta Grátis
             </Button>
           </Link>
         </div>
 
         {/* Mobile Hamburger Toggle */}
         <button 
-          className="md:hidden p-2 text-white z-[210] relative"
+          className="lg:hidden p-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl text-white z-[210] relative"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -59,60 +80,65 @@ export default function Home() {
 
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-[#050A15] z-[200] flex flex-col items-center justify-center gap-8 animate-in fade-in zoom-in duration-300 md:hidden">
-          <Link onClick={() => setIsMenuOpen(false)} className="text-xl font-black uppercase tracking-[0.3em] text-slate-300" href="/">Início</Link>
-          <Link onClick={() => setIsMenuOpen(false)} className="text-xl font-black uppercase tracking-[0.3em] text-slate-300" href="/about">Sobre</Link>
-          <Link onClick={() => setIsMenuOpen(false)} className="text-xl font-black uppercase tracking-[0.3em] text-slate-300" href="/collaborators">Colaboradores</Link>
-          <Link onClick={() => setIsMenuOpen(false)} className="text-xl font-black uppercase tracking-[0.3em] text-slate-300" href="#pricing">Planos</Link>
-          <div className="flex flex-col w-full px-12 gap-4 mt-8">
+        <div className="fixed inset-0 bg-[#050A15]/95 backdrop-blur-2xl z-[200] flex flex-col items-center justify-center gap-10 animate-in fade-in zoom-in duration-500 lg:hidden px-8 text-center">
+          {["Início", "Sobre", "Colaboradores", "Contacto", "Planos"].map((item) => (
+            <Link 
+              key={item}
+              onClick={() => setIsMenuOpen(false)} 
+              className="text-3xl font-black uppercase tracking-[0.4em] text-slate-300 hover:text-primary transition-all" 
+              href={item === "Planos" ? "#pricing" : item === "Início" ? "/" : `/${item.toLowerCase()}`}
+            >
+              {item}
+            </Link>
+          ))}
+          <div className="flex flex-col w-full gap-5 mt-10">
             <Link onClick={() => setIsMenuOpen(false)} href="/login">
-              <Button variant="outline" className="w-full h-14 rounded-xl border-white/10 bg-white/5 text-white font-black text-xs uppercase tracking-widest">
+              <Button variant="outline" className="w-full h-18 rounded-[2rem] border-white/10 bg-white/5 text-white font-black text-sm uppercase tracking-widest py-6">
                 Entrar
               </Button>
             </Link>
             <Link onClick={() => setIsMenuOpen(false)} href="/register">
-              <Button className="w-full h-14 rounded-xl bg-primary hover:bg-blue-600 text-white font-black text-xs uppercase tracking-widest shadow-xl shadow-primary/20">
-                Criar Conta Grátis
+              <Button className="w-full h-18 rounded-[2rem] bg-primary hover:bg-blue-600 text-white font-black text-sm uppercase tracking-widest shadow-2xl shadow-primary/20 py-6">
+                Começar Agora
               </Button>
             </Link>
           </div>
         </div>
       )}
 
-      <main className="flex-1 pt-20">
+      <main className="flex-1">
         
         {/* 1. HERO SECTION */}
-        <section className="relative w-full py-16 lg:py-32 flex items-center justify-center overflow-hidden">
-          {/* Ambient Backgrounds */}
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 blur-[150px] rounded-full -mr-64 -mt-32 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/5 blur-[150px] rounded-full -ml-64 -mb-32 pointer-events-none" />
-          
+        <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden pt-20">
           <div className="container relative z-10 px-6 md:px-12 mx-auto text-center">
-             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-8 animate-in fade-in slide-in-from-bottom-2 duration-700">
-                <span className="relative flex h-2 w-2">
+             <div className="inline-flex items-center gap-2 px-6 py-2.5 bg-white/5 backdrop-blur-xl rounded-full border border-white/10 text-[12px] font-black uppercase tracking-[0.3em] text-primary mb-12 animate-in fade-in slide-in-from-bottom-2 duration-1000 shadow-2xl">
+                <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
                 </span>
                 Plataforma feita para jovens em Angola 🇦🇴
              </div>
 
-             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-100 max-w-5xl mx-auto">
+             <h1 className="text-6xl md:text-[8rem] lg:text-[10rem] font-black tracking-tighter leading-[0.82] mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-100 max-w-[90rem] mx-auto drop-shadow-[0_10px_30px_rgba(37,99,235,0.2)]">
                Cria teu CV com IA e consegue <span className="text-primary italic">emprego mais rápido</span>
              </h1>
              
-             <p className="max-w-2xl mx-auto text-slate-400 text-lg md:text-xl font-bold leading-relaxed mb-12 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-300">
+             <p className="max-w-4xl mx-auto text-slate-300 text-xl md:text-3xl font-bold leading-relaxed mb-20 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-300 opacity-80 drop-shadow-lg">
                Tudo que precisas para encontrar vagas, preparar-te e ser contratado — num só lugar.
              </p>
 
-             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+             <div className="flex flex-col sm:flex-row items-center justify-center gap-10 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
                <Link href="/register" className="w-full sm:w-auto">
-                 <Button className="w-full sm:w-auto h-16 px-12 rounded-2xl bg-primary hover:bg-blue-600 text-white font-black uppercase text-sm tracking-widest shadow-2xl shadow-primary/40 group">
-                   Começar Grátis
-                   <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                 <Button className="w-full sm:w-auto h-24 px-20 rounded-[2.5rem] bg-primary hover:bg-blue-600 text-white font-black uppercase text-lg tracking-[0.2em] shadow-[0_0_80px_rgba(37,99,235,0.5)] group relative overflow-hidden transition-all duration-500 hover:scale-105">
+                   <div className="relative z-10 flex items-center">
+                     Começar Grátis
+                     <ArrowRight className="ml-4 h-7 w-7 group-hover:translate-x-3 transition-transform duration-500" />
+                   </div>
+                   <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[800ms]" />
                  </Button>
                </Link>
                <Link href="#how-it-works" className="w-full sm:w-auto">
-                 <Button variant="outline" className="w-full sm:w-auto h-16 px-12 rounded-2xl border-white/10 bg-white/5 hover:bg-white/10 text-white font-black uppercase text-sm tracking-widest">
+                 <Button variant="outline" className="w-full sm:w-auto h-24 px-20 rounded-[2.5rem] border-white/10 bg-white/5 backdrop-blur-2xl hover:bg-white/10 text-white font-black uppercase text-lg tracking-[0.2em] transition-all duration-500">
                    Ver como funciona
                  </Button>
                </Link>
@@ -121,25 +147,25 @@ export default function Home() {
         </section>
 
         {/* 2. COMO FUNCIONA */}
-        <section id="how-it-works" className="w-full py-24 bg-white/5 border-y border-white/5">
+        <section id="how-it-works" className="w-full py-40 relative z-10">
            <div className="container px-6 md:px-12 mx-auto">
-              <div className="text-center mb-16">
-                 <h2 className="text-3xl md:text-5xl font-black tracking-tighter leading-none mb-4 uppercase">Caminho para o Sucesso</h2>
-                 <p className="text-slate-400 font-bold tracking-widest uppercase text-xs">O processo é simples e direto</p>
+              <div className="text-center mb-32 max-w-4xl mx-auto">
+                 <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 uppercase">Caminho para o Sucesso</h2>
+                 <p className="text-slate-400 font-bold tracking-[0.4em] uppercase text-sm opacity-60">O processo é simples e direto para quem quer evoluir</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                  {[
-                   { step: '01', title: 'Cria teu CV com IA', desc: 'Gera um currículo otimizado para o mercado angolano em minutos.', icon: <FileText className="h-6 w-6 text-primary" /> },
-                   { step: '02', title: 'Encontra vagas', desc: 'IA rastreia as melhores oportunidades reais para o teu perfil.', icon: <Search className="h-6 w-6 text-primary" /> },
-                   { step: '03', title: 'Treina Entrevistas', desc: 'Pratica com a nossa IA que responde como um recrutador real.', icon: <MessageSquare className="h-6 w-6 text-primary" /> },
-                   { step: '04', title: 'Consegue Emprego', desc: 'Candidata-te com confiança e destaca-te da concorrência.', icon: <Briefcase className="h-6 w-6 text-primary" /> }
+                   { step: '01', title: 'Cria teu CV com IA', desc: 'Gera um currículo otimizado para o mercado angolano em minutos.', icon: <FileText className="h-8 w-8 text-primary" /> },
+                   { step: '02', title: 'Encontra vagas', desc: 'IA rastreia as melhores oportunidades reais para o teu perfil.', icon: <Search className="h-8 w-8 text-primary" /> },
+                   { step: '03', title: 'Treina Entrevistas', desc: 'Pratica com a nossa IA que responde como um recrutador real.', icon: <MessageSquare className="h-8 w-8 text-primary" /> },
+                   { step: '04', title: 'Consegue Emprego', desc: 'Candidata-te com confiança e destaca-te da concorrência.', icon: <Briefcase className="h-8 w-8 text-primary" /> }
                  ].map((item, i) => (
-                   <div key={i} className="relative p-8 bg-[#0A1224] border border-white/5 rounded-3xl group hover:border-primary/30 transition-all">
-                      <div className="absolute -top-4 -left-4 w-12 h-12 bg-primary rounded-2xl flex items-center justify-center font-black text-white shadow-xl shadow-primary/20 rotate-12 group-hover:rotate-0 transition-transform">{item.step}</div>
-                      <div className="mt-4 mb-6">{item.icon}</div>
-                      <h3 className="text-xl font-black mb-3">{item.title}</h3>
-                      <p className="text-slate-400 text-sm font-bold leading-relaxed">{item.desc}</p>
+                   <div key={i} className="relative p-12 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] group hover:border-primary/50 transition-all duration-700 hover:-translate-y-4 hover:shadow-2xl">
+                      <div className="absolute -top-7 -left-7 w-16 h-16 bg-primary rounded-3xl flex items-center justify-center font-black text-white shadow-2xl shadow-primary/40 rotate-12 group-hover:rotate-0 transition-all duration-700 text-xl">{item.step}</div>
+                      <div className="mb-10 p-5 bg-primary/10 rounded-2xl inline-block group-hover:bg-primary group-hover:text-white transition-all duration-700">{item.icon}</div>
+                      <h3 className="text-3xl font-black mb-6 tracking-tight leading-tight">{item.title}</h3>
+                      <p className="text-slate-400 text-lg font-bold leading-relaxed opacity-70">{item.desc}</p>
                    </div>
                  ))}
               </div>
@@ -147,75 +173,25 @@ export default function Home() {
         </section>
 
         {/* 3. O PROBLEMA */}
-        <section className="w-full py-24 bg-[#050A15]">
+        <section className="w-full py-40 relative z-10">
            <div className="container px-6 md:px-12 mx-auto">
-              <div className="max-w-4xl mx-auto bg-red-500/5 border border-red-500/10 rounded-[3rem] p-12 md:p-20 relative overflow-hidden">
-                 <div className="absolute top-0 right-0 p-12 opacity-10">
-                    <AlertCircle className="w-40 h-40 text-red-500 -rotate-12" />
+              <div className="max-w-6xl mx-auto bg-red-500/5 backdrop-blur-3xl border border-red-500/10 rounded-[4rem] p-16 md:p-32 relative overflow-hidden">
+                 <div className="absolute top-0 right-0 p-20 opacity-5 pointer-events-none">
+                    <AlertCircle className="w-80 h-80 text-red-500 -rotate-12" />
                  </div>
-                 <div className="relative z-10 text-center space-y-8">
-                    <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-white">Muitos jovens têm talento…</h2>
-                    <p className="text-xl md:text-2xl font-bold text-red-400 italic">mas não conseguem emprego porque:</p>
+                 <div className="relative z-10 text-center space-y-12">
+                    <h2 className="text-4xl md:text-7xl font-black tracking-tighter text-white uppercase leading-none">Muitos jovens têm talento…</h2>
+                    <p className="text-2xl md:text-4xl font-bold text-red-400 italic opacity-80 uppercase tracking-widest">mas não conseguem emprego porque:</p>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10">
-                       <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-2xl">
-                          <p className="text-sm font-black uppercase tracking-widest text-white mb-2">01</p>
-                          <p className="text-base font-bold text-slate-300 italic">Não têm um bom CV</p>
-                       </div>
-                       <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-2xl">
-                          <p className="text-sm font-black uppercase tracking-widest text-white mb-2">02</p>
-                          <p className="text-base font-bold text-slate-300 italic">Não sabem onde encontrar vagas</p>
-                       </div>
-                       <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-2xl">
-                          <p className="text-sm font-black uppercase tracking-widest text-white mb-2">03</p>
-                          <p className="text-base font-bold text-slate-300 italic">Não estão preparados para entrevistas</p>
-                       </div>
-                    </div>
-                 </div>
-              </div>
-           </div>
-        </section>
-
-        {/* 4. A SOLUÇÃO */}
-        <section className="w-full py-24 bg-[#050A15]">
-           <div className="container px-6 md:px-12 mx-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                 <div className="relative">
-                    <div className="absolute inset-0 bg-primary/20 blur-[100px] rounded-full pointer-events-none" />
-                    <div className="relative rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl aspect-[4/3]">
-                       <Image 
-                         src="/solutions.png" 
-                         alt="NextStep Solution" 
-                         fill 
-                         className="object-cover opacity-80"
-                         onError={(e) => {
-                           // Fallback to a placeholder style if image doesn't exist
-                           e.currentTarget.style.display = 'none';
-                         }}
-                       />
-                       <div className="absolute inset-0 flex flex-col items-center justify-center p-12 bg-primary/10 backdrop-blur-sm">
-                          <Rocket className="w-20 h-20 text-white mb-6 animate-bounce" />
-                          <h3 className="text-3xl font-black text-center text-white uppercase tracking-tighter">A NextStep resolve tudo isso num só lugar.</h3>
-                       </div>
-                    </div>
-                 </div>
-
-                 <div className="space-y-8">
-                    <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase leading-none">Tu mereces <span className="text-primary italic">evoluir</span></h2>
-                    <p className="text-lg text-slate-400 font-bold leading-relaxed">
-                       Unimos inteligência artificial de ponta com o conhecimento real do mercado angolano para criar a ponte que faltava entre o teu talento e a tua próxima vaga.
-                    </p>
-
-                    <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-16">
                        {[
-                         { title: 'CV Profissional em minutos', icon: <CheckCircle2 className="h-5 w-5 text-primary" /> },
-                         { title: 'Vagas reais todos os dias', icon: <CheckCircle2 className="h-5 w-5 text-primary" /> },
-                         { title: 'Preparação completa para entrevistas', icon: <CheckCircle2 className="h-5 w-5 text-primary" /> },
-                         { title: 'Ferramentas com IA avançada', icon: <CheckCircle2 className="h-5 w-5 text-primary" /> }
-                       ].map((item, i) => (
-                         <div key={i} className="flex items-center gap-4 p-4 bg-white/5 border border-white/5 rounded-2xl hover:border-primary/20 transition-all">
-                            {item.icon}
-                            <span className="font-black text-sm uppercase tracking-widest text-slate-200">{item.title}</span>
+                         "Não têm um bom CV",
+                         "Não sabem onde encontrar vagas",
+                         "Não estão preparados para entrevistas"
+                       ].map((prob, i) => (
+                         <div key={i} className="p-10 bg-red-500/10 backdrop-blur-md border border-red-500/20 rounded-[2rem] hover:bg-red-500/20 transition-all duration-500 group">
+                            <p className="text-xl font-bold text-slate-200 italic leading-tight">{prob}</p>
+                            <div className="mt-6 w-12 h-1 bg-red-500/30 group-hover:w-full transition-all duration-700" />
                          </div>
                        ))}
                     </div>
@@ -224,27 +200,69 @@ export default function Home() {
            </div>
         </section>
 
-        {/* 5. FUNCIONALIDADES SIMPLIFICADAS */}
-        <section className="w-full py-24 bg-white/5 border-y border-white/5">
+        {/* 4. A SOLUÇÃO */}
+        <section className="w-full py-40 relative z-10">
            <div className="container px-6 md:px-12 mx-auto">
-              <div className="text-center mb-16">
-                 <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase leading-none mb-4">Teu arsenal de <span className="text-primary italic">carreira</span></h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
+                 <div className="relative group">
+                    <div className="absolute inset-[-20px] bg-primary/20 blur-[120px] rounded-full pointer-events-none group-hover:bg-primary/30 transition-all duration-1000" />
+                    <div className="relative rounded-[4rem] overflow-hidden border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.5)] aspect-[4/3] bg-[#0A1224]">
+                       <div className="absolute inset-0 flex flex-col items-center justify-center p-16 bg-gradient-to-br from-primary/20 to-transparent backdrop-blur-md">
+                          <div className="w-32 h-32 bg-white/5 backdrop-blur-2xl rounded-[2.5rem] flex items-center justify-center border border-white/10 mb-10 shadow-3xl">
+                            <Rocket className="w-16 h-16 text-primary animate-bounce duration-[2000ms]" />
+                          </div>
+                          <h3 className="text-4xl md:text-5xl font-black text-center text-white uppercase tracking-tighter leading-none mt-4 shadow-text">A NextStep resolve tudo no mesmo lugar.</h3>
+                       </div>
+                       <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#050A15] to-transparent" />
+                    </div>
+                 </div>
+
+                 <div className="space-y-12">
+                    <h2 className="text-5xl md:text-8xl font-black tracking-tighter text-white uppercase leading-[0.85]">Tu mereces <br /><span className="text-primary italic">evoluir</span></h2>
+                    <p className="text-xl text-slate-300 font-bold leading-relaxed opacity-70">
+                       Unimos inteligência artificial de ponta com o conhecimento real do mercado angolano para criar a ponte que faltava entre o teu talento e o sucesso.
+                    </p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                       {[
+                         { title: 'CV Profissional IA', icon: <FileText className="text-primary" /> },
+                         { title: 'Vagas Reais Diárias', icon: <Search className="text-primary" /> },
+                         { title: 'Treino de Entrevistas', icon: <MessageSquare className="text-primary" /> },
+                         { title: 'IA de Bolsas', icon: <Globe className="text-primary" /> }
+                       ].map((item, i) => (
+                         <div key={i} className="flex items-center gap-5 p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl hover:border-primary/40 transition-all duration-500 hover:scale-105">
+                            <div className="p-3 bg-primary/10 rounded-xl">{item.icon}</div>
+                            <span className="font-black text-xs uppercase tracking-[0.2em] text-slate-200">{item.title}</span>
+                         </div>
+                       ))}
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </section>
+
+        {/* 5. FUNCIONALIDADES (ARSENAL) */}
+        <section className="w-full py-40 relative z-10">
+           <div className="container px-6 md:px-12 mx-auto">
+              <div className="text-center mb-32 max-w-4xl mx-auto">
+                 <h2 className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-none mb-6">Teu arsenal de <span className="text-primary italic">carreira</span></h2>
+                 <p className="text-slate-400 font-bold tracking-[0.4em] uppercase text-xs opacity-60">Ferramentas de elite simplificadas</p>
               </div>
               
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
                  {[
                    { name: 'CV IA', icon: <FileText /> },
                    { name: 'Job Hunter', icon: <Search /> },
                    { name: 'Bolsas IA', icon: <Globe /> },
                    { name: 'Entrevistas IA', icon: <MessageSquare /> },
                    { name: 'Cartas IA', icon: <ClipboardCheck /> },
-                   { name: 'Perfil Profissional', icon: <UserCircle /> }
+                   { name: 'Perfil Público', icon: <UserCircle /> }
                  ].map((item, i) => (
-                   <div key={i} className="flex flex-col items-center justify-center p-8 bg-[#0A1224] border border-white/5 rounded-[2rem] group hover:bg-primary transition-all cursor-default">
-                      <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-white/10 group-hover:scale-110 transition-all">
-                         <div className="text-primary group-hover:text-white transition-colors">{item.icon}</div>
+                   <div key={i} className="flex flex-col items-center justify-center p-12 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] group hover:bg-primary transition-all duration-1000 cursor-pointer hover:-translate-y-4 shadow-xl">
+                      <div className="w-20 h-20 rounded-[2rem] bg-primary/10 border border-primary/20 flex items-center justify-center mb-8 group-hover:bg-white group-hover:scale-110 transition-all duration-700">
+                         <div className="text-primary group-hover:text-primary transition-colors h-10 w-10 flex items-center justify-center">{item.icon}</div>
                       </div>
-                      <span className="text-xs font-black uppercase tracking-[0.2em] text-center">{item.name}</span>
+                      <span className="text-[11px] font-black uppercase tracking-[0.3em] text-center group-hover:tracking-[0.4em] transition-all duration-700">{item.name}</span>
                    </div>
                  ))}
               </div>
@@ -252,100 +270,106 @@ export default function Home() {
         </section>
 
         {/* 6. PROVA SOCIAL */}
-        <section className="w-full py-24 bg-[#050A15]">
+        <section className="w-full py-40 relative z-10">
            <div className="container px-6 md:px-12 mx-auto">
-              <div className="flex flex-col items-center text-center space-y-8">
-                 <div className="p-6 bg-primary/10 border border-primary/20 rounded-full flex items-center gap-4 animate-pulse">
-                    <Globe className="h-8 w-8 text-primary" />
-                    <span className="text-3xl md:text-5xl font-black tracking-widest">+{displayUserCount}</span>
+              <div className="flex flex-col items-center text-center space-y-12">
+                 <div className="relative">
+                   <div className="absolute inset-[-30px] bg-primary/30 blur-[60px] rounded-full animate-pulse" />
+                   <div className="relative p-10 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-full flex items-center gap-6 shadow-3xl">
+                      <Globe className="h-12 w-12 text-primary" />
+                      <span className="text-5xl md:text-8xl font-black tracking-widest text-primary">+{displayUserCount}</span>
+                   </div>
                  </div>
-                 <h2 className="text-2xl md:text-4xl font-black tracking-tighter uppercase max-w-3xl">Plataforma em crescimento constante em Angola</h2>
-                 <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Utilizada por jovens que querem evoluir na carreira</p>
+                 <h2 className="text-3xl md:text-6xl font-black tracking-tighter uppercase max-w-5xl leading-tight">Plataforma em crescimento constante em Angola</h2>
+                 <div className="flex items-center gap-3">
+                   {[1,2,3,4,5].map(s => <Star key={s} className="h-6 w-6 text-yellow-500 fill-yellow-500" />)}
+                 </div>
+                 <p className="text-slate-400 font-bold uppercase tracking-[0.3em] text-[11px]">Utilizada por jovens que querem evoluir na carreira</p>
               </div>
            </div>
         </section>
 
-        {/* 7. PLANOS SIMPLIFICADOS */}
-        <section id="pricing" className="w-full py-24 bg-white/5">
+        {/* 7. PLANOS */}
+        <section id="pricing" className="w-full py-40 relative z-10">
            <div className="container px-6 md:px-12 mx-auto">
-              <div className="text-center mb-20 space-y-4">
-                 <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-none">Planos <span className="text-primary italic">Acessíveis</span></h2>
-                 <p className="text-slate-400 font-black uppercase tracking-widest text-[10px] opacity-60">Invista em si mesmo a partir de Luanda</p>
+              <div className="text-center mb-32 space-y-6">
+                 <h2 className="text-5xl md:text-9xl font-black tracking-tighter uppercase leading-none">Planos <span className="text-primary italic">Acessíveis</span></h2>
+                 <p className="text-slate-400 font-black uppercase tracking-[0.5em] text-xs opacity-60">Invista no seu futuro a partir de Luanda</p>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-[90rem] mx-auto">
                  {/* Grátis */}
-                 <div className="p-10 bg-[#0A1224] border border-white/5 rounded-[2.5rem] flex flex-col justify-between hover:border-primary/20 transition-all group">
-                    <div className="space-y-8">
-                       <div>
-                          <Star className="h-10 w-10 text-slate-500 mb-4" />
-                          <h3 className="text-2xl font-black tracking-tight mb-2 uppercase">Grátis</h3>
-                          <p className="text-sm font-bold text-slate-500 leading-relaxed uppercase tracking-widest">Para quem quer explorar</p>
+                 <div className="p-16 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[4rem] flex flex-col justify-between hover:border-white/30 transition-all duration-700 group">
+                    <div className="space-y-12">
+                       <div className="flex flex-col items-center text-center">
+                          <div className="w-20 h-20 bg-slate-800/50 rounded-3xl flex items-center justify-center mb-8"><Star className="h-10 w-10 text-slate-500" /></div>
+                          <h3 className="text-4xl font-black tracking-tight mb-4 uppercase">Grátis</h3>
+                          <p className="text-xs font-black text-slate-500 uppercase tracking-[0.3em]">Para quem quer explorar</p>
                        </div>
-                       <div className="text-4xl font-black uppercase">Grátis</div>
-                       <ul className="space-y-4">
-                          {['3 Testes de IA / dia', '4 Buscas de vagas / dia', 'Criador de CV básico'].map((f, fi) => (
-                            <li key={fi} className="text-xs font-bold text-slate-400 flex items-center gap-3 uppercase tracking-widest">
-                               <CheckCircle2 className="h-4 w-4 text-slate-600" /> {f}
+                       <div className="text-5xl font-black uppercase text-center">Grátis</div>
+                       <ul className="space-y-6">
+                          {['3 Testes de IA / dia', '4 Buscas de vagas / dia', 'Criador de CV básico', 'Gestor de Candidaturas'].map((f, fi) => (
+                            <li key={fi} className="text-sm font-bold text-slate-400 flex items-center gap-5 uppercase tracking-widest">
+                               <CheckCircle2 className="h-5 w-5 text-slate-600" /> {f}
                             </li>
                           ))}
                        </ul>
                     </div>
-                    <Link href="/register?plan=free" className="mt-12">
-                       <Button variant="outline" className="w-full h-14 rounded-xl border-white/10 bg-white/5 text-white font-black text-[10px] uppercase tracking-widest">Escolher Plano</Button>
+                    <Link href="/register?plan=free" className="mt-20">
+                       <Button variant="outline" className="w-full h-20 rounded-[2rem] border-white/10 bg-white/5 text-white font-black text-xs uppercase tracking-widest transition-all hover:bg-white/10">Escolher Plano</Button>
                     </Link>
                  </div>
 
                  {/* Pro (Destacado) */}
-                 <div className="p-10 bg-primary border-4 border-primary shadow-2xl shadow-primary/20 rounded-[2.5rem] flex flex-col justify-between scale-105 z-10 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                       <Zap className="w-32 h-32 text-white" />
+                 <div className="p-16 bg-primary border-4 border-primary/20 shadow-[0_40px_100px_rgba(37,99,235,0.3)] rounded-[4rem] flex flex-col justify-between scale-110 z-10 relative overflow-hidden group transition-all duration-700">
+                    <div className="absolute top-0 right-0 p-12 opacity-15 pointer-events-none rotate-12">
+                       <Zap className="w-64 h-64 text-white" />
                     </div>
-                    <div className="space-y-8 relative z-10">
-                       <div>
-                          <Zap className="h-10 w-10 text-white mb-4" />
-                          <h3 className="text-2xl font-black tracking-tight mb-2 uppercase text-white">Preparação Pro</h3>
-                          <p className="text-sm font-black text-white/70 leading-relaxed uppercase tracking-widest">O Mais Recomendado</p>
+                    <div className="space-y-12 relative z-10">
+                       <div className="flex flex-col items-center text-center">
+                          <div className="w-24 h-24 bg-white/20 backdrop-blur-3xl rounded-3xl flex items-center justify-center mb-8 shadow-2xl transition-transform duration-700 group-hover:scale-110"><Zap className="h-12 w-12 text-white" /></div>
+                          <h3 className="text-4xl font-black tracking-tight mb-4 uppercase text-white">Preparação Pro</h3>
+                          <p className="text-[10px] font-black text-white/80 uppercase tracking-[0.4em] bg-white/10 px-4 py-2 rounded-full">Mais Vendido em Luanda</p>
                        </div>
-                       <div>
-                          <span className="text-4xl font-black text-white">3.500</span>
-                          <span className="text-white/70 text-xs font-black uppercase tracking-widest ml-2">Kz/mês</span>
+                       <div className="text-center">
+                          <span className="text-7xl font-black text-white">3.500</span>
+                          <span className="text-white/70 text-sm font-black uppercase tracking-widest ml-4">Kz/mês</span>
                        </div>
-                       <ul className="space-y-4">
-                          {['Treino Entrevista (20/dia)', 'Job Hunter Pro', 'CV Otimizado Completo', 'LinkedIn Optimizer'].map((f, fi) => (
-                            <li key={fi} className="text-xs font-black text-white flex items-center gap-3 uppercase tracking-widest">
-                               <CheckCircle2 className="h-4 w-4 text-white" /> {f}
+                       <ul className="space-y-6">
+                          {['Treino Entrevista (20/dia)', 'Job Hunter Pro (IA)', 'CV Otimizado Completo', 'LinkedIn Optimizer Profissional', 'Cartas de Apresentação IA'].map((f, fi) => (
+                            <li key={fi} className="text-sm font-black text-white flex items-center gap-5 uppercase tracking-widest">
+                               <CheckCircle2 className="h-6 w-6 text-white" /> {f}
                             </li>
                           ))}
                        </ul>
                     </div>
-                    <Link href="/register?plan=essential" className="mt-12 relative z-10">
-                       <Button className="w-full h-14 rounded-xl bg-white text-primary hover:bg-white/90 font-black text-[10px] uppercase tracking-widest shadow-xl">Acelerar Carreira</Button>
+                    <Link href="/register?plan=essential" className="mt-20 relative z-10">
+                       <Button className="w-full h-20 rounded-[2rem] bg-white text-primary hover:bg-white/90 font-black text-sm uppercase tracking-widest shadow-2xl transition-all duration-500 hover:scale-[1.03]">Acelerar Carreira</Button>
                     </Link>
                  </div>
 
                  {/* Elite */}
-                 <div className="p-10 bg-[#0A1224] border border-white/5 rounded-[2.5rem] flex flex-col justify-between hover:border-primary/20 transition-all group">
-                    <div className="space-y-8">
-                       <div>
-                          <Crown className="h-10 w-10 text-yellow-500 mb-4" />
-                          <h3 className="text-2xl font-black tracking-tight mb-2 uppercase">Elite VIP</h3>
-                          <p className="text-sm font-bold text-slate-500 leading-relaxed uppercase tracking-widest">Para quem quer o Topo</p>
+                 <div className="p-16 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[4rem] flex flex-col justify-between hover:border-primary/30 transition-all duration-700 group">
+                    <div className="space-y-12">
+                       <div className="flex flex-col items-center text-center">
+                          <div className="w-20 h-20 bg-yellow-500/10 rounded-3xl flex items-center justify-center mb-8"><Crown className="h-10 w-10 text-yellow-500" /></div>
+                          <h3 className="text-4xl font-black tracking-tight mb-4 uppercase">Elite VIP</h3>
+                          <p className="text-xs font-black text-slate-500 uppercase tracking-[0.3em]">Para quem quer o Topo</p>
                        </div>
-                       <div>
-                          <span className="text-4xl font-black text-white">8.500</span>
-                          <span className="text-slate-500 text-xs font-black uppercase tracking-widest ml-2">Kz/mês</span>
+                       <div className="text-center">
+                          <span className="text-7xl font-black text-white">8.500</span>
+                          <span className="text-slate-500 text-sm font-black uppercase tracking-widest ml-4">Kz/mês</span>
                        </div>
-                       <ul className="space-y-4">
-                          {['Tudo Ilimitado', 'Alerta WhatsApp', 'Suporte VIP 24/7', 'Badge de Elite'].map((f, fi) => (
-                            <li key={fi} className="text-xs font-bold text-slate-400 flex items-center gap-3 uppercase tracking-widest">
-                               <CheckCircle2 className="h-4 w-4 text-primary" /> {f}
+                       <ul className="space-y-6">
+                          {['Tudo Ilimitado', 'Alerta Vagas WhatsApp', 'Suporte VIP Individual', 'Badge Elite no Perfil', 'Consultoria de IA'].map((f, fi) => (
+                            <li key={fi} className="text-sm font-bold text-slate-300 flex items-center gap-5 uppercase tracking-widest">
+                               <CheckCircle2 className="h-5 w-5 text-primary" /> {f}
                             </li>
                           ))}
                        </ul>
                     </div>
-                    <Link href="/register?plan=elite" className="mt-12">
-                       <Button variant="outline" className="w-full h-14 rounded-xl border-white/10 bg-white/5 text-white font-black text-[10px] uppercase tracking-widest group-hover:bg-primary transition-colors">Seja Elite</Button>
+                    <Link href="/register?plan=elite" className="mt-20">
+                       <Button variant="outline" className="w-full h-20 rounded-[2rem] border-white/10 bg-white/5 text-white font-black text-xs uppercase tracking-widest group-hover:bg-primary group-hover:border-primary transition-all duration-700">Seja Elite</Button>
                     </Link>
                  </div>
               </div>
@@ -353,62 +377,62 @@ export default function Home() {
         </section>
 
         {/* 8. CTA FINAL */}
-        <section className="w-full py-24 lg:py-32 bg-[#050A15] relative overflow-hidden">
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 blur-[150px] rounded-full pointer-events-none" />
-           
+        <section className="w-full py-64 relative overflow-hidden">
            <div className="container px-6 md:px-12 mx-auto text-center relative z-10">
-              <h2 className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-tight mb-12">O teu futuro <br /> começa <span className="text-primary italic text-8xl md:text-9xl block mt-4">Agora</span></h2>
+              <h2 className="text-5xl md:text-[8rem] lg:text-[11rem] font-black tracking-tighter uppercase leading-[0.8] mb-20 animate-pulse-slow">O teu futuro <br /> começa <span className="text-primary italic block mt-10">Agora</span></h2>
               <Link href="/register">
-                 <Button size="lg" className="h-20 px-16 rounded-[2rem] bg-primary hover:bg-blue-600 text-white font-black uppercase text-base tracking-[0.2em] transition-all shadow-[0_0_60px_rgba(37,99,235,0.4)] group">
+                 <Button size="lg" className="h-28 px-24 rounded-[3rem] bg-primary hover:bg-blue-600 text-white font-black uppercase text-xl tracking-[0.3em] transition-all duration-500 shadow-[0_0_100px_rgba(37,99,235,0.6)] group hover:scale-110 active:scale-95">
                     👉 Criar meu CV grátis
                  </Button>
               </Link>
            </div>
+           
+           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(37,99,235,0.2),transparent_60%)] pointer-events-none" />
         </section>
 
       </main>
 
       {/* Footer */}
-      <footer className="w-full bg-[#050A15] border-t border-white/5 py-24 px-6 md:px-12">
-        <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-16">
-          <div className="space-y-8 col-span-1 md:col-span-2">
-            <Logo />
-            <p className="text-slate-400 font-bold text-base leading-relaxed max-w-md">Redefinindo o futuro do trabalho em Angola através da inteligência artificial e excelência tecnológica.</p>
-            <div className="flex gap-10">
-               <div className="flex flex-col gap-1">
-                  <span className="text-2xl font-black text-white">+{displayUserCount}</span>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Usuários Ativos</span>
+      <footer className="w-full py-40 px-6 md:px-12 relative z-10 border-t border-white/5 bg-[#050A15]/60 backdrop-blur-xl">
+        <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-24">
+          <div className="space-y-12 col-span-1 md:col-span-2">
+            <Logo className="scale-125 mb-10" />
+            <p className="text-slate-400 font-bold text-xl leading-relaxed max-w-xl opacity-80">Redefinindo o futuro do trabalho em Angola através da inteligência artificial e excelência tecnológica.</p>
+            <div className="flex gap-16 pt-10">
+               <div className="flex flex-col gap-2">
+                  <span className="text-4xl font-black text-white">+{displayUserCount}</span>
+                  <span className="text-[12px] font-black uppercase tracking-[0.4em] text-slate-500">Usuários Ativos</span>
                </div>
-               <div className="flex flex-col gap-1">
-                  <span className="text-2xl font-black text-white">100%</span>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Cloud Angolana</span>
+               <div className="flex flex-col gap-2">
+                  <span className="text-4xl font-black text-white">100%</span>
+                  <span className="text-[12px] font-black uppercase tracking-[0.4em] text-slate-500">Cloud Angolana</span>
                </div>
             </div>
           </div>
           
-          <div className="space-y-8 text-center md:text-left">
-              <h4 className="font-black uppercase tracking-[0.3em] text-xs text-primary">Plataforma</h4>
-              <ul className="space-y-4">
-                <li><Link href="/about" className="text-sm font-black text-slate-400 hover:text-white transition-all uppercase tracking-widest">Nossa Missão</Link></li>
-                <li><Link href="/contact" className="text-sm font-black text-slate-400 hover:text-white transition-all uppercase tracking-widest">Contacto</Link></li>
-                <li><Link href="#pricing" className="text-sm font-black text-slate-400 hover:text-white transition-all uppercase tracking-widest">Planos</Link></li>
+          <div className="space-y-10">
+              <h4 className="font-black uppercase tracking-[0.5em] text-sm text-primary">Plataforma</h4>
+              <ul className="space-y-6">
+                {["Sobre", "Colaboradores", "Contacto", "Planos"].map(item => (
+                  <li key={item}><Link href={item === "Planos" ? "#pricing" : `/${item.toLowerCase()}`} className="text-base font-black text-slate-400 hover:text-white transition-all uppercase tracking-widest">{item}</Link></li>
+                ))}
               </ul>
           </div>
 
-          <div className="space-y-8 text-center md:text-left">
-              <h4 className="font-black uppercase tracking-[0.3em] text-xs text-primary">Social</h4>
-              <ul className="space-y-4">
-                <li><Link href="#" className="text-sm font-black text-slate-400 hover:text-white transition-all uppercase tracking-widest">Instagram</Link></li>
-                <li><Link href="#" className="text-sm font-black text-slate-400 hover:text-white transition-all uppercase tracking-widest">LinkedIn</Link></li>
+          <div className="space-y-10">
+              <h4 className="font-black uppercase tracking-[0.5em] text-sm text-primary">Social</h4>
+              <ul className="space-y-6">
+                <li><Link href="#" className="text-base font-black text-slate-400 hover:text-white transition-all uppercase tracking-widest">Instagram</Link></li>
+                <li><Link href="#" className="text-base font-black text-slate-400 hover:text-white transition-all uppercase tracking-widest">LinkedIn</Link></li>
               </ul>
           </div>
         </div>
         
-        <div className="container mx-auto mt-24 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 opacity-40">
-           <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">© 2026 NEXTSTEP TECHNOLOGIES. LUANDA, ANGOLA.</p>
-           <div className="flex gap-8">
-              <Link href="/terms" className="text-[10px] font-black hover:text-white uppercase tracking-[0.3em]">Termos</Link>
-              <Link href="/privacy" className="text-[10px] font-black hover:text-white uppercase tracking-[0.3em]">Privacidade</Link>
+        <div className="container mx-auto mt-40 pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-10 opacity-30">
+           <p className="text-[11px] font-black text-slate-500 uppercase tracking-[0.4em]">© 2026 NEXTSTEP TECHNOLOGIES. LUANDA, ANGOLA.</p>
+           <div className="flex gap-16">
+              <Link href="/terms" className="text-[11px] font-black hover:text-white uppercase tracking-[0.4em]">Termos</Link>
+              <Link href="/privacy" className="text-[11px] font-black hover:text-white uppercase tracking-[0.4em]">Privacidade</Link>
            </div>
         </div>
       </footer>
