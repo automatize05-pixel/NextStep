@@ -27,9 +27,9 @@ export default function Home() {
   const displayUserCount = 1650
 
   return (
-    <div className="flex flex-col min-h-screen text-white font-sans selection:bg-primary/20 overflow-x-hidden relative">
+    <div className="flex flex-col min-h-screen bg-[#050A15] text-white font-sans selection:bg-primary/20 overflow-x-hidden relative">
       
-      {/* Background Animation - Managed via Canvas for performance */}
+      {/* Background Animation - Optimized for Premium Aesthetic */}
       <BackgroundAnimation />
       
       {/* Navigation */}
@@ -156,7 +156,7 @@ export default function Home() {
                    { step: '03', title: 'Treina Entrevistas', desc: 'Pratica com a nossa IA que responde como um recrutador real.', icon: <MessageSquare className="h-6 w-6 text-primary" /> },
                    { step: '04', title: 'Consegue Emprego', desc: 'Candidata-te com confiança e destaca-te da concorrência.', icon: <Briefcase className="h-6 w-6 text-primary" /> }
                  ].map((item, i) => (
-                   <div key={i} className="relative p-10 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] group hover:border-primary/40 transition-all duration-500">
+                   <div key={i} className="relative p-10 bg-white/10 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] group hover:border-primary/40 transition-all duration-500 shadow-2xl">
                       <div className="absolute -top-4 -left-4 w-12 h-12 bg-primary rounded-2xl flex items-center justify-center font-black text-white shadow-xl rotate-12 group-hover:rotate-0 transition-all duration-500">{item.step}</div>
                       <div className="mb-8 p-4 bg-primary/10 rounded-2xl inline-block group-hover:bg-primary group-hover:text-white transition-all duration-500">{item.icon}</div>
                       <h3 className="text-xl font-black mb-3 tracking-tight">{item.title}</h3>
@@ -170,7 +170,7 @@ export default function Home() {
         {/* 3. O PROBLEMA */}
         <section className="w-full py-24 relative z-10">
            <div className="container px-6 md:px-12 mx-auto">
-              <div className="max-w-5xl mx-auto bg-red-500/5 backdrop-blur-2xl border border-red-500/10 rounded-[3rem] p-12 md:p-20 relative overflow-hidden">
+              <div className="max-w-5xl mx-auto bg-red-500/10 backdrop-blur-3xl border border-red-500/10 rounded-[3rem] p-12 md:p-20 relative overflow-hidden">
                  <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
                     <AlertCircle className="w-40 h-40 text-red-500 -rotate-12" />
                  </div>
@@ -223,7 +223,7 @@ export default function Home() {
                          { title: 'Treino de Entrevistas', icon: <MessageSquare className="h-4 w-4 text-primary" /> },
                          { title: 'IA de Bolsas', icon: <Globe className="h-4 w-4 text-primary" /> }
                        ].map((item, i) => (
-                         <div key={i} className="flex items-center gap-4 p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-primary/40 transition-all duration-300">
+                         <div key={i} className="flex items-center gap-4 p-4 bg-white/10 backdrop-blur-3xl border border-white/10 rounded-2xl hover:border-primary/40 transition-all duration-300">
                             {item.icon}
                             <span className="font-black text-[10px] uppercase tracking-widest text-slate-200">{item.title}</span>
                          </div>
@@ -251,7 +251,7 @@ export default function Home() {
                    { name: 'Cartas IA', icon: <ClipboardCheck className="h-6 w-6" /> },
                    { name: 'Perfil Público', icon: <UserCircle className="h-6 w-6" /> }
                  ].map((item, i) => (
-                   <div key={i} className="flex flex-col items-center justify-center p-8 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] group hover:bg-primary transition-all duration-500 cursor-pointer">
+                   <div key={i} className="flex flex-col items-center justify-center p-8 bg-white/10 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] group hover:bg-primary transition-all duration-500 cursor-pointer shadow-xl">
                       <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 group-hover:bg-white group-hover:scale-105 transition-all duration-500">
                          <div className="text-primary group-hover:text-primary transition-colors">{item.icon}</div>
                       </div>

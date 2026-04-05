@@ -92,19 +92,14 @@ export function BackgroundAnimation() {
   }, [])
 
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-black">
-      {/* Test Image - If you see this, the path is correct */}
-      <img 
-        src="/bg-animation/African_professional_smiling_202604051322_000.jpg" 
-        className="w-full h-full object-cover opacity-100"
-        alt="Animation Test"
-      />
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#050A15]">
       <canvas 
         ref={canvasRef} 
-        className="absolute inset-0 w-full h-full object-cover opacity-0"
+        className="w-full h-full object-cover opacity-50 grayscale brightness-50 contrast-125 transition-opacity duration-1000"
       />
-      {/* Lightened Premium Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#050A15]/40 via-transparent to-[#050A15]/20" />
+      {/* Premium Dark Gradient Overlay for readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#050A15]/90 via-[#050A15]/40 to-[#050A15]/80 z-10" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(37,99,235,0.08),transparent_80%)] z-10" />
     </div>
   )
 }
