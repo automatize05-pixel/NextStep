@@ -27,7 +27,7 @@ export default function Home() {
   const displayUserCount = 1650
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#050A15] text-white font-sans selection:bg-primary/20 overflow-x-hidden relative">
+    <div className="flex flex-col min-h-screen text-white font-sans selection:bg-primary/20 overflow-x-hidden relative">
       
       {/* Background Animation - Managed via Canvas for performance */}
       <BackgroundAnimation />

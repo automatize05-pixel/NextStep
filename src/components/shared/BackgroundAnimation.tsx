@@ -15,8 +15,9 @@ export function BackgroundAnimation() {
       for (let i = 0; i < frameCount; i++) {
         const img = new Image()
         const frameNumber = i.toString().padStart(3, '0')
-        // Using the exact filename pattern from the source directory
         img.src = `/bg-animation/African_professional_smiling_202604051322_${frameNumber}.jpg`
+        img.onload = () => { if (i === 0) console.log("First frame loaded successfully") }
+        img.onerror = () => console.error(`Failed to load frame ${frameNumber} at ${img.src}`)
         loadedFrames.push(img)
       }
       framesRef.current = loadedFrames
@@ -41,13 +42,14 @@ export function BackgroundAnimation() {
         lastTime = time
         const currentFrame = framesRef.current[currentFrameRef.current]
         
-        if (currentFrame && currentFrame.complete) {
+        // Safety check for currentFrame properties
+        if (currentFrame && currentFrame.complete && currentFrame.naturalWidth > 0) {
           // Clear canvas
           ctx.clearRect(0, 0, canvas.width, canvas.height)
           
           // Calculate "object-fit: cover" logic for the canvas
           const canvasAspect = canvas.width / canvas.height
-          const imageAspect = currentFrame.width / currentFrame.height
+          const imageAspect = currentFrame.naturalWidth / currentFrame.naturalHeight
           
           let drawWidth, drawHeight, offsetX, offsetY
           
@@ -64,9 +66,8 @@ export function BackgroundAnimation() {
           }
           
           ctx.drawImage(currentFrame, offsetX, offsetY, drawWidth, drawHeight)
+          currentFrameRef.current = (currentFrameRef.current + 1) % frameCount
         }
-        
-        currentFrameRef.current = (currentFrameRef.current + 1) % frameCount
       }
       
       animationId = requestAnimationFrame(render)
@@ -91,14 +92,19 @@ export function BackgroundAnimation() {
   }, [])
 
   return (
-    <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden bg-[#050A15]">
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-black">
+      {/* Test Image - If you see this, the path is correct */}
+      <img 
+        src="/bg-animation/African_professional_smiling_202604051322_000.jpg" 
+        className="w-full h-full object-cover opacity-100"
+        alt="Animation Test"
+      />
       <canvas 
         ref={canvasRef} 
-        className="w-full h-full object-cover opacity-65 grayscale contrast-125 brightness-90 transition-opacity duration-1000"
+        className="absolute inset-0 w-full h-full object-cover opacity-0"
       />
-      {/* Lightened Premium Gradient Overlay to let the animation show through */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#050A15]/85 via-[#050A15]/40 to-[#050A15]/70" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(37,99,235,0.15),transparent_75%)]" />
+      {/* Lightened Premium Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#050A15]/40 via-transparent to-[#050A15]/20" />
     </div>
   )
 }
