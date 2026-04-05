@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { 
   Loader2, CheckCircle2, ChevronRight, ArrowLeft, 
   Copy, Smartphone, CreditCard, Clock, Check, 
-  FileText, X, PlusCircle, ShieldCheck
+  FileText, X, PlusCircle, ShieldCheck, Crown
 } from "lucide-react"
 
 const PLAN_INFO: Record<string, { name: string; price: number; color: string; badge: string }> = {
