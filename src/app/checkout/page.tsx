@@ -1,24 +1,24 @@
 "use client"
 
-import { Suspense, useState } from "react"
+import { Suspense, useState, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Upload, Loader2, CheckCircle2, Crown, ArrowLeft } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import { 
+  Loader2, CheckCircle2, Crown, ArrowLeft, 
+  Copy, Smartphone, CreditCard, Clock, Check
+} from "lucide-react"
 
-const PLAN_INFO: Record<string, { name: string; price: number; color: string }> = {
-  starter: { name: 'Primeiro Passo', price: 1500, color: 'border-green-400' },
-  essential: { name: 'Preparação Pro', price: 3500, color: 'border-blue-400' },
-  premium: { name: 'Aceleração Total', price: 8500, color: 'border-purple-400' },
-  elite: { name: 'Elite VIP', price: 15000, color: 'border-yellow-400' },
+const PLAN_INFO: Record<string, { name: string; price: number; color: string; badge: string }> = {
+  starter: { name: 'Primeiro Passo', price: 1500, color: 'border-green-400', badge: 'INICIANTE' },
+  essential: { name: 'Preparação Pro', price: 3500, color: 'border-blue-400', badge: 'RECOMENDADO' },
+  premium: { name: 'Aceleração Total', price: 8500, color: 'border-purple-400', badge: 'AVANÇADO' },
+  elite: { name: 'Elite VIP', price: 8500, color: 'border-yellow-400', badge: 'EXCLUSIVO' },
 }
 
-const IBAN_INFO = {
-  bank: "IBAN KWik",
-  iban: "AO06.0420.0000.0000.0006.1077.260",
-  account_holder: "NextStep Lda.",
+const PAYMENT_INFO = {
   entity: "10116",
   reference: "947005277",
 }
@@ -31,160 +31,299 @@ function CheckoutContent() {
   const plan = searchParams.get('plan') || 'essential'
   const planInfo = PLAN_INFO[plan] || PLAN_INFO.essential
 
-  const [file, setFile] = useState<File | null>(null)
-  const [uploading, setUploading] = useState(false)
-  const [done, setDone] = useState(false)
+  // Steps: 'info' | 'selection' | 'details'
+  const [step, setStep] = useState<'info' | 'selection' | 'details'>('info')
+  const [method, setMethod] = useState<'referencia' | 'express' | null>(null)
+  
   const [name, setName] = useState("")
-  const [notes, setNotes] = useState("")
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [copied, setCopied] = useState<string | null>(null)
+  
+  const [timeLeft, setTimeLeft] = useState(7199) // 2 hours in seconds
 
-  const handleUpload = async () => {
-    if (!file || !name) return
-    setUploading(true)
-    try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/login'); return }
+  useEffect(() => {
+    if (step !== 'details') return
+    const timer = setInterval(() => {
+      setTimeLeft(prev => (prev > 0 ? prev - 1 : 0))
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [step])
 
-      // Upload receipt to Supabase Storage
-      const ext = file.name.split('.').pop()
-      const fileName = `receipts/${user.id}/${Date.now()}.${ext}`
-      const { error: uploadError } = await supabase.storage
-        .from('receipts')
-        .upload(fileName, file)
-
-      if (uploadError) throw uploadError
-
-      const { data: urlData } = supabase.storage.from('receipts').getPublicUrl(fileName)
-      const receiptUrl = urlData?.publicUrl
-
-      // Create subscription record
-      const { error: subError } = await supabase.from('subscriptions').insert({
-        user_id: user.id,
-        plan_type: plan,
-        amount_kz: planInfo.price,
-        receipt_url: receiptUrl,
-        status: 'pending',
-        notes: notes || `Comprovativo enviado por ${name}`
-      })
-
-      if (subError) throw subError
-      setDone(true)
-    } catch (err) {
-      console.error(err)
-      alert("Erro ao enviar comprovativo. Tente novamente.")
-    } finally { setUploading(false) }
+  const formatTime = (seconds: number) => {
+    const h = Math.floor(seconds / 3600)
+    const m = Math.floor((seconds % 3600) / 60)
+    const s = seconds % 60
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
   }
 
-  if (done) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
-        <div className="text-center space-y-6 max-w-md">
-          <div className="h-20 w-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto">
-            <CheckCircle2 className="h-10 w-10 text-green-400" />
+  const handleCopy = (text: string, id: string) => {
+    navigator.clipboard.writeText(text)
+    setCopied(id)
+    setTimeout(() => setCopied(null), 2000)
+  }
+
+  const handleNext = () => {
+    if (step === 'info') {
+      if (!name || !email || !phone) return
+      setStep('selection')
+    }
+  }
+
+  const selectMethod = (m: 'referencia' | 'express') => {
+    setMethod(m)
+    setStep('details')
+  }
+
+  const renderInfoForm = () => (
+    <Card className="border-slate-100 shadow-xl rounded-[2.5rem] bg-white overflow-hidden">
+      <CardContent className="p-10 space-y-8">
+        <div className="space-y-6">
+          <div>
+            <label className="text-[10px] font-black uppercase text-slate-400 mb-3 block tracking-widest">Nome completo</label>
+            <Input 
+              placeholder="Seu nome" 
+              value={name} 
+              onChange={e => setName(e.target.value)} 
+              className="h-14 rounded-2xl border-slate-100 bg-slate-50/50 text-slate-900 placeholder:text-slate-300 font-bold px-6 focus:ring-2 focus:ring-[#00875A] transition-all" 
+            />
           </div>
-          <h1 className="text-3xl font-black text-white">Comprovativo Enviado!</h1>
-          <p className="text-slate-400">O seu pagamento está em análise. A activação do plano <span className="text-white font-black">{planInfo.name}</span> será feita em até 24 horas úteis.</p>
-          <p className="text-slate-200 text-sm">Receberá uma notificação assim que o seu plano for ativado.</p>
-          <Button onClick={() => router.push('/dashboard')} className="w-full">← Ir ao Dashboard</Button>
+          <div>
+            <label className="text-[10px] font-black uppercase text-slate-400 mb-3 block tracking-widest">Email</label>
+            <Input 
+              type="email"
+              placeholder="seu@email.com" 
+              value={email} 
+              onChange={e => setEmail(e.target.value)} 
+              className="h-14 rounded-2xl border-slate-100 bg-slate-50/50 text-slate-900 placeholder:text-slate-300 font-bold px-6 focus:ring-2 focus:ring-[#00875A] transition-all" 
+            />
+          </div>
+          <div>
+            <label className="text-[10px] font-black uppercase text-slate-400 mb-3 block tracking-widest">Número de telefone</label>
+            <Input 
+              placeholder="Digite o seu número de telefone" 
+              value={phone} 
+              onChange={e => setPhone(e.target.value)} 
+              className="h-14 rounded-2xl border-slate-100 bg-slate-50/50 text-slate-900 placeholder:text-slate-300 font-bold px-6 focus:ring-2 focus:ring-[#00875A] transition-all" 
+            />
+          </div>
         </div>
-      </div>
-    )
-  }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-lg space-y-6">
-        <button onClick={() => router.push('/plans')} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm">
-          <ArrowLeft className="h-4 w-4" /> Voltar aos planos
+        <div className="pt-4 border-t border-slate-50">
+           <div className="flex justify-between items-center mb-6 px-2">
+              <span className="text-slate-500 font-bold text-sm">Acesso ao Plano {planInfo.name}</span>
+              <span className="text-slate-900 font-bold text-sm">{planInfo.price.toLocaleString('pt-AO')} kz</span>
+           </div>
+           <div className="flex justify-between items-center mb-8 px-2">
+              <span className="text-slate-900 font-black text-xl">Total</span>
+              <span className="text-[#00875A] font-black text-xl">{planInfo.price.toLocaleString('pt-AO')} kz</span>
+           </div>
+
+           <Button 
+             className="w-full h-20 rounded-2xl bg-[#00875A] hover:bg-[#00704A] text-white font-black text-sm tracking-widest transition-all shadow-xl shadow-[#00875A]/20 flex items-center justify-between px-10 group"
+             onClick={handleNext}
+             disabled={!name || !email || !phone}
+           >
+             <span className="uppercase">Adquirir Agora</span>
+             <span className="text-white/90 group-hover:translate-x-1 transition-transform">{planInfo.price.toLocaleString('pt-AO')} kz</span>
+           </Button>
+           
+           <p className="text-[10px] text-slate-400 text-center mt-6">Ao pagar, você concorda com os <span className="text-[#00875A] font-bold">termos e políticas</span>.</p>
+        </div>
+      </CardContent>
+    </Card>
+  )
+
+  const renderSelection = () => (
+    <Card className="border-slate-100 shadow-xl rounded-[2.5rem] bg-white overflow-hidden">
+      <CardContent className="p-10 space-y-10">
+        <h2 className="text-[10px] font-black uppercase text-slate-400 tracking-widest text-center mt-2">Escolha o Método de Pagamento</h2>
+        
+        <div className="grid grid-cols-2 gap-6">
+           <button 
+             onClick={() => selectMethod('referencia')}
+             className="h-44 rounded-3xl border-2 border-slate-100 hover:border-[#00875A] bg-white transition-all flex flex-col items-center justify-center gap-4 group hover:shadow-lg"
+           >
+              <div className="p-4 bg-slate-50 rounded-2xl group-hover:bg-[#00875A]/10 transition-colors">
+                 <CreditCard className="h-10 w-10 text-slate-400 group-hover:text-[#00875A]" />
+              </div>
+              <span className="text-slate-900 font-black text-sm">Referência</span>
+           </button>
+           <button 
+             onClick={() => selectMethod('express')}
+             className="h-44 rounded-3xl border-2 border-slate-100 hover:border-[#00875A] bg-white transition-all flex flex-col items-center justify-center gap-4 group hover:shadow-lg"
+           >
+              <div className="p-4 bg-slate-50 rounded-2xl group-hover:bg-[#00875A]/10 transition-colors">
+                 <Smartphone className="h-10 w-10 text-slate-400 group-hover:text-[#00875A]" />
+              </div>
+              <span className="text-slate-900 font-black text-sm">Express</span>
+           </button>
+        </div>
+
+        <div className="pt-4 border-t border-slate-50">
+           <div className="flex justify-between items-center mb-8 px-2">
+              <span className="text-slate-900 font-black text-xl">Total</span>
+              <span className="text-[#00875A] font-black text-xl">{planInfo.price.toLocaleString('pt-AO')} kz</span>
+           </div>
+           <Button 
+             variant="ghost" 
+             className="w-full text-slate-400 font-bold uppercase text-[10px] tracking-widest hover:text-slate-600"
+             onClick={() => setStep('info')}
+           >
+             ← Voltar aos dados
+           </Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+
+  const renderDetails = () => (
+    <Card className="border-slate-100 shadow-xl rounded-[2.5rem] bg-white overflow-hidden relative">
+      <CardContent className="p-10 space-y-8">
+        <button onClick={() => setStep('selection')} className="absolute top-8 right-8 p-3 hover:bg-slate-50 rounded-full transition-all text-slate-400">
+          <ArrowLeft className="h-5 w-5" />
         </button>
 
-        {/* Plan Summary */}
-        <div className={`p-6 rounded-2xl border-2 ${planInfo.color} bg-slate-900`}>
-          <div className="flex items-center gap-3">
-            <Crown className="h-6 w-6 text-yellow-400" />
-            <div>
-              <p className="text-white font-black text-lg">Plano {planInfo.name}</p>
-              <p className="text-slate-300 text-sm">Activação em até 24h após confirmação do pagamento</p>
-            </div>
-            <div className="ml-auto text-right">
-              <p className="text-2xl font-black text-white">{planInfo.price.toLocaleString('pt-AO')} Kz</p>
-              <p className="text-slate-400 text-xs">por mês</p>
-            </div>
-          </div>
+        <div className="text-center space-y-2 pt-4">
+           <h2 className="text-2xl font-black text-slate-900">
+             {method === 'referencia' ? 'Detalhes do Pagamento por Referência' : 'Pagamento Multicaixa Express'}
+           </h2>
+           <p className="text-slate-400 font-medium text-sm px-8">
+             {method === 'referencia' 
+               ? 'Use estes dados para completar o pagamento através do seu banco' 
+               : 'Aguarde a notificação no seu telefone para autorizar o pagamento'
+             }
+           </p>
         </div>
 
-        {/* IBAN Instructions */}
-        <Card className="bg-slate-900 border-slate-700">
-          <CardHeader>
-            <CardTitle className="text-white">1. Faça a Transferência</CardTitle>
-            <CardDescription className="text-slate-400">Transfira o valor para a conta abaixo</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="p-4 bg-primary/10 border border-primary/20 rounded-xl mb-4">
-              <p className="text-[10px] font-black uppercase text-primary mb-2 tracking-widest text-center">Recomendado: Pagamento por Referência</p>
-              <div className="flex justify-between items-center py-2 border-b border-primary/10">
-                <span className="text-slate-400 text-sm font-bold">Entidade</span>
-                <span className="text-white font-black text-sm">{IBAN_INFO.entity}</span>
-              </div>
-              <div className="flex justify-between items-center py-2">
-                <span className="text-slate-400 text-sm font-bold">Referência</span>
-                <span className="text-primary font-black text-sm">{IBAN_INFO.reference}</span>
-              </div>
-            </div>
+        {/* Timer */}
+        <div className={`p-8 rounded-[2rem] border transition-all text-center space-y-2 ${method === 'referencia' ? 'bg-[#00875A]/5 border-[#00875A]/20' : 'bg-amber-50 border-amber-200'}`}>
+           <div className="flex items-center justify-center gap-2 text-slate-400">
+              <Clock className="h-4 w-4" />
+              <span className="text-[10px] font-black uppercase tracking-widest">Tempo restante</span>
+           </div>
+           <div className={`text-4xl font-black font-mono tracking-tighter ${method === 'referencia' ? 'text-[#00875A]' : 'text-amber-600'}`}>
+              {formatTime(timeLeft)}
+           </div>
+        </div>
 
-            <p className="text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest text-center">Ou via IBAN</p>
-            {[
-              { label: 'Banco', value: IBAN_INFO.bank },
-              { label: 'IBAN', value: IBAN_INFO.iban },
-              { label: 'Titular', value: IBAN_INFO.account_holder },
-              { label: 'Montante', value: `${planInfo.price.toLocaleString('pt-AO')} Kz` },
-            ].map(({ label, value }) => (
-              <div key={label} className="flex justify-between items-center py-2 border-b border-slate-800 last:border-0">
-                <span className="text-slate-400 text-sm font-bold">{label}</span>
-                <span className="text-white font-black text-sm text-right">{value}</span>
+        {method === 'referencia' ? (
+           <div className="space-y-4">
+              <div className="p-6 bg-slate-50 rounded-3xl flex items-center justify-between group">
+                 <div>
+                    <span className="text-[10px] font-black uppercase text-slate-400 mb-1 block">Entidade</span>
+                    <span className="text-slate-900 font-black text-xl">{PAYMENT_INFO.entity}</span>
+                 </div>
+                 <Button variant="ghost" className="p-3 text-slate-400 hover:text-[#00875A]" onClick={() => handleCopy(PAYMENT_INFO.entity, 'entity')}>
+                    {copied === 'entity' ? <Check className="h-5 w-5 text-green-500" /> : <Copy className="h-5 w-5" />}
+                 </Button>
               </div>
-            ))}
-          </CardContent>
-        </Card>
+              <div className="p-6 bg-slate-50 rounded-3xl flex items-center justify-between group">
+                 <div>
+                    <span className="text-[10px] font-black uppercase text-slate-400 mb-1 block">Referência</span>
+                    <span className="text-slate-900 font-black text-xl tracking-wider">{PAYMENT_INFO.reference}</span>
+                 </div>
+                 <Button variant="ghost" className="p-3 text-slate-400 hover:text-[#00875A]" onClick={() => handleCopy(PAYMENT_INFO.reference, 'ref')}>
+                    {copied === 'ref' ? <Check className="h-5 w-5 text-green-500" /> : <Copy className="h-5 w-5" />}
+                 </Button>
+              </div>
+              <div className="p-6 bg-slate-50 rounded-3xl flex items-center justify-between group">
+                 <div>
+                    <span className="text-[10px] font-black uppercase text-slate-400 mb-1 block">Valor</span>
+                    <span className="text-slate-900 font-black text-xl font-mono">{planInfo.price.toLocaleString('pt-AO')} kz</span>
+                 </div>
+                 <Button variant="ghost" className="p-3 text-slate-400 hover:text-[#00875A]" onClick={() => handleCopy(planInfo.price.toString(), 'val')}>
+                    {copied === 'val' ? <Check className="h-5 w-5 text-green-500" /> : <Copy className="h-5 w-5" />}
+                 </Button>
+              </div>
 
-        {/* Upload Receipt */}
-        <Card className="bg-slate-900 border-slate-700">
-          <CardHeader>
-            <CardTitle className="text-white">2. Envie o Comprovativo</CardTitle>
-            <CardDescription className="text-slate-300">Após a transferência, envie a prova de pagamento</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <label className="text-xs font-black uppercase text-slate-400 mb-2 block">O seu nome completo *</label>
-              <Input placeholder="Nome completo" value={name} onChange={e => setName(e.target.value)} className="bg-slate-800 border-slate-600 text-white placeholder:text-slate-400 font-bold" />
-            </div>
-            <div>
-              <label className="text-xs font-black uppercase text-slate-400 mb-2 block">Comprovativo (imagem ou PDF) *</label>
-              <label className={`block w-full p-8 border-2 border-dashed rounded-xl cursor-pointer transition-all text-center ${file ? 'border-green-500 bg-green-500/10' : 'border-slate-600 hover:border-primary/60 bg-slate-800/50'}`}>
-                <input type="file" accept="image/*,.pdf" className="hidden" onChange={e => setFile(e.target.files?.[0] || null)} />
-                {file ? (
-                  <div className="text-green-400">
-                    <CheckCircle2 className="h-8 w-8 mx-auto mb-2" />
-                    <p className="font-black text-sm">{file.name}</p>
-                    <p className="text-xs text-green-600 mt-1">{(file.size / 1024).toFixed(0)} KB — Clique para trocar</p>
-                  </div>
-                ) : (
-                  <div className="text-slate-400">
-                    <Upload className="h-8 w-8 mx-auto mb-2" />
-                    <p className="font-bold text-sm">Clique para selecionar</p>
-                    <p className="text-xs mt-1">JPG, PNG ou PDF — Máx. 5MB</p>
-                  </div>
-                )}
-              </label>
-            </div>
-            <div>
-              <label className="text-xs font-black uppercase text-slate-400 mb-2 block">Notas (opcional)</label>
-              <Input placeholder="Ex: Pagamento referente ao mês de Abril..." value={notes} onChange={e => setNotes(e.target.value)} className="bg-slate-800 border-slate-600 text-white placeholder:text-slate-500" />
-            </div>
-            <Button className="w-full font-black" onClick={handleUpload} disabled={!file || !name || uploading}>
-              {uploading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />A enviar...</> : <><Upload className="h-4 w-4 mr-2" />Enviar Comprovativo</>}
-            </Button>
-          </CardContent>
-        </Card>
+              <div className="pt-6 space-y-3">
+                 <h4 className="text-[10px] font-black uppercase text-slate-900 tracking-widest mb-4">Instruções:</h4>
+                 {[
+                   'Acesse seu Internet Banking ou aplicativo do banco',
+                   'Selecione a opção "Pagamentos por Referência"',
+                   'Introduza a Entidade e Referência acima',
+                   'Confirme o valor e autorize o pagamento'
+                 ].map((inst, i) => (
+                   <p key={i} className="text-xs text-slate-500 font-medium flex gap-3">
+                     <span className="text-slate-300 font-black">{i + 1}.</span> {inst}
+                   </p>
+                 ))}
+              </div>
+           </div>
+        ) : (
+           <div className="text-center py-6 space-y-10">
+              <div className="space-y-4">
+                 <div className="w-16 h-16 bg-[#00875A]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Smartphone className="h-8 w-8 text-[#00875A]" />
+                 </div>
+                 <h3 className="text-xl font-black text-slate-900">Pedido de Pagamento Enviado</h3>
+                 <p className="text-sm text-slate-500 px-10">Verifique o seu telefone para confirmar o pagamento.</p>
+              </div>
+
+              <div className="p-6 bg-slate-50 rounded-3xl inline-block min-w-[200px]">
+                 <span className="text-[10px] font-black uppercase text-slate-400 mb-1 block">Valor</span>
+                 <span className="text-slate-900 font-black text-xl font-mono tracking-tighter">{planInfo.price.toLocaleString('pt-AO')} kz</span>
+              </div>
+
+              <div className="pt-4 text-left space-y-3 px-2">
+                 <h4 className="text-[10px] font-black uppercase text-slate-900 tracking-widest mb-4">Instruções:</h4>
+                 {[
+                   'Aguarde a notificação no seu telefone',
+                   'Abra a app do seu banco ou Multicaixa Express',
+                   'Verifique os detalhes do pagamento',
+                   'Introduza o seu PIN para autorizar'
+                 ].map((inst, i) => (
+                   <p key={i} className="text-xs text-slate-500 font-medium flex gap-3">
+                     <span className="text-slate-300 font-black">{i + 1}.</span> {inst}
+                   </p>
+                 ))}
+              </div>
+           </div>
+        )}
+
+        <div className="pt-4 space-y-4">
+           <Button 
+             className="w-full h-16 rounded-2xl bg-[#00875A] hover:bg-[#00704A] text-white font-black text-[12px] tracking-widest transition-all shadow-xl shadow-[#00875A]/20 flex items-center justify-center gap-3"
+             onClick={() => {
+                setLoading(true)
+                setTimeout(() => {
+                  setLoading(false)
+                }, 2000)
+             }}
+             disabled={loading}
+           >
+             {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <><RotateCcw className="h-4 w-4" /> Verificar Pagamento</>}
+           </Button>
+           <p className="text-[10px] text-slate-400 text-center font-bold">Após efectuar o pagamento, clique no botão acima para confirmar.</p>
+        </div>
+      </CardContent>
+    </Card>
+  )
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-4 py-20 relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-40">
+         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#00875A] blur-[150px] opacity-10 rounded-full" />
+         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#00875A] blur-[150px] opacity-10 rounded-full" />
+      </div>
+
+      <div className="w-full max-w-2xl relative z-10 space-y-8">
+        <div className="flex items-center justify-between px-4 mb-4">
+           <button onClick={() => router.push('/plans')} className="text-slate-400 hover:text-slate-900 transition-colors flex items-center gap-2 group">
+              <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" /> 
+              <span className="text-[10px] font-black uppercase tracking-widest">Voltar aos planos</span>
+           </button>
+           <div className={`px-4 py-1.5 rounded-full border border-[#00875A]/10 bg-white/50 backdrop-blur-sm text-[9px] font-black text-[#00875A] uppercase tracking-widest`}>
+              Plano {planInfo.name} — {planInfo.badge}
+           </div>
+        </div>
+
+        {step === 'info' && renderInfoForm()}
+        {step === 'selection' && renderSelection()}
+        {step === 'details' && renderDetails()}
       </div>
     </div>
   )
@@ -193,8 +332,11 @@ function CheckoutContent() {
 export default function CheckoutPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="h-12 w-12 text-primary animate-spin" />
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="flex flex-col items-center gap-6">
+           <Loader2 className="h-16 w-16 text-[#00875A] animate-spin stroke-[1.5]" />
+           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#00875A]/60 animate-pulse">Iniciando Checkout</p>
+        </div>
       </div>
     }>
       <CheckoutContent />

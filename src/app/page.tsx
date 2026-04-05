@@ -288,25 +288,28 @@ export default function Home() {
               </div>
               
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                 {/* Grátis */}
+                 {/* Starter */}
                  <div className="p-10 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] flex flex-col justify-between hover:border-white/20 transition-all duration-500">
                     <div className="space-y-10">
                        <div className="flex flex-col items-center text-center">
                           <div className="w-14 h-14 bg-slate-800/50 rounded-2xl flex items-center justify-center mb-6"><Star className="h-6 w-6 text-slate-500" /></div>
-                          <h3 className="text-xl font-black tracking-tight mb-2 uppercase">Grátis</h3>
-                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Para explorar</p>
+                          <h3 className="text-xl font-black tracking-tight mb-2 uppercase">Primeiro Passo</h3>
+                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Plano Inicial</p>
                        </div>
-                       <div className="text-4xl font-black uppercase text-center">Grátis</div>
+                       <div className="text-center">
+                          <span className="text-5xl font-black text-white">1.500</span>
+                          <span className="text-slate-500 text-xs font-black uppercase tracking-widest ml-3">Kz/mês</span>
+                       </div>
                        <ul className="space-y-4">
-                          {['3 Testes de IA / dia', '4 Buscas de vagas / dia', 'Criador de CV básico'].map((f, fi) => (
+                          {['Treino Entrevista (7/dia)', 'Job Hunter Lite', 'CV Básico IA', 'Dicas de Carreira'].map((f, fi) => (
                             <li key={fi} className="text-[10px] font-bold text-slate-400 flex items-center gap-4 uppercase tracking-widest">
                                <CheckCircle2 className="h-4 w-4 text-slate-600" /> {f}
                             </li>
                           ))}
                        </ul>
                     </div>
-                    <Link href="/register?plan=free" className="mt-12">
-                       <Button variant="outline" className="w-full h-14 rounded-2xl border-white/10 bg-white/5 text-white font-black text-[10px] uppercase tracking-widest">Selecionar</Button>
+                    <Link href="/register?plan=starter" className="mt-12">
+                       <Button variant="outline" className="w-full h-14 rounded-2xl border-white/10 bg-white/5 text-white font-black text-[10px] uppercase tracking-widest hover:bg-primary transition-all">Começar Agora</Button>
                     </Link>
                  </div>
 
@@ -319,7 +322,7 @@ export default function Home() {
                        <div className="flex flex-col items-center text-center">
                           <div className="w-16 h-16 bg-white/20 backdrop-blur-3xl rounded-2xl flex items-center justify-center mb-6 shadow-xl"><Zap className="h-8 w-8 text-white" /></div>
                           <h3 className="text-xl font-black tracking-tight mb-2 uppercase text-white">Preparação Pro</h3>
-                          <p className="text-[9px] font-black text-white/80 uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full">Recomendado em Luanda</p>
+                          <p className="text-[9px] font-black text-white/80 uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full">Recomendado</p>
                        </div>
                        <div className="text-center">
                           <span className="text-5xl font-black text-white">3.500</span>
