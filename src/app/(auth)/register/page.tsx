@@ -25,6 +25,10 @@ export default function RegisterPage() {
     setLoading(true)
     setError(null)
 
+    const redirectUrl = window.location.origin.includes('localhost') 
+      ? `${window.location.origin}/auth/callback`
+      : 'https://next-step-mocha.vercel.app/auth/callback'
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -32,7 +36,7 @@ export default function RegisterPage() {
         data: {
           full_name: name,
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: redirectUrl,
       }
     })
   
