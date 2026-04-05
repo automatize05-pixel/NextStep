@@ -94,11 +94,11 @@ export function BackgroundAnimation() {
     <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden bg-[#050A15]">
       <canvas 
         ref={canvasRef} 
-        className="w-full h-full object-cover opacity-40 grayscale contrast-125 brightness-75 transition-opacity duration-1000"
+        className="w-full h-full object-cover opacity-65 grayscale contrast-125 brightness-90 transition-opacity duration-1000"
       />
-      {/* Premium Gradient Overlay to blend with the app's dark theme */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#050A15]/95 via-[#050A15]/70 to-[#050A15]/90" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(37,99,235,0.1),transparent_70%)]" />
+      {/* Lightened Premium Gradient Overlay to let the animation show through */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#050A15]/85 via-[#050A15]/40 to-[#050A15]/70" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(37,99,235,0.15),transparent_75%)]" />
     </div>
   )
 }
